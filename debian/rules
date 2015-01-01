@@ -1,0 +1,13 @@
+#!/usr/bin/make -f
+
+%:
+	dh $@
+
+clean:
+	rm -rf build
+	rm -rf debian/files debian/*.substvars debian/*.log
+
+build:
+	echo "/usr" > conf-home
+	make
+	cmp rts.exp rts.out

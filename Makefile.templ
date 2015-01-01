@@ -1,0 +1,141 @@
+it:  httpfile-httpd rts rts.out httpfile-conf httpfile-gzip httpfile-access httpfile-setlock httpfile-getmtime httpfile-setmtime
+
+load: \
+warn-auto.sh conf-ld
+	( cat warn-auto.sh; \
+	echo 'main="$$1"; shift'; \
+	echo exec "`head -1 conf-ld`" \
+	'-o "$$main" "$$main".o $${1+"$$@"}' \
+	) > load
+	chmod 755 load
+
+compile: \
+warn-auto.sh conf-cc
+	( cat warn-auto.sh; \
+	echo exec "`head -1 conf-cc`" '-c $${1+"$$@"}' \
+	) > compile
+	chmod 755 compile
+
+choose: \
+warn-auto.sh choose.sh compile load
+	cat warn-auto.sh choose.sh \
+	> choose
+	chmod 755 choose
+
+makelib: \
+warn-auto.sh
+	( cat warn-auto.sh; \
+	echo 'main="$$1"; shift'; \
+	echo 'rm -f "$$main"'; \
+	echo 'ar cr "$$main" $${1+"$$@"}'; \
+	case "`uname -s | tr '/:[A-Z]' '..[a-z]'`" in \
+	sunos-5.*) ;; \
+	unix_sv*) ;; \
+	irix64-*) ;; \
+	irix-*) ;; \
+	dgux-*) ;; \
+	hp-ux-*) ;; \
+	sco*) ;; \
+	*) echo 'ranlib "$$main"' ;; \
+	esac \
+	) > makelib
+	chmod 755 makelib
+
+
+socket.lib: \
+trylib.c compile load
+	( ( ./compile trylib.c && \
+	./load trylib -lsocket -lnsl ) >/dev/null 2>&1 \
+	&& echo -lsocket -lnsl || exit 0 ) > socket.lib
+	rm -f trylib.o trylib
+
+
+hasdevtcp.h: \
+hasdevtcp.h1 hasdevtcp.h2
+	(case "`uname -s | tr '/:[A-Z]' '..[a-z]'`" in \
+	sunos-5.*) cat hasdevtcp.h2 ;; \
+	*) cat hasdevtcp.h1 ;; \
+	esac \
+	) > hasdevtcp.h
+
+uint32.h: \
+choose tryuint.h uint32.h-int uint32.h-long uint32.h-attr
+	./choose uint32.h uint32.h-int uint32.h-long uint32.h-attr
+
+hasshsgr.h: \
+choose hasshsgr.h-yes default.h-no
+	./choose hasshsgr.h hasshsgr.h-yes default.h-no
+
+clean:
+	rm -f load compile makelib choose *.o *.a
+	rm -f socket.lib auto_home.c hasdevtcp.h uint32.h hasshsgr.h
+	rm -f httpfile-httpd httpfile-setmtime rts rts.out auto-str install instcheck httpfile-gzip httpfile-access httpfile-setlock httpfile-getmtime
+	rm -rf access.cdb plain gzip
+
+setup: \
+it install
+	./install
+
+check: \
+it instcheck
+	./instcheck
+
+
+httpfile-httpd: \
+load httpfile-httpd.o library.a socket.lib
+	./load httpfile-httpd library.a `cat socket.lib`
+
+httpfile-setmtime: \
+load httpfile-setmtime.o library.a
+	./load httpfile-setmtime library.a
+
+rts: \
+warn-auto.sh rts.sh
+	cat warn-auto.sh rts.sh > rts
+	chmod 755 rts
+
+rts.out: \
+rts rts.tests httpfile-httpd httpfile-access httpfile-setmtime rts.access.txt rts.foo rts.foo.gz
+	./rts > rts.out
+
+auto-str: \
+load auto-str.o library.a
+	./load auto-str library.a
+
+auto_home.c: \
+auto-str conf-home
+	./auto-str auto_home `head -1 conf-home` > auto_home.c
+
+auto_home.o: \
+compile auto_home.c
+	./compile auto_home.c
+
+httpfile-conf: \
+load httpfile-conf.o auto_home.o library.a
+	./load httpfile-conf auto_home.o library.a
+
+install: \
+load install.o auto_home.o library.a
+	./load install auto_home.o library.a
+	./install
+
+instcheck: \
+load instcheck.o auto_home.o library.a
+	./load instcheck auto_home.o library.a
+
+httpfile-gzip: \
+warn-auto.sh httpfile-gzip.sh conf-home
+	cat warn-auto.sh httpfile-gzip.sh | sed s}HTTPFILE}"`head -1 conf-home`"}g  > httpfile-gzip
+	chmod 755 httpfile-gzip
+
+httpfile-access: \
+load httpfile-access.o library.a
+	./load httpfile-access library.a
+
+httpfile-setlock: \
+load httpfile-setlock.o library.a
+	./load httpfile-setlock library.a
+
+httpfile-getmtime: \
+load httpfile-getmtime.o library.a
+	./load httpfile-getmtime library.a

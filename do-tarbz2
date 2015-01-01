@@ -1,0 +1,31 @@
+#!/bin/sh -e
+
+#20131116
+#Jan Mojzis
+#Public domain.
+
+[ -f do-tarbz2 ] || (echo "file do-tarbz2 not found"; exit 111;)
+[ -f debian/changelog ] || (echo "file debian/changelog not found"; exit 111;)
+
+version=`head -1 debian/changelog  | cut -d '(' -f2 | cut -d ')' -f1`
+
+build="`pwd`/build"
+rm -rf "${build}/httpfile-${version}"
+mkdir -p "${build}/httpfile-${version}"
+
+files=""
+for f in `ls | sort`; do
+  [ x"${f}" = xbuild ] && continue
+  [ x"${f}" = xdo-tarbz2 ] && continue
+  [ x"${f}" = xcreatemake.sh ] && continue
+  [ x"${f}" = xgetheader.sh ] && continue
+  [ x"${f}" = xMakefile.templ ] && continue
+  files="${files} ${f}"
+done
+cp -pr ${files} "${build}/httpfile-${version}"
+(
+  cd "${build}"
+  tar cf - "httpfile-${version}" | bzip2 > "httpfile-${version}.tar.bz2.tmp"
+  mv -f "httpfile-${version}.tar.bz2.tmp" "httpfile-${version}.tar.bz2"
+  rm -rf "httpfile-${version}"
+)

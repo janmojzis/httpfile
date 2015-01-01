@@ -1,0 +1,5 @@
+/* Public domain. */
+
+#include "tryuint.h"
+typedef unsigned int __attribute__((__mode__(__SI__))) uint32;
+DOIT(32, uint32, "unsigned int __attribute__((__mode__(__SI__)))")

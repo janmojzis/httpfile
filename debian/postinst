@@ -1,0 +1,18 @@
+#!/bin/sh -e
+
+if [ x"$1" != "xconfigure" ]; then
+  exit 0
+fi
+
+
+NAME="httpfile"
+LOG="httpfilelog"
+
+#vytvorim uzivatele pokud neexituji
+if ! grep -q "^${NAME}:" /etc/passwd; then
+    adduser --quiet --system --no-create-home --disabled-password --home /nonexistent --ingroup nogroup --gecos "${NAME} user" ${NAME}
+fi
+if ! grep -q "^${LOG}:" /etc/passwd; then
+    adduser --quiet --system --no-create-home --disabled-password --home /nonexistent --ingroup nogroup --gecos "${LOG} user" ${LOG}
+fi
+

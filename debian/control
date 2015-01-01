@@ -1,0 +1,12 @@
+Source: httpfile
+Section: net
+Priority: optional
+Build-Depends: debhelper (>= 7), gcc, libc6-dev, make
+Maintainer: Jan Mojzis <jan.mojzis@gmail.com>
+
+Package: httpfile
+Section: net
+Depends: ${shlibs:Depends}, ucspi-tcp
+Architecture: any
+Description: httpfile package
+

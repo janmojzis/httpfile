@@ -1,0 +1,7 @@
+httpfile-httpd usr/bin
+httpfile-conf usr/bin
+httpfile-gzip usr/bin
+httpfile-access usr/bin
+httpfile-setlock usr/bin
+httpfile-getmtime usr/bin
+httpfile-setmtime usr/bin

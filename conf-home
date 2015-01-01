@@ -1,0 +1,4 @@
+/usr/local
+
+This is the httpfile home directory. Programs will be installed in
+.../bin.

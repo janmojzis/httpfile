@@ -1,0 +1,603 @@
+--- httpd handles HTTP/0.9 GET
+1.2.3.4 ./plain/0/foo: success
+Hello, world
+0
+--- httpd handles %xx
+1.2.3.4 ./plain/0/foo: success
+Hello, world
+0
+--- httpd handles HTTP/1.0 GET
+1.2.3.4 ./plain/0/foo: success
+HTTP/1.0 200 OK^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Type: text/plain^M
+Content-Length: 13^M
+^M
+Hello, world
+0
+--- httpd handles HTTP/1.0 HEAD
+1.2.3.4 ./plain/0/foo: success
+HTTP/1.0 200 OK^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Type: text/plain^M
+Content-Length: 13^M
+^M
+0
+--- httpd handles HTTP/1.1 GET with absolute URL
+1.2.3.4 ./plain/0/foo: success
+HTTP/1.1 200 OK^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Type: text/plain^M
+Transfer-Encoding: chunked^M
+^M
+d^M
+Hello, world
+^M
+0^M
+^M
+0
+--- httpd handles HTTP/1.1 GET with Host
+1.2.3.4 ./plain/0/foo: success
+HTTP/1.1 200 OK^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Type: text/plain^M
+Transfer-Encoding: chunked^M
+^M
+d^M
+Hello, world
+^M
+0^M
+^M
+0
+--- httpd rejects HTTP/1.1 GET without host
+HTTP/1.1 400 HTTP/1.1 requests must include a host name^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Length: 70^M
+Connection: close^M
+Content-Type: text/html^M
+^M
+<html><body>HTTP/1.1 requests must include a host name</body></html>^M
+--- httpd handles HTTP/1.1 HEAD
+1.2.3.4 ./plain/0/foo: success
+HTTP/1.1 200 OK^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Type: text/plain^M
+Transfer-Encoding: chunked^M
+^M
+0
+--- httpd handles multiple HTTP/1.1 requests
+1.2.3.4 ./plain/0/foo: success
+HTTP/1.1 200 OK^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Type: text/plain^M
+Transfer-Encoding: chunked^M
+^M
+d^M
+Hello, world
+^M
+0^M
+^M
+1.2.3.4 ./plain/0/bar: success
+HTTP/1.1 200 OK^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Type: text/plain^M
+Transfer-Encoding: chunked^M
+^M
+3^M
+Hi
+^M
+0^M
+^M
+0
+--- httpd prints error message for ENOENT
+1.2.3.4 ./plain/0/nonexistent: open failed: file does not exist
+HTTP/1.0 404 file does not exist^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Length: 47^M
+Content-Type: text/html^M
+^M
+<html><body>file does not exist</body></html>^M
+0
+--- httpd omits body from HEAD error message
+1.2.3.4 ./plain/0/nonexistent: open failed: file does not exist
+HTTP/1.0 404 file does not exist^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Length: 47^M
+Content-Type: text/html^M
+^M
+0
+--- httpd prints error message for ELOOP
+1.2.3.4 ./plain/0/loop: open failed: symbolic link loop
+HTTP/1.0 404 symbolic link loop^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Length: 46^M
+Content-Type: text/html^M
+^M
+<html><body>symbolic link loop</body></html>^M
+0
+--- httpd prints error message for file not group-readable
+1.2.3.4 ./plain/0/unreadable: not ugo+r
+HTTP/1.0 403 access denied^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Length: 41^M
+Content-Type: text/html^M
+^M
+<html><body>access denied</body></html>^M
+0
+--- httpd prints error message for file not world-readable
+1.2.3.4 ./plain/0/unreadable: not ugo+r
+HTTP/1.0 403 access denied^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Length: 41^M
+Content-Type: text/html^M
+^M
+<html><body>access denied</body></html>^M
+0
+--- httpd prints error message for 101 001
+1.2.3.4 ./plain/0/unreadable: o+x but u-x
+HTTP/1.0 403 access denied^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Length: 41^M
+Content-Type: text/html^M
+^M
+<html><body>access denied</body></html>^M
+0
+--- httpd prints error message for directory
+HTTP/1.0 301 moved permanently^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Length: 169^M
+Location: http://0subdirectory/^M
+Content-Type: text/html^M
+^M
+<html><body>The document you requested is a directory.  Try adding a trailing slash to the URL: <a href="http://0subdirectory/">http://0subdirectory/</a></body></html>^M
+0
+--- httpd lowercases host names
+1.2.3.4 ./plain/0virtual/index.html: success
+HTTP/1.0 200 OK^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Type: text/html^M
+Content-Length: 34^M
+^M
+<html><body>Virtual</body></html>
+0
+--- httpd does index.html rewriting
+1.2.3.4 ./plain/0virtual/index.html: success
+HTTP/1.0 200 OK^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Type: text/html^M
+Content-Length: 34^M
+^M
+<html><body>Virtual</body></html>
+0
+--- httpd rewrites dots after slashes
+1.2.3.4 ./plain/0virtual/:./:/index.html: success
+HTTP/1.0 200 OK^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Type: text/html^M
+Content-Length: 33^M
+^M
+<html><body>colons</body></html>
+0
+--- httpd rejects unrecognized requests
+HTTP/1.0 501 method not implemented^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Length: 50^M
+Content-Type: text/html^M
+^M
+<html><body>method not implemented</body></html>^M
+0
+--- httpd rejects lowercase requests
+HTTP/1.0 501 method not implemented^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Length: 50^M
+Content-Type: text/html^M
+^M
+<html><body>method not implemented</body></html>^M
+0
+--- httpd rejects Expect
+HTTP/1.0 417 I do not accept Expect^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Length: 50^M
+Content-Type: text/html^M
+^M
+<html><body>I do not accept Expect</body></html>^M
+0
+--- httpd converts names to file types
+1.2.3.4 ./plain/0/foo...audio=vnd:digital-winds: success
+HTTP/1.1 200 OK^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Type: audio/vnd.digital-winds^M
+Transfer-Encoding: chunked^M
+^M
+1.2.3.4 ./plain/0/foo...dvi: success
+HTTP/1.1 200 OK^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Type: application/x-dvi^M
+Transfer-Encoding: chunked^M
+^M
+1.2.3.4 ./plain/0/foo...gif: success
+HTTP/1.1 200 OK^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Type: image/gif^M
+Transfer-Encoding: chunked^M
+^M
+1.2.3.4 ./plain/0/foo...gz: success
+HTTP/1.1 200 OK^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Type: application/x-gzip^M
+Transfer-Encoding: chunked^M
+^M
+1.2.3.4 ./plain/0/foo...html: success
+HTTP/1.1 200 OK^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Type: text/html^M
+Transfer-Encoding: chunked^M
+^M
+1.2.3.4 ./plain/0/foo...jpeg: success
+HTTP/1.1 200 OK^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Type: image/jpeg^M
+Transfer-Encoding: chunked^M
+^M
+1.2.3.4 ./plain/0/foo...mpeg: success
+HTTP/1.1 200 OK^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Type: video/mpeg^M
+Transfer-Encoding: chunked^M
+^M
+1.2.3.4 ./plain/0/foo...pdf: success
+HTTP/1.1 200 OK^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Type: application/pdf^M
+Transfer-Encoding: chunked^M
+^M
+1.2.3.4 ./plain/0/foo...png: success
+HTTP/1.1 200 OK^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Type: image/png^M
+Transfer-Encoding: chunked^M
+^M
+1.2.3.4 ./plain/0/foo...ps: success
+HTTP/1.1 200 OK^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Type: application/postscript^M
+Transfer-Encoding: chunked^M
+^M
+1.2.3.4 ./plain/0/foo...JPEG: success
+HTTP/1.1 200 OK^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Type: image/jpeg^M
+Transfer-Encoding: chunked^M
+^M
+0
+--- httpd compresses multiple slashes in log entry
+1.2.3.4 ./plain/0/foo: success
+HTTP/1.0 200 OK^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Type: text/plain^M
+Content-Length: 13^M
+^M
+Hello, world
+0
+--- httpd truncates log entry
+1.2.3.4 ./plain/0/012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789...: open failed: file does not exist
+HTTP/1.0 404 file does not exist^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Length: 47^M
+Content-Type: text/html^M
+^M
+<html><body>file does not exist</body></html>^M
+0
+--- httpd translates unusual characters in log entry
+1.2.3.4 ./plain/0/00?01?02?1f?20_21!7f?80?81?ff?: open failed: file does not exist
+HTTP/1.0 404 file does not exist^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Length: 47^M
+Content-Type: text/html^M
+^M
+<html><body>file does not exist</body></html>^M
+0
+--- httpd prints Last-Modified
+1.2.3.4 ./plain/0/old: success
+HTTP/1.0 200 OK^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Last-Modified: Thu, 01 Jan 1970 03:25:45 GMT^M
+Content-Type: text/plain^M
+Content-Length: 5^M
+^M
+test
+0
+--- httpd handles If-Modified-Since
+1.2.3.4 ./plain/0/old: success
+HTTP/1.0 304 OK^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Last-Modified: Thu, 01 Jan 1970 03:25:45 GMT^M
+Content-Type: text/plain^M
+Content-Length: 5^M
+^M
+0
+--- httpd handles Accept-Encoding
+1.2.3.4 ./gzip/0/foo: success
+HTTP/1.0 200 OK^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Type: text/plain^M
+Content-Encoding: gzip^M
+Content-Length: 22^M
+^M
+Hello, world - GZIPED
+0
+--- httpd handles query-string
+1.2.3.4 ./plain/0/foo: success
+HTTP/1.0 200 OK^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Type: text/plain^M
+Content-Length: 13^M
+^M
+Hello, world
+0
+--- httpd handles basic authorization
+HTTP/1.0 401 unauthorized^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+WWW-Authenticate: Basic realm="authorization required"^M
+Content-Length: 40^M
+Content-Type: text/html^M
+^M
+<html><body>unauthorized</body></html>^M
+0
+--- httpd handles correct authorization
+1.2.3.4 ./plain/0/protected/foo: success
+HTTP/1.0 200 OK^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Type: text/plain^M
+Content-Length: 13^M
+^M
+Hello, world
+0
+--- httpd handles bad authorization
+HTTP/1.0 403 unauthorized^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Length: 40^M
+Content-Type: text/html^M
+^M
+<html><body>unauthorized</body></html>^M
+0
+--- httpd handles authorization string
+1.2.3.4 ./plain/0/unprotected/foo: success
+HTTP/1.0 200 OK^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Type: text/plain^M
+Content-Length: 13^M
+^M
+Hello, world
+0
+--- httpd handles authorization + rewrites dots after slashes
+HTTP/1.0 401 unauthorized^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+WWW-Authenticate: Basic realm="authorization required"^M
+Content-Length: 40^M
+Content-Type: text/html^M
+^M
+<html><body>unauthorized</body></html>^M
+0
+--- httpd handles HTTP/1.0 Range for empty file
+1.2.3.4 ./plain/0/range: success
+HTTP/1.0 416 Requested Range Not Satisfiable^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Length: 59^M
+Content-Type: text/html^M
+^M
+<html><body>Requested Range Not Satisfiable</body></html>^M
+0
+--- httpd handles HTTP/1.0 bad Range request: first byte > last byte
+1.2.3.4 ./plain/0/range: success
+HTTP/1.0 416 Requested Range Not Satisfiable^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Length: 59^M
+Content-Type: text/html^M
+^M
+<html><body>Requested Range Not Satisfiable</body></html>^M
+0
+--- httpd handles HTTP/1.0 bad Range request: first byte undefined, last byte is zero
+1.2.3.4 ./plain/0/range: success
+HTTP/1.0 416 Requested Range Not Satisfiable^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Length: 59^M
+Content-Type: text/html^M
+^M
+<html><body>Requested Range Not Satisfiable</body></html>^M
+0
+--- httpd handles HTTP/1.0 bad Range request: first byte undefined, last byte greater or equal than length
+1.2.3.4 ./plain/0/range: success
+HTTP/1.0 206 Partial content^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Range: bytes 0-8/9^M
+Content-Type: text/plain^M
+Content-Length: 9^M
+^M
+12345678
+0
+1.2.3.4 ./plain/0/range: success
+HTTP/1.0 200 OK^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Type: text/plain^M
+Content-Length: 9^M
+^M
+12345678
+0
+--- httpd handles HTTP/1.0 bad Range request: 9-9
+1.2.3.4 ./plain/0/range: success
+HTTP/1.0 416 Requested Range Not Satisfiable^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Length: 59^M
+Content-Type: text/html^M
+^M
+<html><body>Requested Range Not Satisfiable</body></html>^M
+0
+--- httpd handles HTTP/1.0 bad Range request: 100-100
+1.2.3.4 ./plain/0/range: success
+HTTP/1.0 416 Requested Range Not Satisfiable^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Length: 59^M
+Content-Type: text/html^M
+^M
+<html><body>Requested Range Not Satisfiable</body></html>^M
+0
+--- httpd handles HTTP/1.0 bad Range request: 100-
+1.2.3.4 ./plain/0/range: success
+HTTP/1.0 416 Requested Range Not Satisfiable^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Length: 59^M
+Content-Type: text/html^M
+^M
+<html><body>Requested Range Not Satisfiable</body></html>^M
+0
+--- httpd handles HTTP/1.0 Range request: 0-0
+1.2.3.4 ./plain/0/range: success
+HTTP/1.0 206 Partial content^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Range: bytes 0-0/9^M
+Content-Type: text/plain^M
+Content-Length: 1^M
+^M
+10
+--- httpd handles HTTP/1.0 Range request: 0-7
+1.2.3.4 ./plain/0/range: success
+HTTP/1.0 206 Partial content^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Range: bytes 0-7/9^M
+Content-Type: text/plain^M
+Content-Length: 8^M
+^M
+123456780
+--- httpd handles HTTP/1.0 Range request: 0-8
+1.2.3.4 ./plain/0/range: success
+HTTP/1.0 206 Partial content^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Range: bytes 0-8/9^M
+Content-Type: text/plain^M
+Content-Length: 9^M
+^M
+12345678
+0
+--- httpd handles HTTP/1.0 Range request: 0-100
+1.2.3.4 ./plain/0/range: success
+HTTP/1.0 206 Partial content^M
+Server: httpfile^M
+Date: ...
+Accept-Ranges: bytes^M
+Content-Range: bytes 0-8/9^M
+Content-Type: text/plain^M
+Content-Length: 9^M
+^M
+12345678
+0

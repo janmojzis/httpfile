@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if [ x"$1" != xpurge ]; then
+  if [ x"$1" != xremove ]; then
+    exit 0
+  fi
+fi
+
+userdel -f httpfile
+userdel -f httpfilelog
