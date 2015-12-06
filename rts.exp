@@ -175,11 +175,10 @@ HTTP/1.0 301 moved permanently^M
 Server: httpfile^M
 Date: ...
 Accept-Ranges: bytes^M
-Content-Length: 169^M
-Location: http://0subdirectory/^M
+Content-Length: 0^M
+Location: subdirectory/^M
 Content-Type: text/html^M
 ^M
-<html><body>The document you requested is a directory.  Try adding a trailing slash to the URL: <a href="http://0subdirectory/">http://0subdirectory/</a></body></html>^M
 0
 --- httpd lowercases host names
 1.2.3.4 ./plain/0virtual/index.html: success

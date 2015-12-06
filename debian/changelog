@@ -1,3 +1,9 @@
+httpfile (20151206) stable; urgency=low
+
+  * updated directory redirect
+
+ -- Jan Mojzis <jan.mojzis@gmail.com>  Sun, 06 Dec 2015 17:36:56 +0100
+
 httpfile (20140105) stable; urgency=low
 
   * added  header Expires: -1

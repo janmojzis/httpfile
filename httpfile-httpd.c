@@ -140,30 +140,13 @@ stralloc contenttype = {0};
 stralloc redirurl;
 void redirect(void)
 {
-
-  if (!case_startb(url.s,url.len,"http://")) {
-    if (!stralloc_copys(&redirurl,"http://")) die_nomem();
-    if (!stralloc_cat(&redirurl,&host)) die_nomem();
-    if (!stralloc_cat(&redirurl,&path)) die_nomem();
-  }
-  else {
-    if (!stralloc_cat(&redirurl,&url)) die_nomem();
-  }
+  if (!stralloc_copy(&redirurl,&url)) die_nomem();
   if (!stralloc_cats(&redirurl, "/")) die_nomem();
   if (protocolnum > 0) {
     header("301 ", "moved permanently");
-    out_puts("Content-Length: ");
-    out_put(strnum,fmt_longlong(strnum,redirurl.len * 2 + 127));
-    out_puts("\r\nLocation: ");
+    out_puts("Content-Length: 0\r\nLocation: ");
     out_put(redirurl.s, redirurl.len);
     out_puts("\r\nContent-Type: text/html\r\n\r\n");
-  }
-  if (flagbody) {
-    out_puts("<html><body>The document you requested is a directory.  Try adding a trailing slash to the URL: <a href=\"");
-    out_put(redirurl.s,redirurl.len);
-    out_puts("\">");
-    out_put(redirurl.s,redirurl.len);
-    out_puts("</a></body></html>\r\n");
   }
   out_flush();
   if (protocolnum < 2) _exit(0);
