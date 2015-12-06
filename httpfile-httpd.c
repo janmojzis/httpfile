@@ -325,6 +325,7 @@ void get(void)
       out_puts("Last-Modified:");
       out_put(mtimestr.s,mtimestr.len);
       out_puts("\r\n");
+      out_puts("Expires: -1\r\nCache-Control: must-revalidate, private\r\n");
     }
     /* if (!filetype(fn.s,&contenttype)) die_nomem(); */
     out_put(contenttype.s,contenttype.len);

@@ -374,6 +374,8 @@ Server: httpfile^M
 Date: ...
 Accept-Ranges: bytes^M
 Last-Modified: Thu, 01 Jan 1970 03:25:45 GMT^M
+Expires: -1^M
+Cache-Control: must-revalidate, private^M
 Content-Type: text/plain^M
 Content-Length: 5^M
 ^M
@@ -386,6 +388,8 @@ Server: httpfile^M
 Date: ...
 Accept-Ranges: bytes^M
 Last-Modified: Thu, 01 Jan 1970 03:25:45 GMT^M
+Expires: -1^M
+Cache-Control: must-revalidate, private^M
 Content-Type: text/plain^M
 Content-Length: 5^M
 ^M

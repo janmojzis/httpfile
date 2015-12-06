@@ -1,3 +1,10 @@
+httpfile (20140105) stable; urgency=low
+
+  * added  header Expires: -1
+  * added Cache-Control: must-revalidate
+
+ -- Jan Mojzis <jan.mojzis@gmail.com>  Mon, 05 Jan 2015 11:00:42 +0100
+
 httpfile (20131124) stable; urgency=low
 
   * removed flv support
