@@ -1,3 +1,10 @@
+#!/bin/sh
+
+cleanup() {
+  rm -rf '0' 0virtual httpd
+}
+trap "cleanup" EXIT TERM INT
+
 rm -f httpd
 #ln -s publicfile httpd
 ln -s httpfile httpd
