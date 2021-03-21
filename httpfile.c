@@ -1,8 +1,9 @@
 #include <signal.h>
-#include <unistd.h>
-#include <errno.h>
 #include <stdlib.h>
 #include <sys/socket.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #include "stralloc.h"
 #include "pathdecode.h"
 #include "httpdate.h"
@@ -195,6 +196,8 @@ static void redirecthttps(void) {
 
 static void get(void) {
 
+    struct stat st;
+
     if (path.len <= 0 || (path.s[path.len - 1] == '/'))
         if (!stralloc_cats(&path, "index.html")) die_nomem();
     percent(&path);
@@ -203,6 +206,10 @@ static void get(void) {
         if (!stralloc_cats(&fn, "@")) die_nomem();
         if (!stralloc_cat(&fn, &auth)) die_nomem();
         if (!stralloc_cats(&fn, "/")) die_nomem();
+        /* check if authorization string is valid */
+        if (!stralloc_0(&fn)) die_nomem();
+        --fn.len;
+        if (stat(fn.s, &st) != 0) barf("401 ", "unauthorized");
     }
     if (!stralloc_cat(&fn, &host)) die_nomem();
     if (!stralloc_cats(&fn,"/")) die_nomem();
@@ -456,7 +463,9 @@ int main(int argc, char **argv) {
                             for (i = 5; i < field.len; ++i) {
                                 if (field.s[i] != ' ') {
                                     if (field.s[i] != '\t') {
-                                        if (!stralloc_append(&host, &field.s[i])) die_nomem();
+                                        if (field.s[i] != '@') {
+                                            if (!stralloc_append(&host, &field.s[i])) die_nomem();
+                                        }
                                     }
                                 }
                             }
