@@ -1,5 +1,0 @@
-/* Public domain. */
-
-#include "tryuint.h"
-typedef unsigned long uint32;
-DOIT(32, uint32, "unsigned long")

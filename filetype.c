@@ -9,18 +9,18 @@ int filetype(const char *fn,stralloc *contenttype)
   long long i;
   char ch;
 
-  if (!stralloc_copys(contenttype,"Content-Type: ")) return 0;
+  if (!stralloc_copys(contenttype, "")) return 0;
 
   x = fn + str_rchr(fn,'.');
   if (x[str_chr(x,'=')])
     for (i = 0;(i < 100) && (ch = x[i]);++i) {
       if ((ch != '=') && (ch != '-') && (ch != ':'))
-	if ((ch < 'a') || (ch > 'z'))
-	  if ((ch < '0') || (ch > '9'))
-	    continue;
+        if ((ch < 'a') || (ch > 'z'))
+          if ((ch < '0') || (ch > '9'))
+            continue;
       if (ch == '=') ch = '/';
       if (ch == ':') ch = '.';
-      if (!stralloc_append(contenttype,&ch)) return 0;
+      if (!stralloc_append(contenttype, &ch)) return 0;
     }
   else {
     result = "text/plain";
@@ -55,9 +55,7 @@ int filetype(const char *fn,stralloc *contenttype)
     else if (case_equals(x,".ogg")) result = "video/ogg";
     else if (case_equals(x,".webm")) result = "video/webm";
 
-    if (!stralloc_cats(contenttype,result)) return 0;
+    if (!stralloc_cats(contenttype, result)) return 0;
   }
-
-  if (!stralloc_cats(contenttype,"\r\n")) return 0;
   return 1;
 }

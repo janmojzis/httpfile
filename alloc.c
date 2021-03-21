@@ -1,94 +1,139 @@
-/* Public domain. */
+/*
+20201129
+Jan Mojzis
+Public domain.
+*/
 
 #include <stdlib.h>
-#include <sys/time.h>
-#include <sys/resource.h>
-
-#include "e.h"
+#include <string.h>
+#include <errno.h>
 #include "alloc.h"
+#include "log.h"
 
-#define ALIGNMENT 16 /* XXX: assuming that this alignment is enough */
-#define SPACE 8192 /* must be multiple of ALIGNMENT */
+static unsigned char space[alloc_STATICSPACE]  __attribute__ ((aligned(alloc_ALIGNMENT)));
+static unsigned long long avail = sizeof space;
+static unsigned long long allocated = 0;
 
-typedef union { char irrelevant[ALIGNMENT]; double d; } aligned;
-static aligned realspace[SPACE / ALIGNMENT];
-#define space ((char *) realspace)
-static long long avail = SPACE; /* multiple of ALIGNMENT; 0<=avail<=SPACE */
+static void **ptr = 0;
+static unsigned long long ptrlen = 0;
+static unsigned long long ptralloc = 0;
 
-static long long allocated = 0;
-static long long limit     = 0;
+static int ptr_add(void *x) {
 
+    void **newptr;
 
-static void getlimit(void) {
-
-#ifdef RLIMIT_DATA
-    struct rlimit r;
-    if (getrlimit(RLIMIT_DATA, &r) == 0) {
-        if (r.rlim_cur > r.rlim_max)
-            r.rlim_cur = r.rlim_max;
-        limit = (long long)r.rlim_cur;
+    if (!x) return 1;
+    if (ptrlen + 1 > ptralloc) {
+        while (ptrlen + 1 > ptralloc)
+            ptralloc = 2 * ptralloc + 1;
+        newptr = (void **) malloc(ptralloc * sizeof(void *));
+        if (!newptr) return 0;
+        if (ptr) {
+            memcpy(newptr, ptr, ptrlen * sizeof(void *));
+            free(ptr);
+        }
+        ptr = newptr;
     }
-#endif
-    if (limit <= 0)
-        limit = 1073741823; /* 1G */
-    return;
+    ptr[ptrlen++] = x;
+    return 1;
+}
+
+static int ptr_remove(void *x) {
+
+    unsigned long long i;
+
+    for (i = 0; i < ptrlen; ++i) {
+        if (ptr[i] == x) goto ok;
+    }
+    return 0;
+ok:
+    --ptrlen;
+    ptr[i] = ptr[ptrlen];
+    return 1;
+}
+
+static void cleanup(void *xv, unsigned long long xlen) {
+    memset(xv, 0, xlen);
+    __asm__ __volatile__("" : : "r"(xv) : "memory");
 }
 
 
-void *alloc(long long n) {
+void *alloc(unsigned long long norig) {
 
     unsigned char *x;
+    unsigned long long i, n = norig;
 
-    if (n < 0) { errno = ENOMEM; return (void *)0; }
-#if 0
-    if (sizeof(size_t) < 8){
-        if (n > 4000000000LL) { errno = ENOMEM; return (void *)0; } /* 32bit hard limit, slightly less than 4G*/
+    if (n > alloc_LIMIT) {
+        log_e5("alloc(", lognum(norig), ") ... failed, > alloc_LIMIT (", lognum(alloc_LIMIT), ")");
+        goto nomem;
     }
-    else{
-        if (n > 1000000000000LL) { errno = ENOMEM; return (void *)0; } /* hard limit, slightly less than 1T */
+    if (n == 0) {
+        log_w3("alloc(0), will allocate ", lognum(alloc_ALIGNMENT), " bytes");
+        n = alloc_ALIGNMENT;
     }
-#else
-    if (n > 1073741823) { errno = ENOMEM; return (void *)0; }
-#endif
-    if (n == 0) n = 1;
+    n = ((n + alloc_ALIGNMENT - 1) / alloc_ALIGNMENT) * alloc_ALIGNMENT;
+    if (n <= avail) {
+        avail -= n;
+        log_t3("alloc(", lognum(norig), ") ... ok, static");
+        return (void *)(space + avail);
+    }
 
-    n = ALIGNMENT + n - (n & (ALIGNMENT - 1));
-    if (n <= avail) { avail -= n; return (void *)(space + avail); }
-    n += 5;
-
-    if (limit <= 0) getlimit();
-    if (allocated + n > limit) { errno = ENOMEM; return (void *)0; }
-
-    x = malloc(n);
-    if (!x) { errno = ENOMEM; return (void *)0; }
-
+    n += alloc_ALIGNMENT;
     allocated += n;
-    *x++ = n; n >>= 8;
-    *x++ = n; n >>= 8;
-    *x++ = n; n >>= 8;
-    *x++ = n; n >>= 8;
-    *x++ = n; n >>= 8;
 
+    if (n != (unsigned long long) (size_t) (n)) {
+        log_e3("alloc(", lognum(norig), ") ... failed, size_t overflow");
+        goto nomem;
+    }
+
+    x = (unsigned char *) malloc(n);
+    if (!x) {
+        log_e3("alloc(", lognum(norig), ") ... failed, malloc() failed");
+        goto nomem;
+    }
+    cleanup(x, n);
+
+    for (i = 0; i < alloc_ALIGNMENT; ++i) { *x++ = n; n >>= 8; }
+
+    if (!ptr_add(x)) {
+        log_e3("alloc(", lognum(norig), ") ... failed, malloc() failed");
+        goto nomem;
+    }
+    log_t5("alloc(", lognum(norig), ") ... ok, using malloc(), total ", lognum(allocated), " bytes");
     return (void *)x;
+nomem:
+    errno = ENOMEM;
+    return (void *)0;
 }
 
 void alloc_free(void *xv) {
-    
-    unsigned char *p;
-    long long n;
-    char *x = xv;
+
+    unsigned char *x = xv;
+    unsigned long long i, n = 0;
+
+    if (!x) {
+        log_w1("alloc_free(0)");
+        return;
+    }
 
     if (x >= space)
-        if (x < space + SPACE)
+        if (x < space + sizeof space)
             return;
 
-    p = (unsigned char *)x - 5;
-    n = p[4];
-    n <<= 8; n |= p[3];
-    n <<= 8; n |= p[2];
-    n <<= 8; n |= p[1];
-    n <<= 8; n |= p[0];
-    allocated -= n;
+    ptr_remove(x);
 
-    return free(x - 5);
+    for (i = 0; i < alloc_ALIGNMENT; ++i) { n <<= 8; n |= *--x; }
+
+    cleanup(x, n);
+    free(x);
+}
+
+void alloc_freeall(void) {
+
+    while (ptrlen > 0) {
+        alloc_free(ptr[0]);
+    }
+    if (ptr) { free(ptr); ptr = 0; ptrlen = ptralloc = 0; }
+
+    cleanup(space, sizeof space);
 }

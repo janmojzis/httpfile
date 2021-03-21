@@ -4,7 +4,6 @@
 #include <errno.h>
 
 extern const char *e_str(int);
-extern int e_temp(int);
 
 #ifndef EPERM
 #define EPERM (-5001)
