@@ -1,7 +1,7 @@
 --- httpd handles HTTP/1.0 GET
+1.2.3.4 read ./0/foo: success
 HTTP/1.0 200 OK
-Server: httpfile
-Accept-Ranges: bytes
+Server: publicfile
 Date: ...
 Content-Type: text/plain
 Content-Length: 13
@@ -9,18 +9,18 @@ Content-Length: 13
 Hello, world
 0
 --- httpd handles HTTP/1.0 HEAD
+1.2.3.4 read ./0/foo: success
 HTTP/1.0 200 OK
-Server: httpfile
-Accept-Ranges: bytes
+Server: publicfile
 Date: ...
 Content-Type: text/plain
 Content-Length: 13
 
 0
 --- httpd handles HTTP/1.0 %xx
+1.2.3.4 read ./0/foo: success
 HTTP/1.0 200 OK
-Server: httpfile
-Accept-Ranges: bytes
+Server: publicfile
 Date: ...
 Content-Type: text/plain
 Content-Length: 13
@@ -28,19 +28,22 @@ Content-Length: 13
 Hello, world
 0
 --- httpd handles HTTP/1.1 GET with Host
+1.2.3.4 read ./0/foo: success
 HTTP/1.1 200 OK
-Server: httpfile
-Accept-Ranges: bytes
+Server: publicfile
 Date: ...
 Content-Type: text/plain
-Content-Length: 13
+Transfer-Encoding: chunked
 
+d
 Hello, world
+
+0
+
 0
 --- httpd rejects HTTP/1.1 GET without host
 HTTP/1.1 400 HTTP/1.1 requests must include a host name
-Server: httpfile
-Accept-Ranges: bytes
+Server: publicfile
 Date: ...
 Content-Length: 70
 Connection: close
@@ -48,36 +51,44 @@ Content-Type: text/html
 
 <html><body>HTTP/1.1 requests must include a host name</body></html>
 --- httpd handles HTTP/1.1 HEAD with Host
+1.2.3.4 read ./0/foo: success
 HTTP/1.1 200 OK
-Server: httpfile
-Accept-Ranges: bytes
+Server: publicfile
 Date: ...
 Content-Type: text/plain
-Content-Length: 13
+Transfer-Encoding: chunked
 
 0
 --- httpd handles multiple HTTP/1.1 requests
+1.2.3.4 read ./0/foo: success
 HTTP/1.1 200 OK
-Server: httpfile
-Accept-Ranges: bytes
+Server: publicfile
 Date: ...
 Content-Type: text/plain
-Content-Length: 13
+Transfer-Encoding: chunked
 
+d
 Hello, world
+
+0
+
+1.2.3.4 read ./0/bar: success
 HTTP/1.1 200 OK
-Server: httpfile
-Accept-Ranges: bytes
+Server: publicfile
 Date: ...
 Content-Type: text/plain
-Content-Length: 3
+Transfer-Encoding: chunked
 
+3
 Hi
+
+0
+
 0
 --- httpd prints error message for ENOENT
+1.2.3.4 read ./0/nonexistent: open failed: file does not exist
 HTTP/1.0 404 file does not exist
-Server: httpfile
-Accept-Ranges: bytes
+Server: publicfile
 Date: ...
 Content-Length: 47
 Content-Type: text/html
@@ -85,18 +96,18 @@ Content-Type: text/html
 <html><body>file does not exist</body></html>
 0
 --- httpd omits body from HEAD error message
+1.2.3.4 read ./0/nonexistent: open failed: file does not exist
 HTTP/1.0 404 file does not exist
-Server: httpfile
-Accept-Ranges: bytes
+Server: publicfile
 Date: ...
 Content-Length: 47
 Content-Type: text/html
 
 0
 --- httpd prints error message for ELOOP
+1.2.3.4 read ./0/loop: open failed: symbolic link loop
 HTTP/1.0 404 symbolic link loop
-Server: httpfile
-Accept-Ranges: bytes
+Server: publicfile
 Date: ...
 Content-Length: 46
 Content-Type: text/html
@@ -104,9 +115,9 @@ Content-Type: text/html
 <html><body>symbolic link loop</body></html>
 0
 --- httpd prints error message for file not group-readable
+1.2.3.4 read ./0/unreadable: not ugo+r
 HTTP/1.0 404 access denied
-Server: httpfile
-Accept-Ranges: bytes
+Server: publicfile
 Date: ...
 Content-Length: 41
 Content-Type: text/html
@@ -114,9 +125,9 @@ Content-Type: text/html
 <html><body>access denied</body></html>
 0
 --- httpd prints error message for file not world-readable
+1.2.3.4 read ./0/unreadable: not ugo+r
 HTTP/1.0 404 access denied
-Server: httpfile
-Accept-Ranges: bytes
+Server: publicfile
 Date: ...
 Content-Length: 41
 Content-Type: text/html
@@ -124,9 +135,9 @@ Content-Type: text/html
 <html><body>access denied</body></html>
 0
 --- httpd prints error message for 101 001
+1.2.3.4 read ./0/unreadable: o+x but u-x
 HTTP/1.0 404 access denied
-Server: httpfile
-Accept-Ranges: bytes
+Server: publicfile
 Date: ...
 Content-Length: 41
 Content-Type: text/html
@@ -134,18 +145,19 @@ Content-Type: text/html
 <html><body>access denied</body></html>
 0
 --- httpd prints error message for directory
-HTTP/1.0 301 moved permanently
-Server: httpfile
-Accept-Ranges: bytes
+1.2.3.4 read ./0/subdirectory: not a regular file
+HTTP/1.0 404 access denied
+Server: publicfile
 Date: ...
-Content-Length: 0
-Location: //0/subdirectory/
+Content-Length: 41
+Content-Type: text/html
 
+<html><body>access denied</body></html>
 0
 --- httpd lowercases host names
+1.2.3.4 read ./0virtual/index.html: success
 HTTP/1.0 200 OK
-Server: httpfile
-Accept-Ranges: bytes
+Server: publicfile
 Date: ...
 Content-Type: text/html
 Content-Length: 34
@@ -153,9 +165,9 @@ Content-Length: 34
 <html><body>Virtual</body></html>
 0
 --- httpd does index.html rewriting
+1.2.3.4 read ./0virtual/index.html: success
 HTTP/1.0 200 OK
-Server: httpfile
-Accept-Ranges: bytes
+Server: publicfile
 Date: ...
 Content-Type: text/html
 Content-Length: 34
@@ -163,9 +175,9 @@ Content-Length: 34
 <html><body>Virtual</body></html>
 0
 --- httpd rewrites dots after slashes
+1.2.3.4 read ./0virtual/:./:/index.html: success
 HTTP/1.0 200 OK
-Server: httpfile
-Accept-Ranges: bytes
+Server: publicfile
 Date: ...
 Content-Type: text/html
 Content-Length: 33
@@ -173,9 +185,8 @@ Content-Length: 33
 <html><body>colons</body></html>
 0
 --- httpd rejects unrecognized requests
-POST .././ HTTP/1.0HTTP/1.0 501 method not implemented
-Server: httpfile
-Accept-Ranges: bytes
+HTTP/1.0 501 method not implemented
+Server: publicfile
 Date: ...
 Content-Length: 50
 Content-Type: text/html
@@ -183,9 +194,8 @@ Content-Type: text/html
 <html><body>method not implemented</body></html>
 0
 --- httpd rejects lowercase requests
-Head / HTTP/1.0HTTP/1.0 501 method not implemented
-Server: httpfile
-Accept-Ranges: bytes
+HTTP/1.0 501 method not implemented
+Server: publicfile
 Date: ...
 Content-Length: 50
 Content-Type: text/html
@@ -194,8 +204,7 @@ Content-Type: text/html
 0
 --- httpd rejects Expect
 HTTP/1.0 417 I do not accept Expect
-Server: httpfile
-Accept-Ranges: bytes
+Server: publicfile
 Date: ...
 Content-Length: 50
 Content-Type: text/html
@@ -203,81 +212,81 @@ Content-Type: text/html
 <html><body>I do not accept Expect</body></html>
 0
 --- httpd converts names to file types
+1.2.3.4 read ./0/foo...audio=vnd:digital-winds: success
 HTTP/1.1 200 OK
-Server: httpfile
-Accept-Ranges: bytes
+Server: publicfile
 Date: ...
 Content-Type: audio/vnd.digital-winds
-Content-Length: 0
+Transfer-Encoding: chunked
 
+1.2.3.4 read ./0/foo...dvi: success
 HTTP/1.1 200 OK
-Server: httpfile
-Accept-Ranges: bytes
+Server: publicfile
 Date: ...
 Content-Type: application/x-dvi
-Content-Length: 0
+Transfer-Encoding: chunked
 
+1.2.3.4 read ./0/foo...gif: success
 HTTP/1.1 200 OK
-Server: httpfile
-Accept-Ranges: bytes
+Server: publicfile
 Date: ...
 Content-Type: image/gif
-Content-Length: 0
+Transfer-Encoding: chunked
 
+1.2.3.4 read ./0/foo...gz: success
 HTTP/1.1 200 OK
-Server: httpfile
-Accept-Ranges: bytes
+Server: publicfile
 Date: ...
 Content-Type: application/x-gzip
-Content-Length: 0
+Transfer-Encoding: chunked
 
+1.2.3.4 read ./0/foo...html: success
 HTTP/1.1 200 OK
-Server: httpfile
-Accept-Ranges: bytes
+Server: publicfile
 Date: ...
 Content-Type: text/html
-Content-Length: 0
+Transfer-Encoding: chunked
 
+1.2.3.4 read ./0/foo...jpeg: success
 HTTP/1.1 200 OK
-Server: httpfile
-Accept-Ranges: bytes
+Server: publicfile
 Date: ...
 Content-Type: image/jpeg
-Content-Length: 0
+Transfer-Encoding: chunked
 
+1.2.3.4 read ./0/foo...mpeg: success
 HTTP/1.1 200 OK
-Server: httpfile
-Accept-Ranges: bytes
+Server: publicfile
 Date: ...
 Content-Type: video/mpeg
-Content-Length: 0
+Transfer-Encoding: chunked
 
+1.2.3.4 read ./0/foo...pdf: success
 HTTP/1.1 200 OK
-Server: httpfile
-Accept-Ranges: bytes
+Server: publicfile
 Date: ...
 Content-Type: application/pdf
-Content-Length: 0
+Transfer-Encoding: chunked
 
+1.2.3.4 read ./0/foo...png: success
 HTTP/1.1 200 OK
-Server: httpfile
-Accept-Ranges: bytes
+Server: publicfile
 Date: ...
 Content-Type: image/png
-Content-Length: 0
+Transfer-Encoding: chunked
 
+1.2.3.4 read ./0/foo...ps: success
 HTTP/1.1 200 OK
-Server: httpfile
-Accept-Ranges: bytes
+Server: publicfile
 Date: ...
 Content-Type: application/postscript
-Content-Length: 0
+Transfer-Encoding: chunked
 
 0
 --- httpd prints Last-Modified
+1.2.3.4 read ./0/old: success
 HTTP/1.0 200 OK
-Server: httpfile
-Accept-Ranges: bytes
+Server: publicfile
 Date: ...
 Last-Modified: Thu, 01 Jan 1970 03:25:45 GMT
 Content-Type: text/plain
@@ -286,9 +295,9 @@ Content-Length: 5
 test
 0
 --- httpd handles If-Modified-Since
+1.2.3.4 read ./0/old: success
 HTTP/1.0 304 OK
-Server: httpfile
-Accept-Ranges: bytes
+Server: publicfile
 Date: ...
 Last-Modified: Thu, 01 Jan 1970 03:25:45 GMT
 Content-Type: text/plain

@@ -1,6 +1,6 @@
-#ifndef DROPROOT_H
-#define DROPROOT_H
+#ifndef _DROPROOT_H____
+#define _DROPROOT_H____
 
-extern void droproot(const char *);
+extern int droproot(const char *, const char *);
 
 #endif

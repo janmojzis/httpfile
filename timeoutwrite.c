@@ -6,7 +6,7 @@
 #include "milliseconds.h"
 #include "timeoutwrite.h"
 
-long long timeoutwrite(long long t, int fd, char *buf, long long len) {
+long long timeoutwrite(long long t, int fd, const char *buf, long long len) {
 
     long long tm;
     long long deadline;

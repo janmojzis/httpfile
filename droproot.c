@@ -1,33 +1,43 @@
+#include <sys/types.h>
+#include <pwd.h>
+#include <grp.h>
 #include <unistd.h>
-#include "env.h"
-#include "scan.h"
-#include "prot.h"
-#include "strerr.h"
+#include <errno.h>
+#include <sys/resource.h>
+#ifdef __linux__
+#include <sys/prctl.h>
+#endif
+#include "droproot.h"
 
-void droproot(const char *fatal)
-{
-  char *x;
-  long long id;
+int droproot(const char *account, const char *root) {
 
-  x = env_get("ROOT");
-  if (!x)
-    strerr_die2x(111,fatal,"$ROOT not set");
-  if (chdir(x) == -1)
-    strerr_die4sys(111,fatal,"unable to chdir to ",x,": ");
-  if (chroot(".") == -1)
-    strerr_die4sys(111,fatal,"unable to chroot to ",x,": ");
+    struct passwd *pw;
 
-  x = env_get("GID");
-  if (!x)
-    strerr_die2x(111,fatal,"$GID not set");
-  scan_longlong(x,&id);
-  if (prot_gid((int) id) == -1)
-    strerr_die2sys(111,fatal,"unable to setgid: ");
 
-  x = env_get("UID");
-  if (!x)
-    strerr_die2x(111,fatal,"$UID not set");
-  scan_longlong(x,&id);
-  if (prot_uid((int) id) == -1)
-    strerr_die2sys(111,fatal,"unable to setuid: ");
+    pw = getpwnam(account);
+    if (!pw) { errno = ENOENT; return 0; }
+
+#ifdef PR_SET_DUMPABLE
+    if (prctl(PR_SET_DUMPABLE, 0) == -1) return 0;
+#endif
+
+    if (setgroups(1, &pw->pw_gid) == -1) return 0;
+    if (setgid(pw->pw_gid) == -1) return 0;
+    if (getgid() != pw->pw_gid) { errno = EPERM; return 0; }
+    if (setuid(pw->pw_uid) == -1) return 0;
+    if (getuid() != pw->pw_uid) { errno = EPERM; return 0; }
+
+/* prohibit fork */
+#ifdef RLIM_INFINITY
+#ifdef RLIMIT_NPROC
+    {
+        struct rlimit r;
+        r.rlim_cur = 0;
+        r.rlim_max = 0;
+        if (setrlimit(RLIMIT_NPROC, &r) == -1) return 0;
+    }
+#endif
+#endif
+
+    return 1;
 }

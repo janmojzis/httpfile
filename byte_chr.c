@@ -1,6 +1,6 @@
 #include "byte.h"
 
-long long byte_chr(const void *yv,long long ylen, int c) {
+long long byte_chr(const void *yv, long long ylen, int c) {
 
     const unsigned char *y = yv;
     char ch = c;

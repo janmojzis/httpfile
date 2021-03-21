@@ -1,47 +1,30 @@
-# not tested:
-
-# configure
-
-# httpd chroot
-# httpd setgid
-# httpd setuid
-# httpd Date: accuracy
-# httpd timeout
-# httpd temporary errors
+rm -f httpd
+#ln -s publicfile httpd
+ln -s httpfile httpd
 
 umask 022
 
 TCPREMOTEIP=1.2.3.4; export TCPREMOTEIP
-ROOT="."; export ROOT 
-UID=0; export UID
-GID=0; export GID
 
-rm -rf plain gzip
-rm -f access.cdb
-
-echo '--- httpd handles HTTP/0.9 GET'
-rm -rf plain/0
-mkdir -p plain/0
-cat rts.foo >plain/0/foo
-echo 'GET foo' | ./httpfile-httpd; echo $?
-
-echo '--- httpd handles %xx'
-echo 'GET %66%6F%6f' | ./httpfile-httpd; echo $?
+rm -rf 0
+mkdir 0
+echo 'Hello, world' > 0/foo
 
 echo '--- httpd handles HTTP/1.0 GET'
 echo 'GET foo HTTP/1.0
 
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+' | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
 
 echo '--- httpd handles HTTP/1.0 HEAD'
 echo 'HEAD foo HTTP/1.0
 
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+' | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
 
-echo '--- httpd handles HTTP/1.1 GET with absolute URL'
-echo 'GET http://0/foo HTTP/1.1
+echo '--- httpd handles HTTP/1.0 %xx'
+echo 'GET %66%6F%6f HTTP/1.0
 
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+' | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+
 
 echo '--- httpd handles HTTP/1.1 GET with Host'
 echo 'GET foo HTTP/1.1
@@ -49,287 +32,136 @@ One: Two
 Host: 0
 Three: Four
 
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+' | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
 
 echo '--- httpd rejects HTTP/1.1 GET without host'
 echo 'GET foo HTTP/1.1
 
-' | ./httpfile-httpd 2>&1 | sed 's/^Date: .*/Date: .../'
+' | ./httpd 2>&1 | sed 's/^Date: .*/Date: .../'
 
-echo '--- httpd handles HTTP/1.1 HEAD'
-echo 'HEAD http://0/foo HTTP/1.1
+echo '--- httpd handles HTTP/1.1 HEAD with Host'
+echo 'HEAD foo HTTP/1.1
+One: Two
+Host: 0
+Three: Four
 
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+' | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
 
 echo '--- httpd handles multiple HTTP/1.1 requests'
-echo 'Hi' > plain/0/bar
-echo 'GET http://0/foo HTTP/1.1
+echo 'Hi' > 0/bar
+echo 'GET foo HTTP/1.1
+Host: 0
 
-GET http://0/bar HTTP/1.1
+GET bar HTTP/1.1
+Host: 0
 
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+' | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
 
 echo '--- httpd prints error message for ENOENT'
 echo 'GET nonexistent HTTP/1.0
 
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+' | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
 
 echo '--- httpd omits body from HEAD error message'
 echo 'HEAD nonexistent HTTP/1.0
 
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+' | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
 
 echo '--- httpd prints error message for ELOOP'
-ln -s loop plain/0/loop
+ln -s loop 0/loop
 echo 'GET loop HTTP/1.0
 
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+' | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
 
 echo '--- httpd prints error message for file not group-readable'
-echo wrong > plain/0/unreadable
-chmod 604 plain/0/unreadable
+echo wrong > 0/unreadable
+chmod 604 0/unreadable
 echo 'GET unreadable HTTP/1.0
 
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+' | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
 
 echo '--- httpd prints error message for file not world-readable'
-chmod 640 plain/0/unreadable
+chmod 640 0/unreadable
 echo 'GET unreadable HTTP/1.0
 
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+' | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
 
 echo '--- httpd prints error message for 101 001'
-chmod 645 plain/0/unreadable
+chmod 645 0/unreadable
 echo 'GET unreadable HTTP/1.0
 
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+' | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
 
 echo '--- httpd prints error message for directory'
-mkdir plain/0/subdirectory
+mkdir 0/subdirectory
 echo 'GET subdirectory HTTP/1.0
 
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+' | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
 
 echo '--- httpd lowercases host names'
-rm -rf plain/0virtual
-mkdir -p plain/0virtual
-echo '<html><body>Virtual</body></html>' > plain/0virtual/index.html
+rm -rf 0virtual
+mkdir 0virtual
+echo '<html><body>Virtual</body></html>' > 0virtual/index.html
 echo 'GET index.html HTTP/1.0
 Host: 0Virtual
 
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+' | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
 
 echo '--- httpd does index.html rewriting'
 echo 'GET / HTTP/1.0
 Host: 0Virtual
 
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+' | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
 
 echo '--- httpd rewrites dots after slashes'
-mkdir plain/0virtual/:.
-mkdir plain/0virtual/:./:
-echo '<html><body>colons</body></html>' > plain/0virtual/:./:/index.html
+mkdir 0virtual/:.
+mkdir 0virtual/:./:
+echo '<html><body>colons</body></html>' > 0virtual/:./:/index.html
 echo 'GET .././ HTTP/1.0
 Host: 0Virtual
 
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+' | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
 
 echo '--- httpd rejects unrecognized requests'
 echo 'POST .././ HTTP/1.0
 
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+' | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
 
 echo '--- httpd rejects lowercase requests'
 echo 'Head / HTTP/1.0
 
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+' | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
 
 echo '--- httpd rejects Expect'
 echo 'GET .././ HTTP/1.0
 Expect: whatever
 
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+' | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
 
 echo '--- httpd converts names to file types'
-( for i in 'audio=vnd:digital-winds' dvi gif gz html jpeg mpeg pdf png ps JPEG
+( for i in 'audio=vnd:digital-winds' dvi gif gz html jpeg mpeg pdf png ps
   do
-    touch plain/0/foo...$i
-    echo 'HEAD http://0/foo...'$i' HTTP/1.1
+    touch 0/foo...$i
+    echo 'HEAD foo...'$i' HTTP/1.1
+Host: 0
 
 '
   done
-) | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+) | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
 
-echo '--- httpd compresses multiple slashes in log entry'
-echo 'GET /////////////////////////////////////////////////////////////////////////////////////////////////////////////foo HTTP/1.0
-Host: ////////////////////0///////////////////
-
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
-
-echo '--- httpd truncates log entry'
-echo 'GET 01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789 HTTP/1.0
-
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
-
-echo '--- httpd translates unusual characters in log entry'
-echo 'GET 00%0001%0102%021f%1f20%2021%217f%7f80%8081%81ff%ff HTTP/1.0
-
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
 
 echo '--- httpd prints Last-Modified'
-echo test > plain/0/old
-./httpfile-setmtime plain/0/old 12345
+echo test > 0/old
+./utime 0/old 12345
 echo 'GET old HTTP/1.0
 
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+' | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
 
 echo '--- httpd handles If-Modified-Since'
 echo 'GET old HTTP/1.0
 If-Modified-Since: second line takes precedence
 If-MoDiFiEd-SiNcE: Thu, 01 Jan 1970 03:25:45 GMTxxx
 
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+' | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
 
-echo "--- httpd handles Accept-Encoding"
-mkdir -p gzip/0
-cat rts.foo >plain/0/foo
-cat rts.foo.gz >gzip/0/foo
-echo 'GET foo HTTP/1.0
-Accept-Encoding: gzip
-
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
-
-echo '--- httpd handles query-string'
-echo 'GET foo?12345 HTTP/1.0
-
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
-
-echo '--- httpd handles basic authorization'
-mkdir -p plain/0/protected
-cat rts.foo >plain/0/protected/foo
-./httpfile-access access.cdb access.tmp < rts.access.txt 
-ACCESSFILE=access.cdb
-export ACCESSFILE
-echo 'GET protected/foo HTTP/1.0
-
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
-
-echo '--- httpd handles correct authorization'
-echo 'GET protected/foo HTTP/1.0
-Authorization: basic dXNlcjpwYXNzd29yZA==
-
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
-
-echo '--- httpd handles bad authorization'
-echo 'GET protected/foo HTTP/1.0
-Authorization: basic eHh4Cg==
-
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
-
-echo '--- httpd handles authorization string'
-mkdir -p plain/0/unprotected
-cat rts.foo >plain/0/unprotected/foo
-echo 'GET unprotected/foo HTTP/1.0
-Authorization: basic eHh4Cg==
-
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
-
-echo '--- httpd handles authorization + rewrites dots after slashes'
-echo 'GET .././ HTTP/1.0
-Host: 0Virtual
-
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
-
-echo '--- httpd handles HTTP/1.0 Range for empty file'
-rm -rf plain/0
-rm -rf gzip/0
-mkdir -p plain/0
-mkdir -p gzip/0
-touch plain/0/range
-echo "xxx" > gzip/0/range
-echo 'GET range HTTP/1.0
-Range: bytes=0-0
-Accept-Encoding: gzip
-
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
-
-echo '--- httpd handles HTTP/1.0 bad Range request: first byte > last byte'
-rm -rf plain/0
-rm -rf gzip/0
-mkdir -p plain/0
-mkdir -p gzip/0
-echo "12345678" > plain/0/range
-echo "xxx" > gzip/0/range
-echo 'GET range HTTP/1.0
-Range: bytes=1-0
-Accept-Encoding: gzip
-
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
-
-echo '--- httpd handles HTTP/1.0 bad Range request: first byte undefined, last byte is zero'
-echo 'GET range HTTP/1.0
-Range: bytes=-0
-Accept-Encoding: gzip
-
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
-
-echo '--- httpd handles HTTP/1.0 bad Range request: first byte undefined, last byte greater or equal than length'
-echo 'GET range HTTP/1.0
-Range: bytes=-9
-Accept-Encoding: gzip
-
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
-echo 'GET range HTTP/1.0
-Range: bytes=-100
-Accept-Encoding: gzip
-
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
-
-echo '--- httpd handles HTTP/1.0 bad Range request: 9-9'
-echo 'GET range HTTP/1.0
-Range: bytes=9-9
-Accept-Encoding: gzip
-
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
-
-echo '--- httpd handles HTTP/1.0 bad Range request: 100-100'
-echo 'GET range HTTP/1.0
-Range: bytes=100-100
-Accept-Encoding: gzip
-
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
-
-echo '--- httpd handles HTTP/1.0 bad Range request: 100-'
-echo 'GET range HTTP/1.0
-Range: bytes=100-
-Accept-Encoding: gzip
-
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
-
-echo '--- httpd handles HTTP/1.0 Range request: 0-0'
-echo 'GET range HTTP/1.0
-Range: bytes=0-0
-Accept-Encoding: gzip
-
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
-
-echo '--- httpd handles HTTP/1.0 Range request: 0-7'
-echo 'GET range HTTP/1.0
-Range: bytes=0-7
-Accept-Encoding: gzip
-
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
-
-echo '--- httpd handles HTTP/1.0 Range request: 0-8'
-echo 'GET range HTTP/1.0
-Range: bytes=0-8
-Accept-Encoding: gzip
-
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
-
-echo '--- httpd handles HTTP/1.0 Range request: 0-100'
-echo 'GET range HTTP/1.0
-Range: bytes=0-100
-Accept-Encoding: gzip
-
-' | ( ./httpfile-httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+exit 0

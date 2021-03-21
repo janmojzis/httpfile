@@ -3,5 +3,5 @@
 
 long long seconds(void) {
 
-    return time((time_t *)0);
+    return time((time_t *) 0);
 }
