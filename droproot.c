@@ -11,21 +11,30 @@
 
 int droproot(const char *account, const char *root) {
 
-    struct passwd *pw;
+    struct passwd *pw = 0;
 
 
-    pw = getpwnam(account);
-    if (!pw) { errno = ENOENT; return 0; }
+    if (account) {
+        pw = getpwnam(account);
+        if (!pw) { errno = ENOENT; return 0; }
+    }
 
 #ifdef PR_SET_DUMPABLE
     if (prctl(PR_SET_DUMPABLE, 0) == -1) return 0;
 #endif
 
-    if (setgroups(1, &pw->pw_gid) == -1) return 0;
-    if (setgid(pw->pw_gid) == -1) return 0;
-    if (getgid() != pw->pw_gid) { errno = EPERM; return 0; }
-    if (setuid(pw->pw_uid) == -1) return 0;
-    if (getuid() != pw->pw_uid) { errno = EPERM; return 0; }
+    if (root) {
+        if (chdir(root) == -1) return 0;
+        if (chroot(".") == -1) return 0;
+    }
+
+    if (pw) {
+        if (setgroups(1, &pw->pw_gid) == -1) return 0;
+        if (setgid(pw->pw_gid) == -1) return 0;
+        if (getgid() != pw->pw_gid) { errno = EPERM; return 0; }
+        if (setuid(pw->pw_uid) == -1) return 0;
+        if (getuid() != pw->pw_uid) { errno = EPERM; return 0; }
+    }
 
 /* prohibit fork */
 #ifdef RLIM_INFINITY

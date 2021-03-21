@@ -32,7 +32,6 @@ static void _die(int x) {
 }
 
 static void die_nomem(void)  { log_f1("out of memory"); _die(111); }
-static void die_chroot(const char *dir)  { log_f2("unable to chroot in to the directory ", dir); _die(111); }
 static void die_droproot(void)  { log_f1("unable to drop privileges"); _die(111); }
 
 static stralloc line = {0};
@@ -339,7 +338,7 @@ int main(int argc, char **argv) {
     signal(SIGPIPE, SIG_IGN);
     signal(SIGALRM, drop);
 
-    log_name("tlswrapper");
+    log_name("httpfile");
 
 
     if (!argv[0]) usage();
@@ -372,16 +371,8 @@ int main(int argc, char **argv) {
     }
     root = *++argv;
 
-    /* chroot */
-    if (root) {
-        if (chdir(root) == -1) die_chroot(root);
-        if (chroot(".") == -1) die_chroot(root);
-    }
-
     /* drop privileges */
-    if (user) {
-        if (!droproot(user, root)) die_droproot();
-    }
+    if (!droproot(user, root)) die_droproot();
 
     log_id(getenv("TCPREMOTEIP"));
     log_level(flagverbose);
