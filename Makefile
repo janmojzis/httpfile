@@ -90,6 +90,12 @@ httpfile: httpfile.o  alloc.o byte_chr.o byte_isequal.o case_diffb.o case_diffs.
 utime: utime.o  alloc.o byte_chr.o byte_isequal.o case_diffb.o case_diffs.o case_lowerb.o case_startb.o case_starts.o droproot.o e.o file.o filetype.o hostparse.o httpdate.o log.o milliseconds.o numtostr.o pathdecode.o percent.o rangeparser.o seconds.o stralloc.o str.o timeoutwrite.o
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o utime utime.o  alloc.o byte_chr.o byte_isequal.o case_diffb.o case_diffs.o case_lowerb.o case_startb.o case_starts.o droproot.o e.o file.o filetype.o hostparse.o httpdate.o log.o milliseconds.o numtostr.o pathdecode.o percent.o rangeparser.o seconds.o stralloc.o str.o timeoutwrite.o $(LDFLAGS)
 
+rts.out:  httpfile utime rts.tests rts.exp
+	sh rts.tests > rts.out
+
+test: rts.exp rts.out
+	diff rts.exp rts.out
+
 clean:
-	rm -f *.o  httpfile utime
+	rm -f *.o  httpfile utime rts.out
 

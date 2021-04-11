@@ -54,8 +54,16 @@ rm -rf "${build}"
       fi
     done
 
+    echo "rts.out: ${binaries} rts.tests rts.exp"
+    echo -e "\tsh rts.tests > rts.out"
+    echo
+
+    echo "test: rts.exp rts.out"
+    echo -e "\tdiff rts.exp rts.out"
+    echo
+
     echo "clean:"
-    echo -e "\trm -f *.o ${binaries}"
+    echo -e "\trm -f *.o ${binaries} rts.out"
     echo 
 
   ) > Makefile
