@@ -45,8 +45,9 @@ int rangeparser(long long *first, long long *last, char *x, long long xlen, long
 
     /* '-2' -> 47020-47021/47022 */
     if (min < 0) {
-        *first = length - max;
         *last = length - 1;
+        *first = length - max;
+        if (*first < 0) *first = 0;
     }
 
     /* '1-1' ->  1-1/47022 */
