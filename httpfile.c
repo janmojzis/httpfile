@@ -219,8 +219,8 @@ static void get(void) {
 
     errno = 0;
     fd = file_open(fn.s, &filecontent, &filelength, &mtime);
+    log_d2("opening file: ", fn.s);
     if (fd == -1) {
-        log_w2("opening file: ", fn.s);
         switch (errno) {
             case EISDIR:
                 redirect("", "/"); return;
@@ -230,7 +230,6 @@ static void get(void) {
                 barf("404 ", e_str(errno)); break;
         }
     }
-    log_d2("opening file: ", fn.s);
     if (!filetype(fn.s, &contenttype)) die_nomem();
 
     rangefirst = 0;
@@ -360,7 +359,7 @@ int main(int argc, char **argv) {
             if (*x == 'Q') { flagverbose = 1; log_level(flagverbose); continue; }
             if (*x == 'v') { log_level(++flagverbose); continue; }
 
-			/* redirect */
+            /* redirect */
             if (*x == 'r') { flagredir = 1; continue; }
 
             /* user */
@@ -373,7 +372,7 @@ int main(int argc, char **argv) {
                 if (x[1]) { customheaders_add(x + 1); break; }
                 if (argv[1]) { customheaders_add(*++argv); break; }
             }
-			usage();
+            usage();
         }
     }
     root = *++argv;
@@ -384,7 +383,7 @@ int main(int argc, char **argv) {
     log_id(getenv("TCPREMOTEIP"));
     log_level(flagverbose);
 
-	if (flagredir) doit = redirecthttps;
+    if (flagredir) doit = redirecthttps;
 
     if (!stralloc_readyplus(&response, 256)) die_nomem();
     if (!stralloc_readyplus(&field, 128)) die_nomem();
