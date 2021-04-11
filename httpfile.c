@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include "stralloc.h"
 #include "pathdecode.h"
+#include "hostparse.h"
 #include "httpdate.h"
 #include "seconds.h"
 #include "percent.h"
@@ -486,7 +487,7 @@ int main(int argc, char **argv) {
             }
         }
 
-        host.len = byte_chr(host.s, host.len, ':');
+        hostparse(&host);
         if (!host.len) {
             if (protocolnum > 1) barf("400 ", "HTTP/1.1 requests must include a host name");
             if (!stralloc_copys(&host,"0")) die_nomem();

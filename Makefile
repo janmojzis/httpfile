@@ -40,12 +40,15 @@ file.o: file.c
 filetype.o: filetype.c filetype.h stralloc.h str.h case.h
 	$(CC) $(CFLAGS) $(CPPFLAGS)  -c filetype.c
 
+hostparse.o: hostparse.c byte.h stralloc.h hostparse.h
+	$(CC) $(CFLAGS) $(CPPFLAGS)  -c hostparse.c
+
 httpdate.o: httpdate.c httpdate.h stralloc.h
 	$(CC) $(CFLAGS) $(CPPFLAGS)  -c httpdate.c
 
-httpfile.o: httpfile.c stralloc.h pathdecode.h httpdate.h seconds.h \
-  percent.h case.h log.h byte.h str.h numtostr.h filetype.h file.h \
-  droproot.h alloc.h timeoutwrite.h rangeparser.h
+httpfile.o: httpfile.c stralloc.h pathdecode.h hostparse.h httpdate.h \
+ seconds.h percent.h case.h log.h byte.h str.h numtostr.h filetype.h \
+ file.h droproot.h alloc.h e.h timeoutwrite.h rangeparser.h
 	$(CC) $(CFLAGS) $(CPPFLAGS)  -c httpfile.c
 
 log.o: log.c e.h log.h
@@ -69,11 +72,11 @@ rangeparser.o: rangeparser.c rangeparser.h
 seconds.o: seconds.c seconds.h
 	$(CC) $(CFLAGS) $(CPPFLAGS)  -c seconds.c
 
-str.o: str.c str.h
-	$(CC) $(CFLAGS) $(CPPFLAGS)  -c str.c
-
 stralloc.o: stralloc.c alloc.h e.h stralloc.h
 	$(CC) $(CFLAGS) $(CPPFLAGS)  -c stralloc.c
+
+str.o: str.c str.h
+	$(CC) $(CFLAGS) $(CPPFLAGS)  -c str.c
 
 timeoutwrite.o: timeoutwrite.c e.h milliseconds.h timeoutwrite.h
 	$(CC) $(CFLAGS) $(CPPFLAGS)  -c timeoutwrite.c
@@ -81,11 +84,11 @@ timeoutwrite.o: timeoutwrite.c e.h milliseconds.h timeoutwrite.h
 utime.o: utime.c
 	$(CC) $(CFLAGS) $(CPPFLAGS)  -c utime.c
 
-httpfile: httpfile.o  alloc.o byte_chr.o byte_isequal.o case_diffb.o case_diffs.o case_lowerb.o case_startb.o case_starts.o droproot.o e.o file.o filetype.o httpdate.o log.o milliseconds.o numtostr.o pathdecode.o percent.o rangeparser.o seconds.o str.o stralloc.o timeoutwrite.o
-	$(CC) $(CFLAGS) $(CPPFLAGS) -o httpfile httpfile.o  alloc.o byte_chr.o byte_isequal.o case_diffb.o case_diffs.o case_lowerb.o case_startb.o case_starts.o droproot.o e.o file.o filetype.o httpdate.o log.o milliseconds.o numtostr.o pathdecode.o percent.o rangeparser.o seconds.o str.o stralloc.o timeoutwrite.o $(LDFLAGS)
+httpfile: httpfile.o  alloc.o byte_chr.o byte_isequal.o case_diffb.o case_diffs.o case_lowerb.o case_startb.o case_starts.o droproot.o e.o file.o filetype.o hostparse.o httpdate.o log.o milliseconds.o numtostr.o pathdecode.o percent.o rangeparser.o seconds.o stralloc.o str.o timeoutwrite.o
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o httpfile httpfile.o  alloc.o byte_chr.o byte_isequal.o case_diffb.o case_diffs.o case_lowerb.o case_startb.o case_starts.o droproot.o e.o file.o filetype.o hostparse.o httpdate.o log.o milliseconds.o numtostr.o pathdecode.o percent.o rangeparser.o seconds.o stralloc.o str.o timeoutwrite.o $(LDFLAGS)
 
-utime: utime.o  alloc.o byte_chr.o byte_isequal.o case_diffb.o case_diffs.o case_lowerb.o case_startb.o case_starts.o droproot.o e.o file.o filetype.o httpdate.o log.o milliseconds.o numtostr.o pathdecode.o percent.o rangeparser.o seconds.o str.o stralloc.o timeoutwrite.o
-	$(CC) $(CFLAGS) $(CPPFLAGS) -o utime utime.o  alloc.o byte_chr.o byte_isequal.o case_diffb.o case_diffs.o case_lowerb.o case_startb.o case_starts.o droproot.o e.o file.o filetype.o httpdate.o log.o milliseconds.o numtostr.o pathdecode.o percent.o rangeparser.o seconds.o str.o stralloc.o timeoutwrite.o $(LDFLAGS)
+utime: utime.o  alloc.o byte_chr.o byte_isequal.o case_diffb.o case_diffs.o case_lowerb.o case_startb.o case_starts.o droproot.o e.o file.o filetype.o hostparse.o httpdate.o log.o milliseconds.o numtostr.o pathdecode.o percent.o rangeparser.o seconds.o stralloc.o str.o timeoutwrite.o
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o utime utime.o  alloc.o byte_chr.o byte_isequal.o case_diffb.o case_diffs.o case_lowerb.o case_startb.o case_starts.o droproot.o e.o file.o filetype.o hostparse.o httpdate.o log.o milliseconds.o numtostr.o pathdecode.o percent.o rangeparser.o seconds.o stralloc.o str.o timeoutwrite.o $(LDFLAGS)
 
 clean:
 	rm -f *.o  httpfile utime

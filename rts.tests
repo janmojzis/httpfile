@@ -171,4 +171,23 @@ If-MoDiFiEd-SiNcE: Thu, 01 Jan 1970 03:25:45 GMTxxx
 
 ' | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
 
-exit 0
+# NEW
+
+echo '--- httpd accepts Host: IPv4:port, [IPv6]:port'
+rm -rf 127.0.0.1 ::1
+mkdir 127.0.0.1 ::1
+echo '<html><body>IPv4</body></html>' > 127.0.0.1/index.html
+echo '<html><body>IPv6</body></html>' > ::1/index.html
+echo 'GET / HTTP/1.1
+Host: 127.0.0.1
+
+GET / HTTP/1.1
+Host: 127.0.0.1:80
+
+GET / HTTP/1.1
+Host: ::1
+
+GET / HTTP/1.1
+Host: [::1]:80
+
+' | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'

@@ -295,3 +295,37 @@ Content-Type: text/plain
 Content-Length: 5
 
 0
+--- httpd accepts Host: IPv4:port, [IPv6]:port
+HTTP/1.1 200 OK
+Server: httpfile
+Accept-Ranges: bytes
+Date: ...
+Content-Type: text/html
+Content-Length: 31
+
+<html><body>IPv4</body></html>
+HTTP/1.1 200 OK
+Server: httpfile
+Accept-Ranges: bytes
+Date: ...
+Content-Type: text/html
+Content-Length: 31
+
+<html><body>IPv4</body></html>
+HTTP/1.1 200 OK
+Server: httpfile
+Accept-Ranges: bytes
+Date: ...
+Content-Type: text/html
+Content-Length: 31
+
+<html><body>IPv6</body></html>
+HTTP/1.1 200 OK
+Server: httpfile
+Accept-Ranges: bytes
+Date: ...
+Content-Type: text/html
+Content-Length: 31
+
+<html><body>IPv6</body></html>
+0
