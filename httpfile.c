@@ -90,11 +90,15 @@ static void out_put(const char *x, long long xlen) {
 }
 
 static void out_body(const char *x, long long xlen) {
+#if XXXTODO
     if (!stralloc_0(&response)) die_nomem();
     --response.len;
     log_d2("response headers: ", response.s);
+#endif
     out_flush();
-    writeall(x, xlen);
+    if (flagbody) {
+        writeall(x, xlen);
+    }
 }
 
 static void customheaders_add(char *x) {
@@ -263,9 +267,6 @@ static void get(void) {
         out_puts("Last-Modified:");
         out_put(mtimestr.s, mtimestr.len);
         out_puts("\r\n");
-    #if 0
-        out_puts("Expires: -1\r\nCache-Control: must-revalidate, no-store, no-cache, private, max-age=0\r\n");
-    #endif
     }
 
     out_puts("Content-Type: ");
@@ -273,10 +274,7 @@ static void get(void) {
     out_puts("\r\nContent-Length: ");
     out_puts(numtostr(0, rangelast + 1 - rangefirst));
     out_puts("\r\n\r\n");
-    if (flagbody) {
-        out_body(filecontent + rangefirst, rangelast + 1 - rangefirst);
-    }
-    out_flush();
+    out_body(filecontent + rangefirst, rangelast + 1 - rangefirst);
     close(fd);
     if (protocolnum < 2) _die(0);
 }
