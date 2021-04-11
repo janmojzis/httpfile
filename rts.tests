@@ -1,7 +1,7 @@
 #!/bin/sh
 
 cleanup() {
-  rm -rf '0' 0virtual httpd
+  rm -rf '0' 0virtual httpd '127.0.0.1' '::1'
 }
 trap "cleanup" EXIT TERM INT
 
