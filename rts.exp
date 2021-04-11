@@ -330,254 +330,229 @@ Content-Length: 31
 <html><body>IPv6</body></html>
 0
 --- httpd handle Range request "0-0" and length 0
-HTTP/1.0 416 requested range not satisfiable
+HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Length: 59
-Content-Type: text/html
+Content-Type: text/plain
+Content-Length: 0
 
-<html><body>requested range not satisfiable</body></html>
 0
 --- httpd handle Range request "0-1" and length 0
-HTTP/1.0 416 requested range not satisfiable
+HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Length: 59
-Content-Type: text/html
+Content-Type: text/plain
+Content-Length: 0
 
-<html><body>requested range not satisfiable</body></html>
 0
 --- httpd handle Range request "0-2" and length 0
-HTTP/1.0 416 requested range not satisfiable
+HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Length: 59
-Content-Type: text/html
+Content-Type: text/plain
+Content-Length: 0
 
-<html><body>requested range not satisfiable</body></html>
 0
 --- httpd handle Range request "0-3" and length 0
-HTTP/1.0 416 requested range not satisfiable
+HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Length: 59
-Content-Type: text/html
+Content-Type: text/plain
+Content-Length: 0
 
-<html><body>requested range not satisfiable</body></html>
 0
 --- httpd handle Range request "0-" and length 0
-HTTP/1.0 416 requested range not satisfiable
+HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Length: 59
-Content-Type: text/html
+Content-Type: text/plain
+Content-Length: 0
 
-<html><body>requested range not satisfiable</body></html>
 0
 --- httpd handle Range request "1-0" and length 0
-HTTP/1.0 416 requested range not satisfiable
+HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Length: 59
-Content-Type: text/html
+Content-Type: text/plain
+Content-Length: 0
 
-<html><body>requested range not satisfiable</body></html>
 0
 --- httpd handle Range request "1-1" and length 0
-HTTP/1.0 416 requested range not satisfiable
+HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Length: 59
-Content-Type: text/html
+Content-Type: text/plain
+Content-Length: 0
 
-<html><body>requested range not satisfiable</body></html>
 0
 --- httpd handle Range request "1-2" and length 0
-HTTP/1.0 416 requested range not satisfiable
+HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Length: 59
-Content-Type: text/html
+Content-Type: text/plain
+Content-Length: 0
 
-<html><body>requested range not satisfiable</body></html>
 0
 --- httpd handle Range request "1-3" and length 0
-HTTP/1.0 416 requested range not satisfiable
+HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Length: 59
-Content-Type: text/html
+Content-Type: text/plain
+Content-Length: 0
 
-<html><body>requested range not satisfiable</body></html>
 0
 --- httpd handle Range request "1-" and length 0
-HTTP/1.0 416 requested range not satisfiable
+HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Length: 59
-Content-Type: text/html
+Content-Type: text/plain
+Content-Length: 0
 
-<html><body>requested range not satisfiable</body></html>
 0
 --- httpd handle Range request "2-0" and length 0
-HTTP/1.0 416 requested range not satisfiable
+HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Length: 59
-Content-Type: text/html
+Content-Type: text/plain
+Content-Length: 0
 
-<html><body>requested range not satisfiable</body></html>
 0
 --- httpd handle Range request "2-1" and length 0
-HTTP/1.0 416 requested range not satisfiable
+HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Length: 59
-Content-Type: text/html
+Content-Type: text/plain
+Content-Length: 0
 
-<html><body>requested range not satisfiable</body></html>
 0
 --- httpd handle Range request "2-2" and length 0
-HTTP/1.0 416 requested range not satisfiable
+HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Length: 59
-Content-Type: text/html
+Content-Type: text/plain
+Content-Length: 0
 
-<html><body>requested range not satisfiable</body></html>
 0
 --- httpd handle Range request "2-3" and length 0
-HTTP/1.0 416 requested range not satisfiable
+HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Length: 59
-Content-Type: text/html
+Content-Type: text/plain
+Content-Length: 0
 
-<html><body>requested range not satisfiable</body></html>
 0
 --- httpd handle Range request "2-" and length 0
-HTTP/1.0 416 requested range not satisfiable
+HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Length: 59
-Content-Type: text/html
+Content-Type: text/plain
+Content-Length: 0
 
-<html><body>requested range not satisfiable</body></html>
 0
 --- httpd handle Range request "3-0" and length 0
-HTTP/1.0 416 requested range not satisfiable
+HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Length: 59
-Content-Type: text/html
+Content-Type: text/plain
+Content-Length: 0
 
-<html><body>requested range not satisfiable</body></html>
 0
 --- httpd handle Range request "3-1" and length 0
-HTTP/1.0 416 requested range not satisfiable
+HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Length: 59
-Content-Type: text/html
+Content-Type: text/plain
+Content-Length: 0
 
-<html><body>requested range not satisfiable</body></html>
 0
 --- httpd handle Range request "3-2" and length 0
-HTTP/1.0 416 requested range not satisfiable
+HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Length: 59
-Content-Type: text/html
+Content-Type: text/plain
+Content-Length: 0
 
-<html><body>requested range not satisfiable</body></html>
 0
 --- httpd handle Range request "3-3" and length 0
-HTTP/1.0 416 requested range not satisfiable
+HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Length: 59
-Content-Type: text/html
+Content-Type: text/plain
+Content-Length: 0
 
-<html><body>requested range not satisfiable</body></html>
 0
 --- httpd handle Range request "3-" and length 0
-HTTP/1.0 416 requested range not satisfiable
+HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Length: 59
-Content-Type: text/html
+Content-Type: text/plain
+Content-Length: 0
 
-<html><body>requested range not satisfiable</body></html>
 0
 --- httpd handle Range request "-0" and length 0
-HTTP/1.0 416 requested range not satisfiable
+HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Length: 59
-Content-Type: text/html
+Content-Type: text/plain
+Content-Length: 0
 
-<html><body>requested range not satisfiable</body></html>
 0
 --- httpd handle Range request "-1" and length 0
-HTTP/1.0 416 requested range not satisfiable
+HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Length: 59
-Content-Type: text/html
+Content-Type: text/plain
+Content-Length: 0
 
-<html><body>requested range not satisfiable</body></html>
 0
 --- httpd handle Range request "-2" and length 0
-HTTP/1.0 416 requested range not satisfiable
+HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Length: 59
-Content-Type: text/html
+Content-Type: text/plain
+Content-Length: 0
 
-<html><body>requested range not satisfiable</body></html>
 0
 --- httpd handle Range request "-3" and length 0
-HTTP/1.0 416 requested range not satisfiable
+HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Length: 59
-Content-Type: text/html
+Content-Type: text/plain
+Content-Length: 0
 
-<html><body>requested range not satisfiable</body></html>
 0
 --- httpd handle Range request "-" and length 0
-HTTP/1.0 416 requested range not satisfiable
+HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Length: 59
-Content-Type: text/html
+Content-Type: text/plain
+Content-Length: 0
 
-<html><body>requested range not satisfiable</body></html>
 0
 --- httpd handle Range request "0-0" and length 1
 HTTP/1.0 206 partial content

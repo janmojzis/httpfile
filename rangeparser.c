@@ -57,8 +57,8 @@ int rangeparser(long long *first, long long *last, char *x, long long xlen, long
         if (*last > length - 1) *last = length - 1;
     }
 
-    if (*first < 0) return 0;
-    if (*last < 0) return 0;
+    if (*first < 0) return 0; /* probably useless */
+    if (*last < 0) return 0; /* probably useless */
     if (*first >= length) return 0;
     if (*first > *last) return 0;
 

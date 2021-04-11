@@ -240,7 +240,7 @@ static void get(void) {
     rangefirst = 0;
     rangelast = filelength - 1;
     if (!httpdate(&mtimestr, mtime)) die_nomem();
-    if (range.len > 0) {
+    if (range.len > 0 && filelength > 0) {
         if (!rangeparser(&rangefirst, &rangelast, range.s, range.len, filelength)) {
             barf("416 ", "requested range not satisfiable");
         }
