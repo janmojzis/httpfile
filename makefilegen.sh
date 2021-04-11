@@ -45,7 +45,7 @@
       fi
     done
 
-    echo "rts.out: ${binaries} rts.tests rts.exp"
+    echo "rts.out: ${binaries} rts.tests"
     echo -e "\tsh rts.tests > rts.out"
     echo
 
