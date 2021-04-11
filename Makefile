@@ -1,4 +1,4 @@
-CC=cc
+CC?=cc
 CFLAGS+=-W -Wall -Os -fPIC -fwrapv -Wall
 LDFLAGS+=
 

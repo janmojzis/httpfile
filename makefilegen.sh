@@ -1,18 +1,9 @@
 #!/bin/bash
 
-top="`pwd`"
-build="`pwd`/build"
-
-rm -rf "${build}"
-#mkdir -p "${build}"
-
-#cp *.c *.h "${build}"
 (
-  #cd "${build}"
   (
-    echo "CC=cc"
+    echo "CC?=cc"
     echo "CFLAGS+=-W -Wall -Os -fPIC -fwrapv -Wall"
-    #echo "LDFLAGS+=-L../BearSSL/build -lbearssl -static"
     echo "LDFLAGS+="
     echo 
 
