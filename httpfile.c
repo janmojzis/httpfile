@@ -276,7 +276,7 @@ static void get(void) {
     out_puts(numtostr(0, rangelast + 1 - rangefirst));
     out_puts("\r\n\r\n");
     out_body(filecontent + rangefirst, rangelast + 1 - rangefirst);
-    close(fd);
+    file_close(fd, filecontent, filelength);
     if (protocolnum < 2) _die(0);
 }
 
