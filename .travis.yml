@@ -19,5 +19,4 @@ script:
 
 after_success:
   - cd "$TRAVIS_BUILD_DIR"
-  - sh rts.tests > rts.out
-  - cmp rts.exp rts.out
+  - make test
