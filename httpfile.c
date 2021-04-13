@@ -4,6 +4,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <string.h>
 #include "stralloc.h"
 #include "pathdecode.h"
 #include "hostparse.h"
@@ -12,7 +13,6 @@
 #include "percent.h"
 #include "case.h"
 #include "log.h"
-#include "byte.h"
 #include "str.h"
 #include "numtostr.h"
 #include "filetype.h"
@@ -255,7 +255,7 @@ static void get(void) {
         out_puts("\r\n");
     }
     else {
-        if ((ims.len < mtimestr.len) || byte_diff(mtimestr.s,mtimestr.len,ims.s)) {
+        if ((ims.len < mtimestr.len) || memcmp(mtimestr.s, ims.s, mtimestr.len)) {
             header("200 ", "OK");
         }
         else {
@@ -475,7 +475,7 @@ int main(int argc, char **argv) {
                         if (!stralloc_copyb(&auth, field.s + 21, field.len - 21)) die_nomem();
                     }
                     if (case_startb(field.s, field.len, "range: bytes=")) {
-                        if (byte_chr(field.s + 13, field.len - 13, ',') == field.len - 13) {
+                        if (!memchr(field.s + 13, ',', field.len - 13)) {
                             if (!stralloc_copyb(&range, field.s + 13, field.len - 13)) die_nomem();
                         }
                     }

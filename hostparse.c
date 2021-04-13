@@ -1,4 +1,3 @@
-#include "byte.h"
 #include "stralloc.h"
 #include "hostparse.h"
 
