@@ -1,7 +1,7 @@
 #!/bin/sh
 
 cleanup() {
-  rm -rf '0' 0virtual httpd '127.0.0.1' '::1'
+  rm -rf '0' 0virtual httpd '127.0.0.1' '::1' '@dXNlcjpwYXNzd29yZA' authhost
 }
 trap "cleanup" EXIT TERM INT
 
@@ -206,16 +206,34 @@ Range: bytes=${min}-${max}
   done
 done
 
-echo "--- httpd handle Range request with ,"
-echo "GET range HTTP/1.0
+echo '--- httpd handle Range request with ,'
+echo 'GET range HTTP/1.0
 Range: bytes=0-1,1-2
 
-" | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+' | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
 
-echo "--- httpd reject Range request with big numbers"
-echo "GET range HTTP/1.0
+echo '--- httpd reject Range request with big numbers'
+echo 'GET range HTTP/1.0
 Range: bytes=-9223372036854775808
 
-" | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+' | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+
+mkdir -p '@dXNlcjpwYXNzd29yZA/authhost'
+echo 'authorized' > '@dXNlcjpwYXNzd29yZA/authhost/auth'
+rm -f authhost
+mkfifo authhost
+
+echo '--- httpd handle basic authorization'
+echo 'GET auth HTTP/1.0
+Host: authhost
+
+' | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+
+echo '--- httpd handle basic authorization'
+echo 'GET auth HTTP/1.0
+Host: authhost
+Authorization: basic dXNlcjpwYXNzd29yZA==
+
+' | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
 
 exit 0

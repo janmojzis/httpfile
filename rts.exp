@@ -1323,3 +1323,24 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
+--- httpd handle basic authorization
+HTTP/1.0 401 unauthorized
+Server: httpfile
+Accept-Ranges: bytes
+Date: ...
+WWW-Authenticate: Basic realm="authorization required"
+Content-Length: 40
+Content-Type: text/html
+
+<html><body>unauthorized</body></html>
+0
+--- httpd handle basic authorization
+HTTP/1.0 200 OK
+Server: httpfile
+Accept-Ranges: bytes
+Date: ...
+Content-Type: text/plain
+Content-Length: 11
+
+authorized
+0

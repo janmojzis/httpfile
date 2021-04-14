@@ -494,6 +494,10 @@ int main(int argc, char **argv) {
                         if (!stralloc_copyb(&ims, field.s + 18, field.len - 18)) die_nomem();
                     if (case_startb(field.s, field.len, "authorization: basic ")) {
                         if (!stralloc_copyb(&auth, field.s + 21, field.len - 21)) die_nomem();
+                        while (auth.len > 0) {
+                            if (auth.s[auth.len - 1] != '=') break;
+                            --auth.len;
+                        }
                     }
                     if (case_startb(field.s, field.len, "range: bytes=")) {
                         if (!memchr(field.s + 13, ',', field.len - 13)) {
