@@ -397,6 +397,8 @@ int main(int argc, char **argv) {
 
     /* drop privileges */
     if (!droproot(user, root)) die_droproot();
+    if (!root) log_w1("not chrooted");
+    if (geteuid() == 0) log_w1("running under root privileges");
 
     log_id(getenv("TCPREMOTEIP"));
     log_level(flagverbose);
