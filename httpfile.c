@@ -59,7 +59,8 @@ static long long rangefirst = -1;
 static long long rangelast = -1;
 static int fd;
 static stralloc auth = {0};
-#define response line
+static stralloc response = {0};
+static long long responsepos = 0;
 
 static char *customheaders[16];
 static long long customheaderslen = 0;
@@ -78,8 +79,10 @@ static void writeall(const char *x, long long xlen) {
 }
 
 static void out_flush(void) {
+
     writeall(response.s, response.len);
     if (!stralloc_copys(&response, "")) die_nomem();
+    responsepos = 0;
 }
 
 static void out_puts(const char *x) {
@@ -90,12 +93,15 @@ static void out_put(const char *x, long long xlen) {
     if (!stralloc_catb(&response, x, xlen)) die_nomem();
 }
 
-static void out_body(const char *x, long long xlen) {
-#if XXXTODO
+static void out_putcrlf(void) {
+    if (!stralloc_cats(&response, "\r\n")) die_nomem();
     if (!stralloc_0(&response)) die_nomem();
     --response.len;
-    log_d2("response headers: ", response.s);
-#endif
+    log_d2("response: ", response.s + responsepos);
+    responsepos = response.len;
+}
+
+static void out_body(const char *x, long long xlen) {
     out_flush();
     if (flagbody) {
         writeall(x, xlen);
@@ -118,7 +124,7 @@ static void customheaders_put(void) {
         j = str_chr(customheaders[i], ':');
         if (str_len(customheaders[i]) > 0 && j != str_len(customheaders[i])) {
             out_puts(customheaders[i]);
-            out_puts("\r\n");
+            out_putcrlf();
         }
     }
 }
@@ -131,10 +137,15 @@ static void header(const char *code, const char *message) {
         out_puts("HTTP/1.1 ");
     out_puts(code);
     out_puts(message);
-    out_puts("\r\nServer: httpfile\r\nAccept-Ranges: bytes\r\nDate:");
+    out_putcrlf();
+    out_puts("Server: httpfile");
+    out_putcrlf();
+    out_puts("Accept-Ranges: bytes");
+    out_putcrlf();
+    out_puts("Date:");
     if (!httpdate(&nowstr, seconds())) die_nomem();
     out_put(nowstr.s, nowstr.len);
-    out_puts("\r\n");
+    out_putcrlf();
     customheaders_put();
     if (!stralloc_0(&url)) die_nomem();
     if (!stralloc_0(&host)) die_nomem();
@@ -155,14 +166,19 @@ static void barf(const char *code, const char *message) {
   if (protocolnum > 0) {
     header(code, message);
     if (str_equal("401 ", code)) {
-      out_puts("WWW-Authenticate: Basic realm=\"authorization required\"\r\n");
+      out_puts("WWW-Authenticate: Basic realm=\"authorization required\"");
+      out_putcrlf();
     }
     out_puts("Content-Length: ");
     out_puts(numtostr(0, str_len(message) + 28));
-    out_puts("\r\n");
-    if (protocolnum == 2)
-      out_puts("Connection: close\r\n");
-    out_puts("Content-Type: text/html\r\n\r\n");
+    out_putcrlf();
+    if (protocolnum == 2) {
+      out_puts("Connection: close");
+      out_putcrlf();
+    }
+    out_puts("Content-Type: text/html");
+    out_putcrlf();
+    out_putcrlf();
   }
   if (flagbody) {
     out_puts("<html><body>");
@@ -188,7 +204,8 @@ static void redirect(char *prefix, char *suffix) {
         header("301 ", "moved permanently");
         out_puts("Content-Length: 0\r\nLocation: ");
         out_put(redirurl.s, redirurl.len);
-        out_puts("\r\n\r\n");
+        out_putcrlf();
+        out_putcrlf();
     }
     out_flush();
     if (protocolnum < 2) _die(0);
@@ -252,7 +269,7 @@ static void get(void) {
         out_puts(numtostr(0, rangelast));
         out_puts("/");
         out_puts(numtostr(0, filelength));
-        out_puts("\r\n");
+        out_putcrlf();
     }
     else {
         if ((ims.len < mtimestr.len) || memcmp(mtimestr.s, ims.s, mtimestr.len)) {
@@ -267,14 +284,16 @@ static void get(void) {
     if (seconds() > mtime + 60) {
         out_puts("Last-Modified:");
         out_put(mtimestr.s, mtimestr.len);
-        out_puts("\r\n");
+        out_putcrlf();
     }
 
     out_puts("Content-Type: ");
     out_put(contenttype.s, contenttype.len);
-    out_puts("\r\nContent-Length: ");
+    out_putcrlf();
+    out_puts("Content-Length: ");
     out_puts(numtostr(0, rangelast + 1 - rangefirst));
-    out_puts("\r\n\r\n");
+    out_putcrlf();
+    out_putcrlf();
     out_body(filecontent + rangefirst, rangelast + 1 - rangefirst);
     file_close(fd, filecontent, filelength);
     if (protocolnum < 2) _die(0);
@@ -384,8 +403,8 @@ int main(int argc, char **argv) {
 
     if (flagredir) doit = redirecthttps;
 
-    if (!stralloc_readyplus(&response, 256)) die_nomem();
     if (!stralloc_readyplus(&field, 128)) die_nomem();
+    if (!stralloc_readyplus(&response, 256)) die_nomem();
 
     for (;;) {
         alarm(REQUESTTIMEOUT);

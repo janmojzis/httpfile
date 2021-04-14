@@ -173,7 +173,7 @@ Content-Length: 33
 <html><body>colons</body></html>
 0
 --- httpd rejects unrecognized requests
-POST .././ HTTP/1.0HTTP/1.0 501 method not implemented
+HTTP/1.0 501 method not implemented
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
@@ -183,7 +183,7 @@ Content-Type: text/html
 <html><body>method not implemented</body></html>
 0
 --- httpd rejects lowercase requests
-Head / HTTP/1.0HTTP/1.0 501 method not implemented
+HTTP/1.0 501 method not implemented
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
