@@ -25,13 +25,7 @@
     for file in `ls *.c`; do
       (
         gcc -I../BearSSL/inc -MM "${file}"
-        start=`echo "${file}" | cut -b1-7`
-        if [ x"`echo "${file}" | cut -b1-7`" = xcrypto_ ]; then
-          opt="-O3"
-        else
-          opt=""
-        fi
-        echo -e "\t\$(CC) \$(CFLAGS) \$(CPPFLAGS) ${opt} -c ${file}"
+        echo -e "\t\$(CC) \$(CFLAGS) \$(CPPFLAGS) -c ${file}"
         echo 
       )
     done
@@ -49,7 +43,7 @@
     echo -e "\tsh rts.tests > rts.out"
     echo
 
-    echo "test: rts.exp rts.out"
+    echo "rts: rts.exp rts.out"
     echo -e "\tdiff rts.exp rts.out"
     echo
 

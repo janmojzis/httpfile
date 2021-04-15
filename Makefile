@@ -5,78 +5,78 @@ LDFLAGS+=
 all:  httpfile utime
 
 alloc.o: alloc.c alloc.h log.h
-	$(CC) $(CFLAGS) $(CPPFLAGS)  -c alloc.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c alloc.c
 
 case_diffb.o: case_diffb.c case.h
-	$(CC) $(CFLAGS) $(CPPFLAGS)  -c case_diffb.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c case_diffb.c
 
 case_diffs.o: case_diffs.c case.h
-	$(CC) $(CFLAGS) $(CPPFLAGS)  -c case_diffs.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c case_diffs.c
 
 case_lowerb.o: case_lowerb.c case.h
-	$(CC) $(CFLAGS) $(CPPFLAGS)  -c case_lowerb.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c case_lowerb.c
 
 case_startb.o: case_startb.c case.h
-	$(CC) $(CFLAGS) $(CPPFLAGS)  -c case_startb.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c case_startb.c
 
 case_starts.o: case_starts.c case.h
-	$(CC) $(CFLAGS) $(CPPFLAGS)  -c case_starts.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c case_starts.c
 
 droproot.o: droproot.c droproot.h
-	$(CC) $(CFLAGS) $(CPPFLAGS)  -c droproot.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c droproot.c
 
 e.o: e.c e.h
-	$(CC) $(CFLAGS) $(CPPFLAGS)  -c e.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c e.c
 
 file.o: file.c
-	$(CC) $(CFLAGS) $(CPPFLAGS)  -c file.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c file.c
 
 filetype.o: filetype.c filetype.h stralloc.h str.h case.h
-	$(CC) $(CFLAGS) $(CPPFLAGS)  -c filetype.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c filetype.c
 
 hostparse.o: hostparse.c stralloc.h hostparse.h
-	$(CC) $(CFLAGS) $(CPPFLAGS)  -c hostparse.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c hostparse.c
 
 httpdate.o: httpdate.c httpdate.h stralloc.h
-	$(CC) $(CFLAGS) $(CPPFLAGS)  -c httpdate.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c httpdate.c
 
 httpfile.o: httpfile.c stralloc.h pathdecode.h hostparse.h httpdate.h \
  seconds.h percent.h case.h log.h str.h numtostr.h filetype.h file.h \
  droproot.h alloc.h e.h timeoutwrite.h rangeparser.h
-	$(CC) $(CFLAGS) $(CPPFLAGS)  -c httpfile.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c httpfile.c
 
 log.o: log.c e.h log.h
-	$(CC) $(CFLAGS) $(CPPFLAGS)  -c log.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c log.c
 
 milliseconds.o: milliseconds.c milliseconds.h
-	$(CC) $(CFLAGS) $(CPPFLAGS)  -c milliseconds.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c milliseconds.c
 
 numtostr.o: numtostr.c numtostr.h
-	$(CC) $(CFLAGS) $(CPPFLAGS)  -c numtostr.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c numtostr.c
 
 pathdecode.o: pathdecode.c pathdecode.h stralloc.h
-	$(CC) $(CFLAGS) $(CPPFLAGS)  -c pathdecode.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c pathdecode.c
 
 percent.o: percent.c percent.h stralloc.h
-	$(CC) $(CFLAGS) $(CPPFLAGS)  -c percent.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c percent.c
 
 rangeparser.o: rangeparser.c rangeparser.h
-	$(CC) $(CFLAGS) $(CPPFLAGS)  -c rangeparser.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c rangeparser.c
 
 seconds.o: seconds.c seconds.h
-	$(CC) $(CFLAGS) $(CPPFLAGS)  -c seconds.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c seconds.c
 
 stralloc.o: stralloc.c alloc.h e.h stralloc.h
-	$(CC) $(CFLAGS) $(CPPFLAGS)  -c stralloc.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c stralloc.c
 
 str.o: str.c str.h
-	$(CC) $(CFLAGS) $(CPPFLAGS)  -c str.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c str.c
 
 timeoutwrite.o: timeoutwrite.c e.h milliseconds.h timeoutwrite.h
-	$(CC) $(CFLAGS) $(CPPFLAGS)  -c timeoutwrite.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c timeoutwrite.c
 
 utime.o: utime.c
-	$(CC) $(CFLAGS) $(CPPFLAGS)  -c utime.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c utime.c
 
 httpfile: httpfile.o  alloc.o case_diffb.o case_diffs.o case_lowerb.o case_startb.o case_starts.o droproot.o e.o file.o filetype.o hostparse.o httpdate.o log.o milliseconds.o numtostr.o pathdecode.o percent.o rangeparser.o seconds.o stralloc.o str.o timeoutwrite.o
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o httpfile httpfile.o  alloc.o case_diffb.o case_diffs.o case_lowerb.o case_startb.o case_starts.o droproot.o e.o file.o filetype.o hostparse.o httpdate.o log.o milliseconds.o numtostr.o pathdecode.o percent.o rangeparser.o seconds.o stralloc.o str.o timeoutwrite.o $(LDFLAGS)
@@ -87,7 +87,7 @@ utime: utime.o  alloc.o case_diffb.o case_diffs.o case_lowerb.o case_startb.o ca
 rts.out:  httpfile utime rts.tests
 	sh rts.tests > rts.out
 
-test: rts.exp rts.out
+rts: rts.exp rts.out
 	diff rts.exp rts.out
 
 clean:

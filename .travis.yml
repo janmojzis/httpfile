@@ -19,4 +19,4 @@ script:
 
 after_success:
   - cd "$TRAVIS_BUILD_DIR"
-  - make test
+  - make rts
