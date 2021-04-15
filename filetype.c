@@ -27,16 +27,12 @@ int filetype(const char *fn,stralloc *contenttype)
     /* web content */
     if (case_equals(x,".html")) result = "text/html";
     else if (case_equals(x,".css")) result = "text/css";
-    else if (case_equals(x,".js"))  result = "application/x-javascript";
+    else if (case_equals(x,".js"))  result = "application/javascript";
     else if (case_equals(x,".xml")) result = "text/xml";
-    else if (case_equals(x,".rss")) result = "text/xml";
     /* archive + commpressed */
-    else if (case_equals(x,".tar")) result = "application/x-tar";
-    else if (case_equals(x,".gz"))  result = "application/x-gzip";
+    else if (case_equals(x,".gz"))  result = "application/gzip";
     else if (case_equals(x,".bz2")) result = "application/x-bzip2";
-    else if (case_equals(x,".7z"))  result = "application/x-7z-compressed";
     else if (case_equals(x,".xz"))  result = "application/x-xz";
-    else if (case_equals(x,".tgz"))  result = "application/x-gtar-compressed";
     /* documents */
     else if (case_equals(x,".dvi")) result = "application/x-dvi";
     else if (case_equals(x,".ps"))  result = "application/postscript";
