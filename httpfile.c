@@ -22,6 +22,7 @@
 #include "e.h"
 #include "timeoutwrite.h"
 #include "rangeparser.h"
+#include "getuidgid.h"
 
 #define WRITETIMEOUT 5
 #define REQUESTTIMEOUT 30
@@ -33,8 +34,9 @@ static void _die(int x) {
     _exit(x);
 }
 
-static void die_nomem(void)  { log_f1("out of memory"); _die(111); }
-static void die_droproot(void)  { log_f1("unable to drop privileges"); _die(111); }
+static void die_nomem(void) { log_f1("out of memory"); _die(111); }
+static void die_droproot(const char *u) { log_f2("unable to drop privileges to account ", u); _die(111); }
+static void die_chroot(const char *d) { log_f2("unable to chroot to ", d); _die(111); }
 
 static stralloc line = {0};
 static stralloc protocol = {0};
@@ -344,6 +346,8 @@ static void readline(void) {
 static int flagredir = 0;
 static const char *user = 0;
 static const char *root = 0;
+static uid_t uid;
+static gid_t gid;
 
 static void usage(void) {
 
@@ -395,9 +399,25 @@ int main(int argc, char **argv) {
     }
     root = *++argv;
 
-    /* drop privileges */
-    if (!droproot(user, root)) die_droproot();
-    if (!root) log_w1("not chrooted");
+    /* get UID + GID */
+    if (user) {
+        if (!getuidgid(&uid, &gid, user)) die_droproot(user);
+    }
+
+    /* chroot */
+    if (root) {
+        if (chdir(root) == -1) die_chroot(root);
+        if (chroot(".") == -1) die_chroot(root);
+    }
+    else {
+        log_w1("not chrooted");
+    }
+
+    /* drop root privileges */
+    if (user) {
+        if (!droproot(uid, gid)) die_droproot(user);
+    }
+
     if (geteuid() == 0) log_w1("running under root privileges");
 
     log_id(getenv("TCPREMOTEIP"));

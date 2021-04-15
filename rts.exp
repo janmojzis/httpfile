@@ -228,7 +228,7 @@ HTTP/1.1 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Type: application/x-gzip
+Content-Type: application/gzip
 Content-Length: 0
 
 HTTP/1.1 200 OK
@@ -329,7 +329,7 @@ Content-Length: 31
 
 <html><body>IPv6</body></html>
 0
---- httpd handle Range request "0-0" and length 0
+--- httpd handles Range request "0-0" and length 0
 HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
@@ -338,7 +338,7 @@ Content-Type: application/octet-stream
 Content-Length: 0
 
 0
---- httpd handle Range request "0-1" and length 0
+--- httpd handles Range request "0-1" and length 0
 HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
@@ -347,7 +347,7 @@ Content-Type: application/octet-stream
 Content-Length: 0
 
 0
---- httpd handle Range request "0-2" and length 0
+--- httpd handles Range request "0-2" and length 0
 HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
@@ -356,7 +356,7 @@ Content-Type: application/octet-stream
 Content-Length: 0
 
 0
---- httpd handle Range request "0-3" and length 0
+--- httpd handles Range request "0-3" and length 0
 HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
@@ -365,7 +365,7 @@ Content-Type: application/octet-stream
 Content-Length: 0
 
 0
---- httpd handle Range request "0-" and length 0
+--- httpd handles Range request "0-" and length 0
 HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
@@ -374,7 +374,7 @@ Content-Type: application/octet-stream
 Content-Length: 0
 
 0
---- httpd handle Range request "1-0" and length 0
+--- httpd handles Range request "1-0" and length 0
 HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
@@ -383,7 +383,7 @@ Content-Type: application/octet-stream
 Content-Length: 0
 
 0
---- httpd handle Range request "1-1" and length 0
+--- httpd handles Range request "1-1" and length 0
 HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
@@ -392,7 +392,7 @@ Content-Type: application/octet-stream
 Content-Length: 0
 
 0
---- httpd handle Range request "1-2" and length 0
+--- httpd handles Range request "1-2" and length 0
 HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
@@ -401,7 +401,7 @@ Content-Type: application/octet-stream
 Content-Length: 0
 
 0
---- httpd handle Range request "1-3" and length 0
+--- httpd handles Range request "1-3" and length 0
 HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
@@ -410,7 +410,7 @@ Content-Type: application/octet-stream
 Content-Length: 0
 
 0
---- httpd handle Range request "1-" and length 0
+--- httpd handles Range request "1-" and length 0
 HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
@@ -419,7 +419,7 @@ Content-Type: application/octet-stream
 Content-Length: 0
 
 0
---- httpd handle Range request "2-0" and length 0
+--- httpd handles Range request "2-0" and length 0
 HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
@@ -428,7 +428,7 @@ Content-Type: application/octet-stream
 Content-Length: 0
 
 0
---- httpd handle Range request "2-1" and length 0
+--- httpd handles Range request "2-1" and length 0
 HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
@@ -437,7 +437,7 @@ Content-Type: application/octet-stream
 Content-Length: 0
 
 0
---- httpd handle Range request "2-2" and length 0
+--- httpd handles Range request "2-2" and length 0
 HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
@@ -446,7 +446,7 @@ Content-Type: application/octet-stream
 Content-Length: 0
 
 0
---- httpd handle Range request "2-3" and length 0
+--- httpd handles Range request "2-3" and length 0
 HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
@@ -455,7 +455,7 @@ Content-Type: application/octet-stream
 Content-Length: 0
 
 0
---- httpd handle Range request "2-" and length 0
+--- httpd handles Range request "2-" and length 0
 HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
@@ -464,7 +464,7 @@ Content-Type: application/octet-stream
 Content-Length: 0
 
 0
---- httpd handle Range request "3-0" and length 0
+--- httpd handles Range request "3-0" and length 0
 HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
@@ -473,7 +473,7 @@ Content-Type: application/octet-stream
 Content-Length: 0
 
 0
---- httpd handle Range request "3-1" and length 0
+--- httpd handles Range request "3-1" and length 0
 HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
@@ -482,7 +482,7 @@ Content-Type: application/octet-stream
 Content-Length: 0
 
 0
---- httpd handle Range request "3-2" and length 0
+--- httpd handles Range request "3-2" and length 0
 HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
@@ -491,7 +491,7 @@ Content-Type: application/octet-stream
 Content-Length: 0
 
 0
---- httpd handle Range request "3-3" and length 0
+--- httpd handles Range request "3-3" and length 0
 HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
@@ -500,7 +500,7 @@ Content-Type: application/octet-stream
 Content-Length: 0
 
 0
---- httpd handle Range request "3-" and length 0
+--- httpd handles Range request "3-" and length 0
 HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
@@ -509,7 +509,7 @@ Content-Type: application/octet-stream
 Content-Length: 0
 
 0
---- httpd handle Range request "-0" and length 0
+--- httpd handles Range request "-0" and length 0
 HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
@@ -518,7 +518,7 @@ Content-Type: application/octet-stream
 Content-Length: 0
 
 0
---- httpd handle Range request "-1" and length 0
+--- httpd handles Range request "-1" and length 0
 HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
@@ -527,7 +527,7 @@ Content-Type: application/octet-stream
 Content-Length: 0
 
 0
---- httpd handle Range request "-2" and length 0
+--- httpd handles Range request "-2" and length 0
 HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
@@ -536,7 +536,7 @@ Content-Type: application/octet-stream
 Content-Length: 0
 
 0
---- httpd handle Range request "-3" and length 0
+--- httpd handles Range request "-3" and length 0
 HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
@@ -545,7 +545,7 @@ Content-Type: application/octet-stream
 Content-Length: 0
 
 0
---- httpd handle Range request "-" and length 0
+--- httpd handles Range request "-" and length 0
 HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
@@ -554,7 +554,7 @@ Content-Type: application/octet-stream
 Content-Length: 0
 
 0
---- httpd handle Range request "0-0" and length 1
+--- httpd handles Range request "0-0" and length 1
 HTTP/1.0 206 partial content
 Server: httpfile
 Accept-Ranges: bytes
@@ -564,7 +564,7 @@ Content-Type: application/octet-stream
 Content-Length: 1
 
  0
---- httpd handle Range request "0-1" and length 1
+--- httpd handles Range request "0-1" and length 1
 HTTP/1.0 206 partial content
 Server: httpfile
 Accept-Ranges: bytes
@@ -574,7 +574,7 @@ Content-Type: application/octet-stream
 Content-Length: 1
 
  0
---- httpd handle Range request "0-2" and length 1
+--- httpd handles Range request "0-2" and length 1
 HTTP/1.0 206 partial content
 Server: httpfile
 Accept-Ranges: bytes
@@ -584,7 +584,7 @@ Content-Type: application/octet-stream
 Content-Length: 1
 
  0
---- httpd handle Range request "0-3" and length 1
+--- httpd handles Range request "0-3" and length 1
 HTTP/1.0 206 partial content
 Server: httpfile
 Accept-Ranges: bytes
@@ -594,7 +594,7 @@ Content-Type: application/octet-stream
 Content-Length: 1
 
  0
---- httpd handle Range request "0-" and length 1
+--- httpd handles Range request "0-" and length 1
 HTTP/1.0 206 partial content
 Server: httpfile
 Accept-Ranges: bytes
@@ -604,7 +604,7 @@ Content-Type: application/octet-stream
 Content-Length: 1
 
  0
---- httpd handle Range request "1-0" and length 1
+--- httpd handles Range request "1-0" and length 1
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -614,7 +614,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "1-1" and length 1
+--- httpd handles Range request "1-1" and length 1
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -624,7 +624,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "1-2" and length 1
+--- httpd handles Range request "1-2" and length 1
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -634,7 +634,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "1-3" and length 1
+--- httpd handles Range request "1-3" and length 1
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -644,7 +644,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "1-" and length 1
+--- httpd handles Range request "1-" and length 1
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -654,7 +654,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "2-0" and length 1
+--- httpd handles Range request "2-0" and length 1
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -664,7 +664,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "2-1" and length 1
+--- httpd handles Range request "2-1" and length 1
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -674,7 +674,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "2-2" and length 1
+--- httpd handles Range request "2-2" and length 1
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -684,7 +684,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "2-3" and length 1
+--- httpd handles Range request "2-3" and length 1
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -694,7 +694,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "2-" and length 1
+--- httpd handles Range request "2-" and length 1
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -704,7 +704,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "3-0" and length 1
+--- httpd handles Range request "3-0" and length 1
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -714,7 +714,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "3-1" and length 1
+--- httpd handles Range request "3-1" and length 1
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -724,7 +724,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "3-2" and length 1
+--- httpd handles Range request "3-2" and length 1
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -734,7 +734,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "3-3" and length 1
+--- httpd handles Range request "3-3" and length 1
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -744,7 +744,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "3-" and length 1
+--- httpd handles Range request "3-" and length 1
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -754,7 +754,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "-0" and length 1
+--- httpd handles Range request "-0" and length 1
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -764,7 +764,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "-1" and length 1
+--- httpd handles Range request "-1" and length 1
 HTTP/1.0 206 partial content
 Server: httpfile
 Accept-Ranges: bytes
@@ -774,7 +774,7 @@ Content-Type: application/octet-stream
 Content-Length: 1
 
  0
---- httpd handle Range request "-2" and length 1
+--- httpd handles Range request "-2" and length 1
 HTTP/1.0 206 partial content
 Server: httpfile
 Accept-Ranges: bytes
@@ -784,7 +784,7 @@ Content-Type: application/octet-stream
 Content-Length: 1
 
  0
---- httpd handle Range request "-3" and length 1
+--- httpd handles Range request "-3" and length 1
 HTTP/1.0 206 partial content
 Server: httpfile
 Accept-Ranges: bytes
@@ -794,7 +794,7 @@ Content-Type: application/octet-stream
 Content-Length: 1
 
  0
---- httpd handle Range request "-" and length 1
+--- httpd handles Range request "-" and length 1
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -804,7 +804,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "0-0" and length 2
+--- httpd handles Range request "0-0" and length 2
 HTTP/1.0 206 partial content
 Server: httpfile
 Accept-Ranges: bytes
@@ -814,7 +814,7 @@ Content-Type: application/octet-stream
 Content-Length: 1
 
  0
---- httpd handle Range request "0-1" and length 2
+--- httpd handles Range request "0-1" and length 2
 HTTP/1.0 206 partial content
 Server: httpfile
 Accept-Ranges: bytes
@@ -824,7 +824,7 @@ Content-Type: application/octet-stream
 Content-Length: 2
 
   0
---- httpd handle Range request "0-2" and length 2
+--- httpd handles Range request "0-2" and length 2
 HTTP/1.0 206 partial content
 Server: httpfile
 Accept-Ranges: bytes
@@ -834,7 +834,7 @@ Content-Type: application/octet-stream
 Content-Length: 2
 
   0
---- httpd handle Range request "0-3" and length 2
+--- httpd handles Range request "0-3" and length 2
 HTTP/1.0 206 partial content
 Server: httpfile
 Accept-Ranges: bytes
@@ -844,7 +844,7 @@ Content-Type: application/octet-stream
 Content-Length: 2
 
   0
---- httpd handle Range request "0-" and length 2
+--- httpd handles Range request "0-" and length 2
 HTTP/1.0 206 partial content
 Server: httpfile
 Accept-Ranges: bytes
@@ -854,7 +854,7 @@ Content-Type: application/octet-stream
 Content-Length: 2
 
   0
---- httpd handle Range request "1-0" and length 2
+--- httpd handles Range request "1-0" and length 2
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -864,7 +864,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "1-1" and length 2
+--- httpd handles Range request "1-1" and length 2
 HTTP/1.0 206 partial content
 Server: httpfile
 Accept-Ranges: bytes
@@ -874,7 +874,7 @@ Content-Type: application/octet-stream
 Content-Length: 1
 
  0
---- httpd handle Range request "1-2" and length 2
+--- httpd handles Range request "1-2" and length 2
 HTTP/1.0 206 partial content
 Server: httpfile
 Accept-Ranges: bytes
@@ -884,7 +884,7 @@ Content-Type: application/octet-stream
 Content-Length: 1
 
  0
---- httpd handle Range request "1-3" and length 2
+--- httpd handles Range request "1-3" and length 2
 HTTP/1.0 206 partial content
 Server: httpfile
 Accept-Ranges: bytes
@@ -894,7 +894,7 @@ Content-Type: application/octet-stream
 Content-Length: 1
 
  0
---- httpd handle Range request "1-" and length 2
+--- httpd handles Range request "1-" and length 2
 HTTP/1.0 206 partial content
 Server: httpfile
 Accept-Ranges: bytes
@@ -904,7 +904,7 @@ Content-Type: application/octet-stream
 Content-Length: 1
 
  0
---- httpd handle Range request "2-0" and length 2
+--- httpd handles Range request "2-0" and length 2
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -914,7 +914,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "2-1" and length 2
+--- httpd handles Range request "2-1" and length 2
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -924,7 +924,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "2-2" and length 2
+--- httpd handles Range request "2-2" and length 2
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -934,7 +934,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "2-3" and length 2
+--- httpd handles Range request "2-3" and length 2
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -944,7 +944,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "2-" and length 2
+--- httpd handles Range request "2-" and length 2
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -954,7 +954,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "3-0" and length 2
+--- httpd handles Range request "3-0" and length 2
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -964,7 +964,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "3-1" and length 2
+--- httpd handles Range request "3-1" and length 2
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -974,7 +974,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "3-2" and length 2
+--- httpd handles Range request "3-2" and length 2
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -984,7 +984,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "3-3" and length 2
+--- httpd handles Range request "3-3" and length 2
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -994,7 +994,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "3-" and length 2
+--- httpd handles Range request "3-" and length 2
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -1004,7 +1004,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "-0" and length 2
+--- httpd handles Range request "-0" and length 2
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -1014,7 +1014,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "-1" and length 2
+--- httpd handles Range request "-1" and length 2
 HTTP/1.0 206 partial content
 Server: httpfile
 Accept-Ranges: bytes
@@ -1024,7 +1024,7 @@ Content-Type: application/octet-stream
 Content-Length: 1
 
  0
---- httpd handle Range request "-2" and length 2
+--- httpd handles Range request "-2" and length 2
 HTTP/1.0 206 partial content
 Server: httpfile
 Accept-Ranges: bytes
@@ -1034,7 +1034,7 @@ Content-Type: application/octet-stream
 Content-Length: 2
 
   0
---- httpd handle Range request "-3" and length 2
+--- httpd handles Range request "-3" and length 2
 HTTP/1.0 206 partial content
 Server: httpfile
 Accept-Ranges: bytes
@@ -1044,7 +1044,7 @@ Content-Type: application/octet-stream
 Content-Length: 2
 
   0
---- httpd handle Range request "-" and length 2
+--- httpd handles Range request "-" and length 2
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -1054,7 +1054,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "0-0" and length 3
+--- httpd handles Range request "0-0" and length 3
 HTTP/1.0 206 partial content
 Server: httpfile
 Accept-Ranges: bytes
@@ -1064,7 +1064,7 @@ Content-Type: application/octet-stream
 Content-Length: 1
 
  0
---- httpd handle Range request "0-1" and length 3
+--- httpd handles Range request "0-1" and length 3
 HTTP/1.0 206 partial content
 Server: httpfile
 Accept-Ranges: bytes
@@ -1074,7 +1074,7 @@ Content-Type: application/octet-stream
 Content-Length: 2
 
   0
---- httpd handle Range request "0-2" and length 3
+--- httpd handles Range request "0-2" and length 3
 HTTP/1.0 206 partial content
 Server: httpfile
 Accept-Ranges: bytes
@@ -1084,7 +1084,7 @@ Content-Type: application/octet-stream
 Content-Length: 3
 
    0
---- httpd handle Range request "0-3" and length 3
+--- httpd handles Range request "0-3" and length 3
 HTTP/1.0 206 partial content
 Server: httpfile
 Accept-Ranges: bytes
@@ -1094,7 +1094,7 @@ Content-Type: application/octet-stream
 Content-Length: 3
 
    0
---- httpd handle Range request "0-" and length 3
+--- httpd handles Range request "0-" and length 3
 HTTP/1.0 206 partial content
 Server: httpfile
 Accept-Ranges: bytes
@@ -1104,7 +1104,7 @@ Content-Type: application/octet-stream
 Content-Length: 3
 
    0
---- httpd handle Range request "1-0" and length 3
+--- httpd handles Range request "1-0" and length 3
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -1114,7 +1114,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "1-1" and length 3
+--- httpd handles Range request "1-1" and length 3
 HTTP/1.0 206 partial content
 Server: httpfile
 Accept-Ranges: bytes
@@ -1124,7 +1124,7 @@ Content-Type: application/octet-stream
 Content-Length: 1
 
  0
---- httpd handle Range request "1-2" and length 3
+--- httpd handles Range request "1-2" and length 3
 HTTP/1.0 206 partial content
 Server: httpfile
 Accept-Ranges: bytes
@@ -1134,7 +1134,7 @@ Content-Type: application/octet-stream
 Content-Length: 2
 
   0
---- httpd handle Range request "1-3" and length 3
+--- httpd handles Range request "1-3" and length 3
 HTTP/1.0 206 partial content
 Server: httpfile
 Accept-Ranges: bytes
@@ -1144,7 +1144,7 @@ Content-Type: application/octet-stream
 Content-Length: 2
 
   0
---- httpd handle Range request "1-" and length 3
+--- httpd handles Range request "1-" and length 3
 HTTP/1.0 206 partial content
 Server: httpfile
 Accept-Ranges: bytes
@@ -1154,7 +1154,7 @@ Content-Type: application/octet-stream
 Content-Length: 2
 
   0
---- httpd handle Range request "2-0" and length 3
+--- httpd handles Range request "2-0" and length 3
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -1164,7 +1164,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "2-1" and length 3
+--- httpd handles Range request "2-1" and length 3
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -1174,7 +1174,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "2-2" and length 3
+--- httpd handles Range request "2-2" and length 3
 HTTP/1.0 206 partial content
 Server: httpfile
 Accept-Ranges: bytes
@@ -1184,7 +1184,7 @@ Content-Type: application/octet-stream
 Content-Length: 1
 
  0
---- httpd handle Range request "2-3" and length 3
+--- httpd handles Range request "2-3" and length 3
 HTTP/1.0 206 partial content
 Server: httpfile
 Accept-Ranges: bytes
@@ -1194,7 +1194,7 @@ Content-Type: application/octet-stream
 Content-Length: 1
 
  0
---- httpd handle Range request "2-" and length 3
+--- httpd handles Range request "2-" and length 3
 HTTP/1.0 206 partial content
 Server: httpfile
 Accept-Ranges: bytes
@@ -1204,7 +1204,7 @@ Content-Type: application/octet-stream
 Content-Length: 1
 
  0
---- httpd handle Range request "3-0" and length 3
+--- httpd handles Range request "3-0" and length 3
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -1214,7 +1214,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "3-1" and length 3
+--- httpd handles Range request "3-1" and length 3
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -1224,7 +1224,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "3-2" and length 3
+--- httpd handles Range request "3-2" and length 3
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -1234,7 +1234,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "3-3" and length 3
+--- httpd handles Range request "3-3" and length 3
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -1244,7 +1244,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "3-" and length 3
+--- httpd handles Range request "3-" and length 3
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -1254,7 +1254,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "-0" and length 3
+--- httpd handles Range request "-0" and length 3
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -1264,7 +1264,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request "-1" and length 3
+--- httpd handles Range request "-1" and length 3
 HTTP/1.0 206 partial content
 Server: httpfile
 Accept-Ranges: bytes
@@ -1274,7 +1274,7 @@ Content-Type: application/octet-stream
 Content-Length: 1
 
  0
---- httpd handle Range request "-2" and length 3
+--- httpd handles Range request "-2" and length 3
 HTTP/1.0 206 partial content
 Server: httpfile
 Accept-Ranges: bytes
@@ -1284,7 +1284,7 @@ Content-Type: application/octet-stream
 Content-Length: 2
 
   0
---- httpd handle Range request "-3" and length 3
+--- httpd handles Range request "-3" and length 3
 HTTP/1.0 206 partial content
 Server: httpfile
 Accept-Ranges: bytes
@@ -1294,7 +1294,7 @@ Content-Type: application/octet-stream
 Content-Length: 3
 
    0
---- httpd handle Range request "-" and length 3
+--- httpd handles Range request "-" and length 3
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
@@ -1304,7 +1304,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle Range request with ,
+--- httpd handles Range request with ,
 HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
@@ -1323,7 +1323,7 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
---- httpd handle basic authorization
+--- httpd handles basic authorization
 HTTP/1.0 401 unauthorized
 Server: httpfile
 Accept-Ranges: bytes
@@ -1334,7 +1334,7 @@ Content-Type: text/html
 
 <html><body>unauthorized</body></html>
 0
---- httpd handle basic authorization
+--- httpd handles basic authorization
 HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes

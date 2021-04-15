@@ -196,7 +196,7 @@ for len in 0 1 2 3; do
   for min in 0 1 2 3 ''; do
     for max in 0 1 2 3 ''; do
       dd if=/dev/zero of=0/range bs=1 "count=${len}" 2>/dev/null
-      echo "--- httpd handle Range request \"${min}-${max}\" and length ${len}"
+      echo "--- httpd handles Range request \"${min}-${max}\" and length ${len}"
       echo "GET range HTTP/1.0
 Range: bytes=${min}-${max}
 
@@ -206,7 +206,7 @@ Range: bytes=${min}-${max}
   done
 done
 
-echo '--- httpd handle Range request with ,'
+echo '--- httpd handles Range request with ,'
 echo 'GET range HTTP/1.0
 Range: bytes=0-1,1-2
 
@@ -223,13 +223,13 @@ echo 'authorized' > '@dXNlcjpwYXNzd29yZA/authhost/auth'
 rm -f authhost
 mkfifo authhost
 
-echo '--- httpd handle basic authorization'
+echo '--- httpd handles basic authorization'
 echo 'GET auth HTTP/1.0
 Host: authhost
 
 ' | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
 
-echo '--- httpd handle basic authorization'
+echo '--- httpd handles basic authorization'
 echo 'GET auth HTTP/1.0
 Host: authhost
 Authorization: basic dXNlcjpwYXNzd29yZA==
