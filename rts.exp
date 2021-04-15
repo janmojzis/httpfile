@@ -3,7 +3,7 @@ HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 13
 
 Hello, world
@@ -13,7 +13,7 @@ HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 13
 
 0
@@ -22,7 +22,7 @@ HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 13
 
 Hello, world
@@ -32,7 +32,7 @@ HTTP/1.1 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 13
 
 Hello, world
@@ -52,7 +52,7 @@ HTTP/1.1 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 13
 
 0
@@ -61,7 +61,7 @@ HTTP/1.1 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 13
 
 Hello, world
@@ -69,7 +69,7 @@ HTTP/1.1 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 3
 
 Hi
@@ -280,7 +280,7 @@ Server: httpfile
 Accept-Ranges: bytes
 Date: ...
 Last-Modified: Thu, 01 Jan 1970 03:25:45 GMT
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 5
 
 test
@@ -291,7 +291,7 @@ Server: httpfile
 Accept-Ranges: bytes
 Date: ...
 Last-Modified: Thu, 01 Jan 1970 03:25:45 GMT
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 5
 
 0
@@ -334,7 +334,7 @@ HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 0
 
 0
@@ -343,7 +343,7 @@ HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 0
 
 0
@@ -352,7 +352,7 @@ HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 0
 
 0
@@ -361,7 +361,7 @@ HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 0
 
 0
@@ -370,7 +370,7 @@ HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 0
 
 0
@@ -379,7 +379,7 @@ HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 0
 
 0
@@ -388,7 +388,7 @@ HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 0
 
 0
@@ -397,7 +397,7 @@ HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 0
 
 0
@@ -406,7 +406,7 @@ HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 0
 
 0
@@ -415,7 +415,7 @@ HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 0
 
 0
@@ -424,7 +424,7 @@ HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 0
 
 0
@@ -433,7 +433,7 @@ HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 0
 
 0
@@ -442,7 +442,7 @@ HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 0
 
 0
@@ -451,7 +451,7 @@ HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 0
 
 0
@@ -460,7 +460,7 @@ HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 0
 
 0
@@ -469,7 +469,7 @@ HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 0
 
 0
@@ -478,7 +478,7 @@ HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 0
 
 0
@@ -487,7 +487,7 @@ HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 0
 
 0
@@ -496,7 +496,7 @@ HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 0
 
 0
@@ -505,7 +505,7 @@ HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 0
 
 0
@@ -514,7 +514,7 @@ HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 0
 
 0
@@ -523,7 +523,7 @@ HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 0
 
 0
@@ -532,7 +532,7 @@ HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 0
 
 0
@@ -541,7 +541,7 @@ HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 0
 
 0
@@ -550,7 +550,7 @@ HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 0
 
 0
@@ -560,7 +560,7 @@ Server: httpfile
 Accept-Ranges: bytes
 Date: ...
 Content-Range: bytes 0-0/1
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 1
 
  0
@@ -570,7 +570,7 @@ Server: httpfile
 Accept-Ranges: bytes
 Date: ...
 Content-Range: bytes 0-0/1
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 1
 
  0
@@ -580,7 +580,7 @@ Server: httpfile
 Accept-Ranges: bytes
 Date: ...
 Content-Range: bytes 0-0/1
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 1
 
  0
@@ -590,7 +590,7 @@ Server: httpfile
 Accept-Ranges: bytes
 Date: ...
 Content-Range: bytes 0-0/1
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 1
 
  0
@@ -600,7 +600,7 @@ Server: httpfile
 Accept-Ranges: bytes
 Date: ...
 Content-Range: bytes 0-0/1
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 1
 
  0
@@ -770,7 +770,7 @@ Server: httpfile
 Accept-Ranges: bytes
 Date: ...
 Content-Range: bytes 0-0/1
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 1
 
  0
@@ -780,7 +780,7 @@ Server: httpfile
 Accept-Ranges: bytes
 Date: ...
 Content-Range: bytes 0-0/1
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 1
 
  0
@@ -790,7 +790,7 @@ Server: httpfile
 Accept-Ranges: bytes
 Date: ...
 Content-Range: bytes 0-0/1
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 1
 
  0
@@ -810,7 +810,7 @@ Server: httpfile
 Accept-Ranges: bytes
 Date: ...
 Content-Range: bytes 0-0/2
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 1
 
  0
@@ -820,7 +820,7 @@ Server: httpfile
 Accept-Ranges: bytes
 Date: ...
 Content-Range: bytes 0-1/2
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 2
 
   0
@@ -830,7 +830,7 @@ Server: httpfile
 Accept-Ranges: bytes
 Date: ...
 Content-Range: bytes 0-1/2
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 2
 
   0
@@ -840,7 +840,7 @@ Server: httpfile
 Accept-Ranges: bytes
 Date: ...
 Content-Range: bytes 0-1/2
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 2
 
   0
@@ -850,7 +850,7 @@ Server: httpfile
 Accept-Ranges: bytes
 Date: ...
 Content-Range: bytes 0-1/2
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 2
 
   0
@@ -870,7 +870,7 @@ Server: httpfile
 Accept-Ranges: bytes
 Date: ...
 Content-Range: bytes 1-1/2
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 1
 
  0
@@ -880,7 +880,7 @@ Server: httpfile
 Accept-Ranges: bytes
 Date: ...
 Content-Range: bytes 1-1/2
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 1
 
  0
@@ -890,7 +890,7 @@ Server: httpfile
 Accept-Ranges: bytes
 Date: ...
 Content-Range: bytes 1-1/2
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 1
 
  0
@@ -900,7 +900,7 @@ Server: httpfile
 Accept-Ranges: bytes
 Date: ...
 Content-Range: bytes 1-1/2
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 1
 
  0
@@ -1020,7 +1020,7 @@ Server: httpfile
 Accept-Ranges: bytes
 Date: ...
 Content-Range: bytes 1-1/2
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 1
 
  0
@@ -1030,7 +1030,7 @@ Server: httpfile
 Accept-Ranges: bytes
 Date: ...
 Content-Range: bytes 0-1/2
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 2
 
   0
@@ -1040,7 +1040,7 @@ Server: httpfile
 Accept-Ranges: bytes
 Date: ...
 Content-Range: bytes 0-1/2
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 2
 
   0
@@ -1060,7 +1060,7 @@ Server: httpfile
 Accept-Ranges: bytes
 Date: ...
 Content-Range: bytes 0-0/3
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 1
 
  0
@@ -1070,7 +1070,7 @@ Server: httpfile
 Accept-Ranges: bytes
 Date: ...
 Content-Range: bytes 0-1/3
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 2
 
   0
@@ -1080,7 +1080,7 @@ Server: httpfile
 Accept-Ranges: bytes
 Date: ...
 Content-Range: bytes 0-2/3
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 3
 
    0
@@ -1090,7 +1090,7 @@ Server: httpfile
 Accept-Ranges: bytes
 Date: ...
 Content-Range: bytes 0-2/3
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 3
 
    0
@@ -1100,7 +1100,7 @@ Server: httpfile
 Accept-Ranges: bytes
 Date: ...
 Content-Range: bytes 0-2/3
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 3
 
    0
@@ -1120,7 +1120,7 @@ Server: httpfile
 Accept-Ranges: bytes
 Date: ...
 Content-Range: bytes 1-1/3
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 1
 
  0
@@ -1130,7 +1130,7 @@ Server: httpfile
 Accept-Ranges: bytes
 Date: ...
 Content-Range: bytes 1-2/3
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 2
 
   0
@@ -1140,7 +1140,7 @@ Server: httpfile
 Accept-Ranges: bytes
 Date: ...
 Content-Range: bytes 1-2/3
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 2
 
   0
@@ -1150,7 +1150,7 @@ Server: httpfile
 Accept-Ranges: bytes
 Date: ...
 Content-Range: bytes 1-2/3
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 2
 
   0
@@ -1180,7 +1180,7 @@ Server: httpfile
 Accept-Ranges: bytes
 Date: ...
 Content-Range: bytes 2-2/3
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 1
 
  0
@@ -1190,7 +1190,7 @@ Server: httpfile
 Accept-Ranges: bytes
 Date: ...
 Content-Range: bytes 2-2/3
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 1
 
  0
@@ -1200,7 +1200,7 @@ Server: httpfile
 Accept-Ranges: bytes
 Date: ...
 Content-Range: bytes 2-2/3
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 1
 
  0
@@ -1270,7 +1270,7 @@ Server: httpfile
 Accept-Ranges: bytes
 Date: ...
 Content-Range: bytes 2-2/3
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 1
 
  0
@@ -1280,7 +1280,7 @@ Server: httpfile
 Accept-Ranges: bytes
 Date: ...
 Content-Range: bytes 1-2/3
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 2
 
   0
@@ -1290,7 +1290,7 @@ Server: httpfile
 Accept-Ranges: bytes
 Date: ...
 Content-Range: bytes 0-2/3
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 3
 
    0
@@ -1309,7 +1309,7 @@ HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 3
 
    0
@@ -1339,7 +1339,7 @@ HTTP/1.0 200 OK
 Server: httpfile
 Accept-Ranges: bytes
 Date: ...
-Content-Type: text/plain
+Content-Type: application/octet-stream
 Content-Length: 11
 
 authorized

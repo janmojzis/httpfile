@@ -23,7 +23,7 @@ int filetype(const char *fn,stralloc *contenttype)
       if (!stralloc_append(contenttype, &ch)) return 0;
     }
   else {
-    result = "text/plain";
+    result = "application/octet-stream";
     /* web content */
     if (case_equals(x,".html")) result = "text/html";
     else if (case_equals(x,".css")) result = "text/css";
