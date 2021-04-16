@@ -4,7 +4,7 @@
   (
     echo "CC?=cc"
     echo "CFLAGS+=-W -Wall -Os -fPIC -fwrapv -Wall"
-    echo "LDFLAGS+="
+    echo "LDFLAGS+=-lz"
     echo 
 
     binaries=""

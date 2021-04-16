@@ -1,6 +1,6 @@
 CC?=cc
 CFLAGS+=-W -Wall -Os -fPIC -fwrapv -Wall
-LDFLAGS+=
+LDFLAGS+=-lz
 
 all:  httpfile utime
 
