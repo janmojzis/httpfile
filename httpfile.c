@@ -24,6 +24,7 @@
 #include "rangeparser.h"
 #include "getuidgid.h"
 #include "limits.h"
+#include "gz.h"
 
 #define WRITETIMEOUT 5
 #define REQUESTTIMEOUT 30
@@ -66,6 +67,8 @@ static stralloc auth = {0};
 static stralloc response = {0};
 static long long responsepos = 0;
 static int flaggzip = 0;
+static char *gzdata = 0;
+static long long gzdatalen = 0;
 
 static char *customheaders[16];
 static long long customheaderslen = 0;
@@ -275,6 +278,7 @@ static void get(void) {
         out_puts("/");
         out_puts(numtostr(0, filelength));
         out_putcrlf();
+        flaggzip = 0;
     }
     else {
         if ((ims.len < mtimestr.len) || memcmp(mtimestr.s, ims.s, mtimestr.len)) {
@@ -291,16 +295,31 @@ static void get(void) {
         out_put(mtimestr.s, mtimestr.len);
         out_putcrlf();
     }
-
     out_puts("Content-Type: ");
     out_put(contenttype.s, contenttype.len);
     out_putcrlf();
-    out_puts("Content-Length: ");
-    out_puts(numtostr(0, rangelast + 1 - rangefirst));
-    out_putcrlf();
-    out_putcrlf();
-    out_body(filecontent + rangefirst, rangelast + 1 - rangefirst);
+
+    if (flaggzip && flagbody) {
+        gzdata = gz(&gzdatalen, filecontent, filelength);
+    }
+    if (gzdata) {
+        out_puts("Content-Encoding: gzip");
+        out_putcrlf();
+        out_puts("Content-Length: ");
+        out_puts(numtostr(0, gzdatalen));
+        out_putcrlf();
+        out_putcrlf();
+        out_body(gzdata, gzdatalen);
+    }
+    else {
+        out_puts("Content-Length: ");
+        out_puts(numtostr(0, rangelast + 1 - rangefirst));
+        out_putcrlf();
+        out_putcrlf();
+        out_body(filecontent + rangefirst, rangelast + 1 - rangefirst);
+    }
     file_close(fd, filecontent, filelength);
+    if (gzdata) { alloc_free(gzdata); gzdata = 0; }
     if (protocolnum < 2) _die(0);
 }
 

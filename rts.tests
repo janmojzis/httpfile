@@ -236,4 +236,25 @@ Authorization: basic dXNlcjpwYXNzd29yZA==
 
 ' | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
 
+touch  0/gzip.html
+touch  0/gzip.jpg
+
+echo '--- httpd handles Accept-Encoding: gzip'
+echo 'GET gzip.html HTTP/1.0
+Accept-Encoding: gzip, deflate, br
+
+' | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+
+echo '--- httpd handles Accept-Encoding: gzip'
+echo 'GET gzip.html HTTP/1.0
+Accept-Encoding: deflate, br, gzip
+
+' | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+
+echo '--- httpd rejects Accept-Encoding: gzip for non-text content'
+echo 'GET gzip.jpg HTTP/1.0
+Accept-Encoding: gzip
+
+' | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+
 exit 0
