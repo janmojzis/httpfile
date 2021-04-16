@@ -23,6 +23,7 @@
 #include "timeoutwrite.h"
 #include "rangeparser.h"
 #include "getuidgid.h"
+#include "limits.h"
 
 #define WRITETIMEOUT 5
 #define REQUESTTIMEOUT 30
@@ -35,6 +36,7 @@ static void _die(int x) {
 }
 
 static void die_nomem(void) { log_f1("out of memory"); _die(111); }
+static void die_limits(void) { log_f1("unable to set limits"); _die(111); }
 static void die_droproot(const char *u) { log_f2("unable to drop privileges to account ", u); _die(111); }
 static void die_chroot(const char *d) { log_f2("unable to chroot to ", d); _die(111); }
 
@@ -398,6 +400,9 @@ int main(int argc, char **argv) {
         }
     }
     root = *++argv;
+
+    /* set limits */
+    if (!limits()) die_limits();
 
     /* get UID + GID */
     if (user) {

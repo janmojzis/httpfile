@@ -45,6 +45,9 @@ httpfile.o: httpfile.c stralloc.h pathdecode.h hostparse.h httpdate.h \
  droproot.h alloc.h e.h timeoutwrite.h rangeparser.h getuidgid.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c httpfile.c
 
+limits.o: limits.c limits.h
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c limits.c
+
 log.o: log.c e.h log.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c log.c
 
@@ -78,11 +81,11 @@ timeoutwrite.o: timeoutwrite.c e.h milliseconds.h timeoutwrite.h
 utime.o: utime.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c utime.c
 
-httpfile: httpfile.o  alloc.o case_diffb.o case_diffs.o case_lowerb.o case_startb.o droproot.o e.o file.o filetype.o getuidgid.o hostparse.o httpdate.o log.o milliseconds.o numtostr.o pathdecode.o percent.o rangeparser.o seconds.o stralloc.o str.o timeoutwrite.o
-	$(CC) $(CFLAGS) $(CPPFLAGS) -o httpfile httpfile.o  alloc.o case_diffb.o case_diffs.o case_lowerb.o case_startb.o droproot.o e.o file.o filetype.o getuidgid.o hostparse.o httpdate.o log.o milliseconds.o numtostr.o pathdecode.o percent.o rangeparser.o seconds.o stralloc.o str.o timeoutwrite.o $(LDFLAGS)
+httpfile: httpfile.o  alloc.o case_diffb.o case_diffs.o case_lowerb.o case_startb.o droproot.o e.o file.o filetype.o getuidgid.o hostparse.o httpdate.o limits.o log.o milliseconds.o numtostr.o pathdecode.o percent.o rangeparser.o seconds.o stralloc.o str.o timeoutwrite.o
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o httpfile httpfile.o  alloc.o case_diffb.o case_diffs.o case_lowerb.o case_startb.o droproot.o e.o file.o filetype.o getuidgid.o hostparse.o httpdate.o limits.o log.o milliseconds.o numtostr.o pathdecode.o percent.o rangeparser.o seconds.o stralloc.o str.o timeoutwrite.o $(LDFLAGS)
 
-utime: utime.o  alloc.o case_diffb.o case_diffs.o case_lowerb.o case_startb.o droproot.o e.o file.o filetype.o getuidgid.o hostparse.o httpdate.o log.o milliseconds.o numtostr.o pathdecode.o percent.o rangeparser.o seconds.o stralloc.o str.o timeoutwrite.o
-	$(CC) $(CFLAGS) $(CPPFLAGS) -o utime utime.o  alloc.o case_diffb.o case_diffs.o case_lowerb.o case_startb.o droproot.o e.o file.o filetype.o getuidgid.o hostparse.o httpdate.o log.o milliseconds.o numtostr.o pathdecode.o percent.o rangeparser.o seconds.o stralloc.o str.o timeoutwrite.o $(LDFLAGS)
+utime: utime.o  alloc.o case_diffb.o case_diffs.o case_lowerb.o case_startb.o droproot.o e.o file.o filetype.o getuidgid.o hostparse.o httpdate.o limits.o log.o milliseconds.o numtostr.o pathdecode.o percent.o rangeparser.o seconds.o stralloc.o str.o timeoutwrite.o
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o utime utime.o  alloc.o case_diffb.o case_diffs.o case_lowerb.o case_startb.o droproot.o e.o file.o filetype.o getuidgid.o hostparse.o httpdate.o limits.o log.o milliseconds.o numtostr.o pathdecode.o percent.o rangeparser.o seconds.o stralloc.o str.o timeoutwrite.o $(LDFLAGS)
 
 rts.out:  httpfile utime rts.tests
 	sh rts.tests > rts.out
