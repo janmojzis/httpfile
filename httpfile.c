@@ -53,12 +53,11 @@ static stralloc field = {0};
 static int flagbody = 1;
 static stralloc redirurl = {0};
 static stralloc nowstr = {0};
-#define contenttype nowstr
-#define contentlengthstr nowstr
-#define rangestr nowstr
+static stralloc contenttype = {0};
+static stralloc contentlen = {0};
 static stralloc fn = {0};
 static char *filecontent;
-static long long filelength = 0;
+static long long filelen = 0;
 static stralloc range = {0};
 static long long rangefirst = -1;
 static long long rangelast = -1;
@@ -174,9 +173,9 @@ static void barf(const char *code, const char *message) {
       out_puts("WWW-Authenticate: Basic realm=\"authorization required\"");
       out_putcrlf();
     }
-    if (!stralloc_copynum(&contentlengthstr, str_len(message) + 28)) die_nomem();
+    if (!stralloc_copynum(&contentlen, str_len(message) + 28)) die_nomem();
     out_puts("Content-Length: ");
-    out_put(contentlengthstr.s, contentlengthstr.len);
+    out_put(contentlen.s, contentlen.len);
     out_putcrlf();
     if (protocolnum == 2) {
       out_puts("Connection: close");
@@ -246,7 +245,7 @@ static void get(void) {
     if (!stralloc_0(&fn)) die_nomem();
 
     errno = 0;
-    fd = file_open(fn.s, &filecontent, &filelength, &mtime);
+    fd = file_open(fn.s, &filecontent, &filelen, &mtime);
     log_d2("opening file: ", fn.s);
     if (fd == -1) {
         switch (errno) {
@@ -260,10 +259,10 @@ static void get(void) {
     }
 
     rangefirst = 0;
-    rangelast = filelength - 1;
+    rangelast = filelen - 1;
     if (!httpdate(&mtimestr, mtime)) die_nomem();
-    if (range.len > 0 && filelength > 0) {
-        if (!rangeparser(&rangefirst, &rangelast, range.s, range.len, filelength)) {
+    if (range.len > 0 && filelen > 0) {
+        if (!rangeparser(&rangefirst, &rangelast, range.s, range.len, filelen)) {
             barf("416 ", "requested range not satisfiable");
         }
 
@@ -273,7 +272,7 @@ static void get(void) {
         if (!stralloc_cats(&range, "-")) die_nomem();
         if (!stralloc_catnum(&range, rangelast)) die_nomem();
         if (!stralloc_cats(&range, "/")) die_nomem();
-        if (!stralloc_catnum(&range, filelength)) die_nomem();
+        if (!stralloc_catnum(&range, filelen)) die_nomem();
         out_put(range.s, range.len);
         out_putcrlf();
 
@@ -298,13 +297,13 @@ static void get(void) {
     if (!filetype(fn.s, &contenttype)) die_nomem();
     out_put(contenttype.s, contenttype.len);
     out_putcrlf();
-    if (!stralloc_copynum(&contentlengthstr, rangelast + 1 - rangefirst)) die_nomem();
+    if (!stralloc_copynum(&contentlen, rangelast + 1 - rangefirst)) die_nomem();
     out_puts("Content-Length: ");
-    out_put(contentlengthstr.s, contentlengthstr.len);
+    out_put(contentlen.s, contentlen.len);
     out_putcrlf();
     out_putcrlf();
     out_body(filecontent + rangefirst, rangelast + 1 - rangefirst);
-    file_close(fd, filecontent, filelength);
+    file_close(fd, filecontent, filelen);
     if (protocolnum < 2) _die(0);
 }
 
