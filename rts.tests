@@ -212,7 +212,7 @@ Range: bytes=0-1,1-2
 
 ' | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
 
-echo '--- httpd reject Range request with big numbers'
+echo '--- httpd rejects Range request with big number (long long overflow)'
 echo 'GET range HTTP/1.0
 Range: bytes=-9223372036854775808
 

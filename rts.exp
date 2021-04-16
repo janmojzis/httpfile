@@ -1313,7 +1313,7 @@ Content-Type: application/octet-stream
 Content-Length: 3
 
    0
---- httpd reject Range request with big numbers
+--- httpd rejects Range request with big number (long long overflow)
 HTTP/1.0 416 requested range not satisfiable
 Server: httpfile
 Accept-Ranges: bytes
