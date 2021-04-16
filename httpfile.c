@@ -65,6 +65,7 @@ static int fd;
 static stralloc auth = {0};
 static stralloc response = {0};
 static long long responsepos = 0;
+static int flaggzip = 0;
 
 static char *customheaders[16];
 static long long customheaderslen = 0;
@@ -256,7 +257,7 @@ static void get(void) {
                 barf("404 ", e_str(errno)); break;
         }
     }
-    if (!filetype(fn.s, &contenttype)) die_nomem();
+    if (!filetype(fn.s, &contenttype, &flaggzip)) die_nomem();
 
     rangefirst = 0;
     rangelast = filelength - 1;
@@ -448,6 +449,7 @@ int main(int argc, char **argv) {
         if (!stralloc_copys(&auth, "")) die_nomem();
         if (!stralloc_copys(&range, "")) die_nomem();
         protocolnum = 2;
+        flaggzip = 0;
 
         spaces = 0;
         for (i = 0; i < line.len; ++i) {
@@ -527,6 +529,14 @@ int main(int argc, char **argv) {
                     if (case_startb(field.s, field.len, "range: bytes=")) {
                         if (!memchr(field.s + 13, ',', field.len - 13)) {
                             if (!stralloc_copyb(&range, field.s + 13, field.len - 13)) die_nomem();
+                        }
+                    }
+                    if (case_startb(field.s, field.len, "accept-encoding:")) {
+                        for (i = 16; i < field.len - 3; ++i) {
+                            if (case_startb(field.s + i, field.len - i, "gzip")) {
+                                flaggzip = 1;
+                                break;
+                            }
                         }
                     }
 

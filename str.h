@@ -7,5 +7,6 @@ extern long long str_len(const char *);
 extern int str_equal(const char *, const char *);
 extern long long str_chr(const char *, int);
 extern long long str_rchr(const char *, int);
+extern int str_start(const char *, const char *);
 
 #endif

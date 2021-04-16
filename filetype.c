@@ -2,7 +2,7 @@
 #include "str.h"
 #include "case.h"
 
-int filetype(const char *fn,stralloc *contenttype)
+int filetype(const char *fn, stralloc *contenttype, int *flaggzip)
 {
   const char *x;
   const char *result;
@@ -52,6 +52,10 @@ int filetype(const char *fn,stralloc *contenttype)
     else if (case_equals(x,".ogg")) result = "video/ogg";
     else if (case_equals(x,".mov")) result = "video/quicktime";
     else if (case_equals(x,".webm")) result = "video/webm";
+
+    if (*flaggzip) {
+        if (!str_start(result, "text/")) *flaggzip = 0;
+    }
 
     if (!stralloc_cats(contenttype, result)) return 0;
   }

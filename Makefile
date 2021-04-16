@@ -42,7 +42,7 @@ httpdate.o: httpdate.c httpdate.h stralloc.h
 
 httpfile.o: httpfile.c stralloc.h pathdecode.h hostparse.h httpdate.h \
  seconds.h percent.h case.h log.h str.h numtostr.h filetype.h file.h \
- droproot.h alloc.h e.h timeoutwrite.h rangeparser.h getuidgid.h
+ droproot.h alloc.h e.h timeoutwrite.h rangeparser.h getuidgid.h limits.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c httpfile.c
 
 limits.o: limits.c limits.h
