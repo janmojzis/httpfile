@@ -125,6 +125,14 @@ int stralloc_catnum(stralloc *r, long long num) {
     return stralloc_catnum0(r, num, 0);
 }
 
+int stralloc_copynum(stralloc *r, long long num) {
+
+    if (!r) { errno = EINVAL; return 0; }
+
+    r->len = 0;
+    return stralloc_catnum(r, num);
+}
+
 void stralloc_free(stralloc *r) {
 
     if (!r) return;

@@ -14,7 +14,6 @@
 #include "case.h"
 #include "log.h"
 #include "str.h"
-#include "numtostr.h"
 #include "filetype.h"
 #include "file.h"
 #include "droproot.h"
@@ -54,8 +53,10 @@ static stralloc field = {0};
 static int flagbody = 1;
 static stralloc redirurl = {0};
 static stralloc nowstr = {0};
+#define contenttype nowstr
+#define contentlengthstr nowstr
+#define rangestr nowstr
 static stralloc fn = {0};
-static stralloc contenttype = {0};
 static char *filecontent;
 static long long filelength = 0;
 static stralloc range = {0};
@@ -173,8 +174,9 @@ static void barf(const char *code, const char *message) {
       out_puts("WWW-Authenticate: Basic realm=\"authorization required\"");
       out_putcrlf();
     }
+    if (!stralloc_copynum(&contentlengthstr, str_len(message) + 28)) die_nomem();
     out_puts("Content-Length: ");
-    out_puts(numtostr(0, str_len(message) + 28));
+    out_put(contentlengthstr.s, contentlengthstr.len);
     out_putcrlf();
     if (protocolnum == 2) {
       out_puts("Connection: close");
@@ -256,7 +258,6 @@ static void get(void) {
                 barf("404 ", e_str(errno)); break;
         }
     }
-    if (!filetype(fn.s, &contenttype)) die_nomem();
 
     rangefirst = 0;
     rangelast = filelength - 1;
@@ -268,12 +269,14 @@ static void get(void) {
 
         header("206 ", "partial content");
         out_puts("Content-Range: bytes ");
-        out_puts(numtostr(0, rangefirst));
-        out_puts("-");
-        out_puts(numtostr(0, rangelast));
-        out_puts("/");
-        out_puts(numtostr(0, filelength));
+        if (!stralloc_copynum(&range, rangefirst)) die_nomem();
+        if (!stralloc_cats(&range, "-")) die_nomem();
+        if (!stralloc_catnum(&range, rangelast)) die_nomem();
+        if (!stralloc_cats(&range, "/")) die_nomem();
+        if (!stralloc_catnum(&range, filelength)) die_nomem();
+        out_put(range.s, range.len);
         out_putcrlf();
+
     }
     else {
         if ((ims.len < mtimestr.len) || memcmp(mtimestr.s, ims.s, mtimestr.len)) {
@@ -292,10 +295,12 @@ static void get(void) {
     }
 
     out_puts("Content-Type: ");
+    if (!filetype(fn.s, &contenttype)) die_nomem();
     out_put(contenttype.s, contenttype.len);
     out_putcrlf();
+    if (!stralloc_copynum(&contentlengthstr, rangelast + 1 - rangefirst)) die_nomem();
     out_puts("Content-Length: ");
-    out_puts(numtostr(0, rangelast + 1 - rangefirst));
+    out_put(contentlengthstr.s, contentlengthstr.len);
     out_putcrlf();
     out_putcrlf();
     out_body(filecontent + rangefirst, rangelast + 1 - rangefirst);

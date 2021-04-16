@@ -18,6 +18,7 @@ extern int stralloc_append(stralloc *, const void *);
 extern int stralloc_0(stralloc *);
 extern void stralloc_free(stralloc *);
 extern int stralloc_catnum(stralloc *, long long);
+extern int stralloc_copynum(stralloc *, long long);
 extern int stralloc_catnum0(stralloc *, long long, long long);
 
 #endif
