@@ -1,5 +1,5 @@
 CC?=cc
-CFLAGS+=-W -Wall -Os -fPIC -fwrapv -Wall
+CFLAGS+=-W -Wall -Os -fPIC -fwrapv -pedantic
 LDFLAGS+=
 
 all:  httpfile utime

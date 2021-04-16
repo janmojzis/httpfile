@@ -3,7 +3,7 @@
 (
   (
     echo "CC?=cc"
-    echo "CFLAGS+=-W -Wall -Os -fPIC -fwrapv -Wall"
+    echo "CFLAGS+=-W -Wall -Os -fPIC -fwrapv -pedantic"
     echo "LDFLAGS+="
     echo 
 
