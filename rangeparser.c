@@ -17,6 +17,8 @@ int rangeparser(long long *first, long long *last, char *x, long long xlen, long
         for (i = 0; i < pos; ++i) {
             c = (unsigned long long) (unsigned char) (x[i] - '0');
             if (c > 10) return 0;
+            if (min < 0) return 0;
+            if ((unsigned long long)min > min * 10 + c) return 0;
             min = min * 10 + c;
         }
     }
@@ -27,6 +29,8 @@ int rangeparser(long long *first, long long *last, char *x, long long xlen, long
         for (i = pos + 1; i < xlen; ++i) {
             c = (unsigned long long) (unsigned char) (x[i] - '0');
             if (c > 10) return 0;
+            if (max < 0) return 0;
+            if ((unsigned long long)max > max * 10 + c) return 0;
             max = max * 10 + c;
         }
     }

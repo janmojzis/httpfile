@@ -1323,6 +1323,16 @@ Content-Type: text/html
 
 <html><body>requested range not satisfiable</body></html>
 0
+--- httpd rejects Range request with big number (long long overflow)
+HTTP/1.0 416 requested range not satisfiable
+Server: httpfile
+Accept-Ranges: bytes
+Date: ...
+Content-Length: 59
+Content-Type: text/html
+
+<html><body>requested range not satisfiable</body></html>
+0
 --- httpd handles basic authorization
 HTTP/1.0 401 unauthorized
 Server: httpfile

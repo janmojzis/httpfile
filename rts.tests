@@ -218,6 +218,12 @@ Range: bytes=-9223372036854775808
 
 ' | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
 
+echo '--- httpd rejects Range request with big number (long long overflow)'
+echo 'GET range HTTP/1.0
+Range: bytes=-10000000000000000000000000
+
+' | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+
 mkdir -p '@dXNlcjpwYXNzd29yZA/authhost'
 echo 'authorized' > '@dXNlcjpwYXNzd29yZA/authhost/auth'
 rm -f authhost
