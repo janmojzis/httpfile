@@ -236,4 +236,28 @@ Authorization: basic dXNlcjpwYXNzd29yZA==
 
 ' | ( ./httpd 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
 
+echo '--- httpd handles 8 custom headers'
+echo 'GET foo HTTP/1.0
+Host: 0
+
+' | ( ./httpd -h '1: 1' -h '2: 2' -h '3: 3' -h '4: 4' -h '5: 5' -h '6: 6' -h '7: 7' -h '8: 8' 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+
+echo '--- httpd ignores more than 8 custom headers'
+echo 'GET foo HTTP/1.0
+Host: 0
+
+' | ( ./httpd -h '1: 1' -h '2: 2' -h '3: 3' -h '4: 4' -h '5: 5' -h '6: 6' -h '7: 7' -h '8: 8' -h 'a: a' 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+
+echo '--- httpd ignores empty custom header'
+echo 'GET foo HTTP/1.0
+Host: 0
+
+' | ( ./httpd -h '' 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+
+echo '--- httpd ignores bad custom header'
+echo 'GET foo HTTP/1.0
+Host: 0
+
+' | ( ./httpd -h 'nocolon' 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+
 exit 0

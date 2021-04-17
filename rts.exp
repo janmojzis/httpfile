@@ -1344,3 +1344,59 @@ Content-Length: 11
 
 authorized
 0
+--- httpd handles 8 custom headers
+HTTP/1.0 200 OK
+Server: httpfile
+Accept-Ranges: bytes
+Date: ...
+1: 1
+2: 2
+3: 3
+4: 4
+5: 5
+6: 6
+7: 7
+8: 8
+Content-Type: application/octet-stream
+Content-Length: 13
+
+Hello, world
+0
+--- httpd ignores more than 8 custom headers
+HTTP/1.0 200 OK
+Server: httpfile
+Accept-Ranges: bytes
+Date: ...
+1: 1
+2: 2
+3: 3
+4: 4
+5: 5
+6: 6
+7: 7
+8: 8
+Content-Type: application/octet-stream
+Content-Length: 13
+
+Hello, world
+0
+--- httpd ignores empty custom header
+HTTP/1.0 200 OK
+Server: httpfile
+Accept-Ranges: bytes
+Date: ...
+Content-Type: application/octet-stream
+Content-Length: 13
+
+Hello, world
+0
+--- httpd ignores bad custom header
+HTTP/1.0 200 OK
+Server: httpfile
+Accept-Ranges: bytes
+Date: ...
+Content-Type: application/octet-stream
+Content-Length: 13
+
+Hello, world
+0

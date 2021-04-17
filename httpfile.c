@@ -66,7 +66,7 @@ static stralloc auth = {0};
 static stralloc response = {0};
 static long long responsepos = 0;
 
-static char *customheaders[16];
+static char *customheaders[8];
 static long long customheaderslen = 0;
 
 static void writeall(const char *x, long long xlen) {
@@ -113,23 +113,26 @@ static void out_body(const char *x, long long xlen) {
 }
 
 static void customheaders_add(char *x) {
-    if ((unsigned long long) customheaderslen <= sizeof customheaders / sizeof customheaders[0]) {
-        customheaders[customheaderslen++] = x;
+    long long xlen;
+    if ((unsigned long long)customheaderslen >= sizeof customheaders / sizeof customheaders[0]) {
+        log_w1("too many custom headers");
+        return;
     }
+    xlen = str_len(x);
+    if (xlen == 0 || x[0] == ' ' || x[0] == '\t' || str_chr(x, '\n') != xlen || str_chr(x, ':') == xlen) {
+        log_w3("bad custom header '", x, "'");
+        return;
+    }
+    customheaders[customheaderslen++] = x;
 }
 
 static void customheaders_put(void) {
 
-    long long i, j;
+    long long i;
 
     for (i = 0; i < customheaderslen; ++i) {
-        j = str_chr(customheaders[i], '\n');
-        customheaders[i][j] = 0;
-        j = str_chr(customheaders[i], ':');
-        if (str_len(customheaders[i]) > 0 && j != str_len(customheaders[i])) {
-            out_puts(customheaders[i]);
-            out_putcrlf();
-        }
+        out_puts(customheaders[i]);
+        out_putcrlf();
     }
 }
 
@@ -357,7 +360,7 @@ static gid_t gid;
 
 static void usage(void) {
 
-    log_u1("httpfile [options] [-r] [-u user] directory");
+    log_u1("httpfile [options] [-r] [-u user] [ -h custom response header ] directory");
     _exit(100);
 }
 
