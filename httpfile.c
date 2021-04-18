@@ -38,6 +38,7 @@ static void die_nomem(void) { log_f1("out of memory"); _die(111); }
 static void die_limits(void) { log_f1("unable to set limits"); _die(111); }
 static void die_droproot(const char *u) { log_f2("unable to drop privileges to account ", u); _die(111); }
 static void die_chroot(const char *d) { log_f2("unable to chroot to ", d); _die(111); }
+static void die_read(const char *f) { log_f2("unable to read from file ", f); _die(111); }
 
 static stralloc line = {0};
 static stralloc protocol = {0};
@@ -56,8 +57,7 @@ static stralloc nowstr = {0};
 static stralloc contenttype = {0};
 static stralloc contentlen = {0};
 static stralloc fn = {0};
-static char *filecontent;
-static long long filelen = 0;
+static long long length = 0;
 static stralloc range = {0};
 static long long rangefirst = -1;
 static long long rangelast = -1;
@@ -105,10 +105,20 @@ static void out_putcrlf(void) {
     responsepos = response.len;
 }
 
-static void out_body(const char *x, long long xlen) {
+static void out_body(long long offset, long long len) {
+    long long r;
     out_flush();
     if (flagbody) {
-        writeall(x, xlen);
+        if (!file_seek(fd, offset)) die_read(fn.s);
+        while (len > 0) {
+            r = response.alloc;
+            if (len < response.alloc) r = len;
+            r = read(fd, response.s, r);
+            if (r == -1) die_read(fn.s);
+            if (r == 0) break;
+            writeall(response.s, r);
+            len -= r;
+        }
     }
 }
 
@@ -248,8 +258,8 @@ static void get(void) {
     if (!stralloc_0(&fn)) die_nomem();
 
     errno = 0;
-    fd = file_open(fn.s, &filecontent, &filelen, &mtime);
-    log_d2("opening file: ", fn.s);
+    fd = file_open(fn.s, &mtime, &length);
+    log_d2("open file: ", fn.s);
     if (fd == -1) {
         switch (errno) {
             case EISDIR:
@@ -262,10 +272,10 @@ static void get(void) {
     }
 
     rangefirst = 0;
-    rangelast = filelen - 1;
+    rangelast = length - 1;
     if (!httpdate(&mtimestr, mtime)) die_nomem();
-    if (range.len > 0 && filelen > 0) {
-        if (!rangeparser(&rangefirst, &rangelast, range.s, range.len, filelen)) {
+    if (range.len > 0 && length > 0) {
+        if (!rangeparser(&rangefirst, &rangelast, range.s, range.len, length)) {
             barf("416 ", "requested range not satisfiable");
         }
 
@@ -275,7 +285,7 @@ static void get(void) {
         if (!stralloc_cats(&range, "-")) die_nomem();
         if (!stralloc_catnum(&range, rangelast)) die_nomem();
         if (!stralloc_cats(&range, "/")) die_nomem();
-        if (!stralloc_catnum(&range, filelen)) die_nomem();
+        if (!stralloc_catnum(&range, length)) die_nomem();
         out_put(range.s, range.len);
         out_putcrlf();
 
@@ -305,8 +315,8 @@ static void get(void) {
     out_put(contentlen.s, contentlen.len);
     out_putcrlf();
     out_putcrlf();
-    out_body(filecontent + rangefirst, rangelast + 1 - rangefirst);
-    file_close(fd, filecontent, filelen);
+    out_body(rangefirst, rangelast + 1 - rangefirst);
+    if (close(fd) == -1) _die(111);
     if (protocolnum < 2) _die(0);
 }
 
@@ -438,7 +448,7 @@ int main(int argc, char **argv) {
     if (flagredir) doit = redirecthttps;
 
     if (!stralloc_readyplus(&field, 128)) die_nomem();
-    if (!stralloc_readyplus(&response, 256)) die_nomem();
+    if (!stralloc_readyplus(&response, 512)) die_nomem();
 
     for (;;) {
         alarm(REQUESTTIMEOUT);

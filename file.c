@@ -1,11 +1,11 @@
+#define _LARGEFILE_SOURCE
 #include <sys/types.h>
-#include <sys/mman.h>
 #include <sys/stat.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
 
-int file_open(char *fn, char **x, long long *xlen, long long *mtime) {
+int file_open(char *fn, long long *mtime, long long *length) {
 
     struct stat st;
     int fd;
@@ -33,20 +33,19 @@ int file_open(char *fn, char **x, long long *xlen, long long *mtime) {
         return -1;
     }
 
-    *xlen = st.st_size;
+    *length = st.st_size;
     *mtime = st.st_mtime;
 
-    if (st.st_size > 0) {
-        *x = mmap(0, st.st_size, PROT_READ, MAP_SHARED, fd, 0);
-        if (*x == MAP_FAILED) return -1;
+    /* probably useless overflow check */
+    if (*length < 0 || *mtime < 0) {
+        errno = EINVAL;
+        return -1;
     }
-
     return fd;
 }
 
-void file_close(int fd, char *x, long long xlen) {
-    if (xlen > 0) {
-        munmap(x, xlen);
-    }
-    close(fd);
+int file_seek(int fd, long long offset) {
+    if (offset < 0) { errno = EINVAL; return 0; }
+    if (lseek(fd, offset, SEEK_SET) != offset) return 0;
+    return 1;
 }
