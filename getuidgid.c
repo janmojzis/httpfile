@@ -6,11 +6,11 @@ int getuidgid(uid_t *uid, gid_t *gid, const char *account) {
 
     struct passwd *pw = 0;
 
-	if (!account) return 0;
+    if (!account) return 0;
 
-	pw = getpwnam(account);
-	if (!pw) return 0;
-	*uid = pw->pw_uid;
-	*gid = pw->pw_gid;
+    pw = getpwnam(account);
+    if (!pw) return 0;
+    *uid = pw->pw_uid;
+    *gid = pw->pw_gid;
     return 1;
 }

@@ -3,7 +3,7 @@
 
 void hostparse(stralloc *host) {
 
-	long long i, j, colonpos, coloncount = 0;
+    long long i, j, colonpos, coloncount = 0;
     char ch;
 
     /* IPv6 in brackets */
