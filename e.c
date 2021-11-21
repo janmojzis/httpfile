@@ -1,4 +1,4 @@
-/* taken from nacl-20110221, from curvecp/e.c */
+/* taken from public-domain nacl-20110221, from curvecp/e.c */
 #include "e.h"
 
 #define X(e, s)                                                                \
