@@ -133,15 +133,43 @@ static void out_body(long long offset, long long len) {
 }
 
 static void customheaders_add(char *x) {
-    long long xlen;
+
+    long long xlen, i;
+
     if ((unsigned long long)customheaderslen >= sizeof customheaders / sizeof customheaders[0]) {
-        log_w1("too many custom headers");
-        return;
+        log_f3("unable to add custom header '", x, "': too many custom headers");
+        _die(100);
     }
     xlen = str_len(x);
-    if (xlen == 0 || x[0] == ' ' || x[0] == '\t' || str_chr(x, '\n') != xlen || str_chr(x, ':') == xlen) {
-        log_w3("bad custom header '", x, "'");
-        return;
+    if (xlen == 0) {
+        log_f3("unable to add empty custom header '", x, "'");
+        _die(100);
+    }
+    if (str_chr(x, ':') == xlen) {
+        log_f3("unable to add custom header '", x, "', header must contain colon");
+        _die(100);
+    }
+    if (str_chr(x, ':') != str_rchr(x, ':')) {
+        log_f3("unable to add custom header '", x, "', only one colon allowed");
+        _die(100);
+    }
+    if (x[str_chr(x, ':') + 1] != ' ') {
+        log_f3("unable to add custom header '", x, "', after colon must be a space");
+        _die(100);
+    }
+    if (x[0] == ' ' || x[0] == '\t') {
+        log_f3("unable to add custom header '", x, "', first character can't be space or tab");
+        _die(100);
+    }
+    for (i = 0; i < xlen; ++i) {
+        if (x[i] < 32 || x[i] > 126) {
+            log_f3("unable to add custom header '", x, "', header contain non-printable character");
+            _die(100);
+        }
+    }
+    if (x[xlen - 1] == ' ' || x[xlen - 1] == ':') {
+        log_f3("unable to add custom header '", x, "', last character can't be space or colon");
+        _die(100);
     }
     customheaders[customheaderslen++] = x;
 }
@@ -384,7 +412,7 @@ static void usage(void) {
     _exit(100);
 }
 
-int numparse(unsigned long long *num, const char *x) {
+static int numparse(unsigned long long *num, const char *x) {
 
     char *endptr = 0;
 

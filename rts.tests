@@ -248,22 +248,71 @@ Host: 0
 
 ' | ( ./httpd -h '1: 1' -h '2: 2' -h '3: 3' -h '4: 4' -h '5: 5' -h '6: 6' -h '7: 7' -h '8: 8' 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
 
-echo '--- httpd ignores more than 8 custom headers'
+echo '--- httpd rejects more than 8 custom headers'
 echo 'GET foo HTTP/1.0
 Host: 0
 
-' | ( ./httpd -h '1: 1' -h '2: 2' -h '3: 3' -h '4: 4' -h '5: 5' -h '6: 6' -h '7: 7' -h '8: 8' -h 'a: a' 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+' | ( ./httpd -q -h '1: 1' -h '2: 2' -h '3: 3' -h '4: 4' -h '5: 5' -h '6: 6' -h '7: 7' -h '8: 8' -h 'a: a' 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
 
-echo '--- httpd ignores empty custom header'
+echo '--- httpd rejects empty custom header'
 echo 'GET foo HTTP/1.0
 Host: 0
 
-' | ( ./httpd -h '' 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+' | ( ./httpd -q -h '' 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
 
-echo '--- httpd ignores bad custom header'
+echo '--- httpd rejects custom header without colon'
 echo 'GET foo HTTP/1.0
 Host: 0
 
-' | ( ./httpd -h 'nocolon' 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+' | ( ./httpd -q -h 'nocolon' 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+
+echo '--- httpd rejects custom header without more than one colon'
+echo 'GET foo HTTP/1.0
+Host: 0
+
+' | ( ./httpd -q -h 'twocolon: x:x' 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+
+echo '--- httpd rejects custom header without colon-space'
+echo 'GET foo HTTP/1.0
+Host: 0
+
+' | ( ./httpd -q -h 'nocolonspace:x' 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+
+echo '--- httpd rejects custom header when first character is a space'
+echo 'GET foo HTTP/1.0
+Host: 0
+
+' | ( ./httpd -q -h ' firstcharacterisiaspace: x' 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+
+echo '--- httpd rejects custom header when first character is a tab'
+echo 'GET foo HTTP/1.0
+Host: 0
+
+' | ( ./httpd -q -h '	firstcharacterisiatab: x' 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+
+echo '--- httpd rejects custom header with non-printable character CR'
+echo 'GET foo HTTP/1.0
+Host: 0
+
+' | ( ./httpd -q -h 'nonprintablecr: ' 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+
+echo '--- httpd rejects custom header with non-printable character LF'
+echo 'GET foo HTTP/1.0
+Host: 0
+
+' | ( ./httpd -q -h 'nonprintablelf: 
+' 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+
+echo '--- httpd rejects custom header with colon at the end'
+echo 'GET foo HTTP/1.0
+Host: 0
+
+' | ( ./httpd -q -h 'colonattheend:' 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+
+echo '--- httpd rejects custom header with space at the end'
+echo 'GET foo HTTP/1.0
+Host: 0
+
+' | ( ./httpd -q -h 'spaceattheend:' 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
 
 exit 0

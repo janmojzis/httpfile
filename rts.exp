@@ -1372,41 +1372,25 @@ Content-Length: 13
 
 Hello, world
 0
---- httpd ignores more than 8 custom headers
-HTTP/1.0 200 OK
-Server: httpfile
-Accept-Ranges: bytes
-Date: ...
-1: 1
-2: 2
-3: 3
-4: 4
-5: 5
-6: 6
-7: 7
-8: 8
-Content-Type: application/octet-stream
-Content-Length: 13
-
-Hello, world
-0
---- httpd ignores empty custom header
-HTTP/1.0 200 OK
-Server: httpfile
-Accept-Ranges: bytes
-Date: ...
-Content-Type: application/octet-stream
-Content-Length: 13
-
-Hello, world
-0
---- httpd ignores bad custom header
-HTTP/1.0 200 OK
-Server: httpfile
-Accept-Ranges: bytes
-Date: ...
-Content-Type: application/octet-stream
-Content-Length: 13
-
-Hello, world
-0
+--- httpd rejects more than 8 custom headers
+100
+--- httpd rejects empty custom header
+100
+--- httpd rejects custom header without colon
+100
+--- httpd rejects custom header without more than one colon
+100
+--- httpd rejects custom header without colon-space
+100
+--- httpd rejects custom header when first character is a space
+100
+--- httpd rejects custom header when first character is a tab
+100
+--- httpd rejects custom header with non-printable character CR
+100
+--- httpd rejects custom header with non-printable character LF
+100
+--- httpd rejects custom header with colon at the end
+100
+--- httpd rejects custom header with space at the end
+100
