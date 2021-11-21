@@ -14,7 +14,7 @@ int limits(void) {
 #endif
     int ret = 0;
 
-    log_t1("jail()");
+    log_t1("limits()");
 
 /* prohibit fork */
 #ifdef RLIMIT_NPROC
@@ -41,6 +41,6 @@ int limits(void) {
     ret = 1;
 cleanup:
 
-    log_t2("jail() = ", lognum(ret));
+    log_t2("limits() = ", lognum(ret));
     return ret;
 }
