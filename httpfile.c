@@ -403,7 +403,6 @@ int main(int argc, char **argv) {
     void (*doit)(void) = get;
     char *x;
     long long i, spaces;
-    unsigned long long u;
 
     signal(SIGPIPE, SIG_IGN);
     signal(SIGALRM, drop);
@@ -456,6 +455,7 @@ int main(int argc, char **argv) {
     }
     else {
         /* from env. */
+        unsigned long long u;
         uidstr = getenv("UID");
         gidstr = getenv("GID");
         if (uidstr && gidstr) {
