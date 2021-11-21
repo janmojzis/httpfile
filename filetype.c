@@ -1,6 +1,7 @@
-#include "filetype.h"
 #include "str.h"
+#include "log.h"
 #include "case.h"
+#include "filetype.h"
 
 int filetype(const char *fn,stralloc *contenttype)
 {
@@ -8,8 +9,11 @@ int filetype(const char *fn,stralloc *contenttype)
   const char *result;
   long long i;
   char ch;
+  int ret = 0;
 
-  if (!stralloc_copys(contenttype, "")) return 0;
+  log_t3("filetype(fn = ", fn, ")");
+
+  if (!stralloc_copys(contenttype, "")) goto cleanup;
 
   x = fn + str_rchr(fn,'.');
   if (x[str_chr(x,'=')])
@@ -20,7 +24,7 @@ int filetype(const char *fn,stralloc *contenttype)
             continue;
       if (ch == '=') ch = '/';
       if (ch == ':') ch = '.';
-      if (!stralloc_append(contenttype, &ch)) return 0;
+      if (!stralloc_append(contenttype, &ch)) goto cleanup;
     }
   else {
     result = "application/octet-stream";
@@ -53,7 +57,15 @@ int filetype(const char *fn,stralloc *contenttype)
     else if (case_equals(x,".mov")) result = "video/quicktime";
     else if (case_equals(x,".webm")) result = "video/webm";
 
-    if (!stralloc_cats(contenttype, result)) return 0;
+    if (!stralloc_cats(contenttype, result)) goto cleanup;
   }
-  return 1;
+  ret = 1;
+cleanup:
+  if (!stralloc_0(contenttype)) {
+    log_t1("filetype() = 0");
+    return 0;
+  }
+  --contenttype->len;
+  log_t6("filetype(fn = ", fn, ", contenttype = ", contenttype->s, ") = ", lognum(ret));
+  return ret;
 }
