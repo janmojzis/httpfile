@@ -5,8 +5,9 @@ Public domain.
 */
 
 #include <stdlib.h>
-#include <string.h>
 #include <errno.h>
+#include <string.h>
+#include "randombytes.h"
 #include "alloc.h"
 #include "log.h"
 
@@ -52,11 +53,6 @@ ok:
     return 1;
 }
 
-static void cleanup(void *xv, unsigned long long xlen) {
-    memset(xv, 0, xlen);
-    __asm__ __volatile__("" : : "r"(xv) : "memory");
-}
-
 
 void *alloc(unsigned long long norig) {
 
@@ -91,7 +87,7 @@ void *alloc(unsigned long long norig) {
         log_e3("alloc(", lognum(norig), ") ... failed, malloc() failed");
         goto nomem;
     }
-    cleanup(x, n);
+    randombytes(x, n);
 
     for (i = 0; i < alloc_ALIGNMENT; ++i) { *x++ = n; n >>= 8; }
 
@@ -124,7 +120,7 @@ void alloc_free(void *xv) {
 
     for (i = 0; i < alloc_ALIGNMENT; ++i) { n <<= 8; n |= *--x; }
 
-    cleanup(x, n);
+    randombytes(x, n);
     free(x);
 }
 
@@ -135,5 +131,5 @@ void alloc_freeall(void) {
     }
     if (ptr) { free(ptr); ptr = 0; ptrlen = ptralloc = 0; }
 
-    cleanup(space, sizeof space);
+    randombytes(space, sizeof space);
 }

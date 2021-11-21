@@ -5,7 +5,7 @@
 #define alloc_ALIGNMENT 16
 #endif
 #ifndef alloc_STATICSPACE
-#define alloc_STATICSPACE 8192
+#define alloc_STATICSPACE (8192 * alloc_ALIGNMENT)
 #endif
 #ifndef alloc_LIMIT
 #define alloc_LIMIT 4611686018427387904ULL

@@ -22,6 +22,7 @@
 #include "timeoutwrite.h"
 #include "rangeparser.h"
 #include "getuidgid.h"
+#include "randombytes.h"
 #include "limits.h"
 
 #define WRITETIMEOUT 5
@@ -433,6 +434,12 @@ int main(int argc, char **argv) {
         }
     }
     root = *++argv;
+
+    /* initialize randombytes */
+    {
+        char ch[1];
+        randombytes(ch, sizeof ch);
+    }
 
     /* set limits */
     if (!limits()) die_limits();
