@@ -1,4 +1,4 @@
-[![TravisCI status](https://travis-ci.org/janmojzis/httpfile.svg?branch=master)](https://travis-ci.org/janmojzis/httpfile)
+[![TravisCI status](https://travis-ci.com/janmojzis/httpfile.svg?branch=master)](https://travis-ci.com/janmojzis/httpfile)
 
 ### Introduction ###
 Httpfile is a HTTP server derived from [publicfile-0.52](https://cr.yp.to/publicfile.html):
