@@ -39,6 +39,7 @@ static void die_limits(void) { log_f1("unable to set limits"); _die(111); }
 static void die_droproot(const char *u) { log_f2("unable to drop privileges to account ", u); _die(111); }
 static void die_chroot(const char *d) { log_f2("unable to chroot to ", d); _die(111); }
 static void die_read(const char *f) { log_f2("unable to read from file ", f); _die(111); }
+static void die_numparse(const char *s) { log_f2("unable to parse number from sthe string ", s); _die(111); }
 
 static stralloc line = {0};
 static stralloc protocol = {0};
@@ -367,11 +368,25 @@ static const char *user = 0;
 static const char *root = 0;
 static uid_t uid;
 static gid_t gid;
+static char *uidstr;
+static char *gidstr;
 
 static void usage(void) {
 
     log_u1("httpfile [options] [-r] [-u user] [ -h custom response header ] directory");
     _exit(100);
+}
+
+int numparse(unsigned long long *num, const char *x) {
+
+    char *endptr = 0;
+
+    *num = strtoull(x, &endptr, 10);
+
+    if (!x || strlen(x) == 0 || !endptr || endptr[0]) {
+        return 0;
+    }
+    return 1;
 }
 
 int main(int argc, char **argv) {
@@ -381,6 +396,7 @@ int main(int argc, char **argv) {
     void (*doit)(void) = get;
     char *x;
     long long i, spaces;
+    unsigned long long u;
 
     signal(SIGPIPE, SIG_IGN);
     signal(SIGALRM, drop);
@@ -425,6 +441,17 @@ int main(int argc, char **argv) {
     if (user) {
         if (!getuidgid(&uid, &gid, user)) die_droproot(user);
     }
+    else {
+        /* from env. */
+        uidstr = getenv("UID");
+        gidstr = getenv("GID");
+        if (uidstr && gidstr) {
+            if (!numparse(&u, uidstr)) die_numparse(uidstr);
+            uid = u;
+            if (!numparse(&u, gidstr)) die_numparse(gidstr);
+            gid = u;
+        }
+    }
 
     /* chroot */
     if (root) {
@@ -435,8 +462,9 @@ int main(int argc, char **argv) {
         log_w1("not chrooted");
     }
 
+
     /* drop root privileges */
-    if (user) {
+    if (user || (uidstr && gidstr)) {
         if (!droproot(uid, gid)) die_droproot(user);
     }
 
