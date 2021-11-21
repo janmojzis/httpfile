@@ -2,6 +2,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include "log.h"
 #include "randombytes.h"
 
 static int fd = -1;
@@ -20,6 +21,7 @@ void randombytes(void *xv, unsigned long long xlen) {
             fcntl(fd, F_SETFD, 1);
 #endif
             if (fd != -1) break;
+            log_w1("unable to open /dev/urandom, sleeping one second");
             sleep(1);
         }
     }
@@ -29,6 +31,7 @@ void randombytes(void *xv, unsigned long long xlen) {
 
         i = read(fd, x, i);
         if (i < 1) {
+            log_w1("unable to read from /dev/urandom, sleeping one second");
             sleep(1);
             continue;
         }
