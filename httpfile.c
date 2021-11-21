@@ -30,8 +30,16 @@
 
 static int flagverbose = 1;
 
+static char inbuf[4096];
+static long long inbuflen = 0;
+
 static void _die(int x) {
     alloc_freeall();
+    randombytes(inbuf, sizeof inbuf);
+    {
+        unsigned char stack[4096];
+        randombytes(stack, sizeof stack);
+    }
     _exit(x);
 }
 
@@ -322,8 +330,6 @@ static void get(void) {
     if (protocolnum < 2) _die(0);
 }
 
-static char inbuf[4096];
-static long long inbuflen = 0;
 
 static int getch(int fd, char *x) {
 
