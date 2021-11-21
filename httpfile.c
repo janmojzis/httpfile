@@ -331,13 +331,13 @@ static void get(void) {
 }
 
 
-static int getch(int fd, char *x) {
+static int getch(char *x) {
 
     long long r, i, j;
     char ch;
 
     if (inbuflen <= 0) {
-        r = read(fd, inbuf, sizeof inbuf);
+        r = read(0, inbuf, sizeof inbuf);
         if (r <= 0) return r;
         for (i = 0, j = r - 1; i < j; ++i, --j) {
             ch = inbuf[i];
@@ -358,7 +358,7 @@ static void readline(void) {
     if (!stralloc_copys(&line, "")) die_nomem();
 
     for (;;) {
-        if (getch(0, &ch) != 1) _die(0);
+        if (getch(&ch) != 1) _die(0);
         if (!stralloc_append(&line, &ch)) die_nomem();
         if (ch == '\n') break;
     }
