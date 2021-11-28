@@ -1394,3 +1394,39 @@ Hello, world
 100
 --- httpd rejects custom header with space at the end
 100
+--- httpd accepts -t timeout
+HTTP/1.0 200 OK
+Server: httpfile
+Accept-Ranges: bytes
+Date: ...
+Content-Type: application/octet-stream
+Content-Length: 13
+
+Hello, world
+0
+--- httpd accepts -T timeout
+HTTP/1.0 200 OK
+Server: httpfile
+Accept-Ranges: bytes
+Date: ...
+Content-Type: application/octet-stream
+Content-Length: 13
+
+Hello, world
+0
+--- httpd rejects -t badtimeout
+100
+--- httpd rejects -T badtimeout
+100
+--- httpd rejects -t emptytimeout
+100
+--- httpd rejects -T emptytimeout
+100
+--- httpd rejects -t zerotimeout
+100
+--- httpd rejects -T zerotimeout
+100
+--- httpd rejects -t largetimeout
+100
+--- httpd rejects -T largetimeout
+100

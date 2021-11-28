@@ -315,4 +315,64 @@ Host: 0
 
 ' | ( ./httpd -q -h 'spaceattheend:' 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
 
+echo '--- httpd accepts -t timeout'
+echo 'GET foo HTTP/1.0
+Host: 0
+
+' | ( ./httpd -t 10  2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+
+echo '--- httpd accepts -T timeout'
+echo 'GET foo HTTP/1.0
+Host: 0
+
+' | ( ./httpd -T 10  2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+
+echo '--- httpd rejects -t badtimeout'
+echo 'GET foo HTTP/1.0
+Host: 0
+
+' | ( ./httpd -q -t 'badtimeout'  2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+
+echo '--- httpd rejects -T badtimeout'
+echo 'GET foo HTTP/1.0
+Host: 0
+
+' | ( ./httpd -q -T 'badtimeout'  2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+
+echo '--- httpd rejects -t emptytimeout'
+echo 'GET foo HTTP/1.0
+Host: 0
+
+' | ( ./httpd -q -t ''  2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+
+echo '--- httpd rejects -T emptytimeout'
+echo 'GET foo HTTP/1.0
+Host: 0
+
+' | ( ./httpd -q -T ''  2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+
+echo '--- httpd rejects -t zerotimeout'
+echo 'GET foo HTTP/1.0
+Host: 0
+
+' | ( ./httpd -q -t 0  2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+
+echo '--- httpd rejects -T zerotimeout'
+echo 'GET foo HTTP/1.0
+Host: 0
+
+' | ( ./httpd -q -T 0  2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+
+echo '--- httpd rejects -t largetimeout'
+echo 'GET foo HTTP/1.0
+Host: 0
+
+' | ( ./httpd -q -t 86401  2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+
+echo '--- httpd rejects -T largetimeout'
+echo 'GET foo HTTP/1.0
+Host: 0
+
+' | ( ./httpd -q -T 86401  2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+
 exit 0

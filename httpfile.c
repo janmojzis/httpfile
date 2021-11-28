@@ -25,8 +25,10 @@
 #include "randombytes.h"
 #include "limits.h"
 
-#define WRITETIMEOUT 5
-#define REQUESTTIMEOUT 30
+static char *writetimeoutstr = "5";
+static long long writetimeout;
+static char *requesttimeoutstr = "30";
+static long long requesttimeout;
 
 static int flagverbose = 1;
 
@@ -48,7 +50,10 @@ static void die_limits(void) { log_f1("unable to set limits"); _die(111); }
 static void die_droproot(const char *u) { log_f2("unable to drop privileges to account ", u); _die(111); }
 static void die_chroot(const char *d) { log_f2("unable to chroot to ", d); _die(111); }
 static void die_read(const char *f) { log_f2("unable to read from file ", f); _die(111); }
-static void die_numparse(const char *s) { log_f2("unable to parse number from sthe string ", s); _die(111); }
+static void die_numparse(const char *s) { log_f2("unable to parse number from the string ", s); _die(100); }
+static void die_timeoutparse(const char *s) { log_f2("unable to parse timeout from the string ", s); _die(100); }
+static void die_timeoutlesszero(const char *s) { log_f3("unable to parse timeout from the string ", s, ": timeout must be a number in seconds > 1"); _die(100); }
+static void die_timeouttoolarge(const char *s) { log_f3("unable to parse timeout from the string ", s, ": timeout must be a number in seconds < 86400"); _die(100); }
 
 static stralloc line = {0};
 static stralloc protocol = {0};
@@ -85,7 +90,7 @@ static void writeall(const char *x, long long xlen) {
 
     while (xlen > 0) {
         w = xlen; if (w > 1024) w = 1024;
-        w = timeoutwrite(WRITETIMEOUT, 1, x, w);
+        w = timeoutwrite(writetimeout, 1, x, w);
         if (w <= 0) _die(111);
         x += w;
         xlen -= w;
@@ -412,11 +417,11 @@ static void usage(void) {
     _exit(100);
 }
 
-static int numparse(unsigned long long *num, const char *x) {
+static int numparse(long long *num, const char *x) {
 
     char *endptr = 0;
 
-    *num = strtoull(x, &endptr, 10);
+    *num = strtoll(x, &endptr, 10);
 
     if (!x || strlen(x) == 0 || !endptr || endptr[0]) {
         return 0;
@@ -458,6 +463,15 @@ int main(int argc, char **argv) {
                 if (x[1]) { user = x + 1; break; }
                 if (argv[1]) { user = *++argv; break; }
             }
+            /* timeout */
+            if (*x == 't') {
+                if (x[1]) { requesttimeoutstr = x + 1; break; }
+                if (argv[1]) { requesttimeoutstr = *++argv; break; }
+            }
+            if (*x == 'T') {
+                if (x[1]) { writetimeoutstr = x + 1; break; }
+                if (argv[1]) { writetimeoutstr = *++argv; break; }
+            }
             /* header */
             if (*x == 'h') {
                 if (x[1]) { customheaders_add(x + 1); break; }
@@ -467,6 +481,16 @@ int main(int argc, char **argv) {
         }
     }
     root = *++argv;
+
+    /* timeout */
+    if (!numparse(&writetimeout, writetimeoutstr)) die_timeoutparse(writetimeoutstr);
+    if (writetimeout < 1) die_timeoutlesszero(writetimeoutstr);
+    if (writetimeout > 86400) die_timeouttoolarge(writetimeoutstr);
+    log_t2("writetimeout = ", lognum(writetimeout));
+    if (!numparse(&requesttimeout, requesttimeoutstr)) die_timeoutparse(requesttimeoutstr);
+    if (requesttimeout < 1) die_timeoutlesszero(requesttimeoutstr);
+    if (requesttimeout > 86400) die_timeouttoolarge(requesttimeoutstr);
+    log_t2("requesttimeout = ", lognum(requesttimeout));
 
     /* initialize randombytes */
     {
@@ -487,9 +511,9 @@ int main(int argc, char **argv) {
         uidstr = getenv("UID");
         gidstr = getenv("GID");
         if (uidstr && gidstr) {
-            if (!numparse(&u, uidstr)) die_numparse(uidstr);
+            if (!numparse((long long *)&u, uidstr)) die_numparse(uidstr);
             uid = u;
-            if (!numparse(&u, gidstr)) die_numparse(gidstr);
+            if (!numparse((long long *)&u, gidstr)) die_numparse(gidstr);
             gid = u;
         }
     }
@@ -520,7 +544,7 @@ int main(int argc, char **argv) {
     if (!stralloc_readyplus(&response, 512)) die_nomem();
 
     for (;;) {
-        alarm(REQUESTTIMEOUT);
+        alarm(requesttimeout);
         readline();
 
         if (line.len <= 0) continue;
