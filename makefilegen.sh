@@ -62,7 +62,7 @@
     echo
 
     echo "test: rts.exp rts.out"
-    echo "	cmp rts.exp rts.out"
+    echo "	cmp rts.exp rts.out || (cat rts.out; exit 1;)"
     echo
 
     echo "clean:"

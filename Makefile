@@ -24,10 +24,10 @@ droproot.o: droproot.c droproot.h
 e.o: e.c e.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c e.c
 
-file.o: file.c
+file.o: file.c log.h file.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c file.c
 
-filetype.o: filetype.c filetype.h stralloc.h str.h case.h
+filetype.o: filetype.c str.h log.h case.h filetype.h stralloc.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c filetype.c
 
 getuidgid.o: getuidgid.c getuidgid.h
@@ -60,7 +60,7 @@ pathdecode.o: pathdecode.c pathdecode.h stralloc.h
 percent.o: percent.c percent.h stralloc.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c percent.c
 
-randombytes.o: randombytes.c randombytes.h
+randombytes.o: randombytes.c log.h randombytes.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c randombytes.c
 
 rangeparser.o: rangeparser.c rangeparser.h
@@ -115,7 +115,7 @@ rts.out: $(BINARIES) rts.tests
 	sh rts.tests > rts.out
 
 test: rts.exp rts.out
-	cmp rts.exp rts.out
+	cmp rts.exp rts.out || (cat rts.out; exit 1;)
 
 clean:
 	rm -f *.o $(BINARIES) rts.out
