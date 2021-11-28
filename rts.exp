@@ -1374,25 +1374,23 @@ Hello, world
 0
 --- httpd rejects more than 8 custom headers
 100
---- httpd rejects empty custom header
+--- httpd rejects bad header ""
 100
---- httpd rejects custom header without colon
+--- httpd rejects bad header "nocolon"
 100
---- httpd rejects custom header without more than one colon
+--- httpd rejects bad header "twocolon: x:x"
 100
---- httpd rejects custom header without colon-space
+--- httpd rejects bad header "nocolonspace:x"
 100
---- httpd rejects custom header when first character is a space
+--- httpd rejects bad header " firstcharacterisiaspace: x"
 100
---- httpd rejects custom header when first character is a tab
+--- httpd rejects bad header "	firstcharacterisiatab: x"
 100
---- httpd rejects custom header with non-printable character CR
+--- httpd rejects bad header "nonprintablecr: "
 100
---- httpd rejects custom header with non-printable character LF
+--- httpd rejects bad header "colonattheend:"
 100
---- httpd rejects custom header with colon at the end
-100
---- httpd rejects custom header with space at the end
+--- httpd rejects bad header "spaceattheend: "
 100
 --- httpd accepts -t timeout
 HTTP/1.0 200 OK
@@ -1414,19 +1412,27 @@ Content-Length: 13
 
 Hello, world
 0
---- httpd rejects -t badtimeout
+--- httpd rejects -t ""
 100
---- httpd rejects -T badtimeout
+--- httpd rejects -t "badtimeout"
 100
---- httpd rejects -t emptytimeout
+--- httpd rejects -t "10badtimeout"
 100
---- httpd rejects -T emptytimeout
+--- httpd rejects -t "0"
 100
---- httpd rejects -t zerotimeout
+--- httpd rejects -t "-1"
 100
---- httpd rejects -T zerotimeout
+--- httpd rejects -t "86401"
 100
---- httpd rejects -t largetimeout
+--- httpd rejects -T ""
 100
---- httpd rejects -T largetimeout
+--- httpd rejects -T "badtimeout"
+100
+--- httpd rejects -T "10badtimeout"
+100
+--- httpd rejects -T "0"
+100
+--- httpd rejects -T "-1"
+100
+--- httpd rejects -T "86401"
 100

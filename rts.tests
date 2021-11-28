@@ -254,66 +254,13 @@ Host: 0
 
 ' | ( ./httpd -q -h '1: 1' -h '2: 2' -h '3: 3' -h '4: 4' -h '5: 5' -h '6: 6' -h '7: 7' -h '8: 8' -h 'a: a' 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
 
-echo '--- httpd rejects empty custom header'
-echo 'GET foo HTTP/1.0
-Host: 0
 
-' | ( ./httpd -q -h '' 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
-
-echo '--- httpd rejects custom header without colon'
-echo 'GET foo HTTP/1.0
-Host: 0
-
-' | ( ./httpd -q -h 'nocolon' 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
-
-echo '--- httpd rejects custom header without more than one colon'
-echo 'GET foo HTTP/1.0
-Host: 0
-
-' | ( ./httpd -q -h 'twocolon: x:x' 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
-
-echo '--- httpd rejects custom header without colon-space'
-echo 'GET foo HTTP/1.0
-Host: 0
-
-' | ( ./httpd -q -h 'nocolonspace:x' 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
-
-echo '--- httpd rejects custom header when first character is a space'
-echo 'GET foo HTTP/1.0
-Host: 0
-
-' | ( ./httpd -q -h ' firstcharacterisiaspace: x' 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
-
-echo '--- httpd rejects custom header when first character is a tab'
-echo 'GET foo HTTP/1.0
-Host: 0
-
-' | ( ./httpd -q -h '	firstcharacterisiatab: x' 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
-
-echo '--- httpd rejects custom header with non-printable character CR'
-echo 'GET foo HTTP/1.0
-Host: 0
-
-' | ( ./httpd -q -h 'nonprintablecr: ' 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
-
-echo '--- httpd rejects custom header with non-printable character LF'
-echo 'GET foo HTTP/1.0
-Host: 0
-
-' | ( ./httpd -q -h 'nonprintablelf: 
-' 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
-
-echo '--- httpd rejects custom header with colon at the end'
-echo 'GET foo HTTP/1.0
-Host: 0
-
-' | ( ./httpd -q -h 'colonattheend:' 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
-
-echo '--- httpd rejects custom header with space at the end'
-echo 'GET foo HTTP/1.0
-Host: 0
-
-' | ( ./httpd -q -h 'spaceattheend:' 2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+for badheader in '' 'nocolon' 'twocolon: x:x' 'nocolonspace:x' ' firstcharacterisiaspace: x' '	firstcharacterisiatab: x' 'nonprintablecr: ' 'colonattheend:' 'spaceattheend: '; do
+  echo "--- httpd rejects bad header \"${badheader}\""
+  echo 'GET foo HTTP/1.0
+  Host: 0
+' | ( ./httpd -q -h "${badheader}"  2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+done
 
 echo '--- httpd accepts -t timeout'
 echo 'GET foo HTTP/1.0
@@ -327,52 +274,13 @@ Host: 0
 
 ' | ( ./httpd -T 10  2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
 
-echo '--- httpd rejects -t badtimeout'
-echo 'GET foo HTTP/1.0
-Host: 0
-
-' | ( ./httpd -q -t 'badtimeout'  2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
-
-echo '--- httpd rejects -T badtimeout'
-echo 'GET foo HTTP/1.0
-Host: 0
-
-' | ( ./httpd -q -T 'badtimeout'  2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
-
-echo '--- httpd rejects -t emptytimeout'
-echo 'GET foo HTTP/1.0
-Host: 0
-
-' | ( ./httpd -q -t ''  2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
-
-echo '--- httpd rejects -T emptytimeout'
-echo 'GET foo HTTP/1.0
-Host: 0
-
-' | ( ./httpd -q -T ''  2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
-
-echo '--- httpd rejects -t zerotimeout'
-echo 'GET foo HTTP/1.0
-Host: 0
-
-' | ( ./httpd -q -t 0  2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
-
-echo '--- httpd rejects -T zerotimeout'
-echo 'GET foo HTTP/1.0
-Host: 0
-
-' | ( ./httpd -q -T 0  2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
-
-echo '--- httpd rejects -t largetimeout'
-echo 'GET foo HTTP/1.0
-Host: 0
-
-' | ( ./httpd -q -t 86401  2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
-
-echo '--- httpd rejects -T largetimeout'
-echo 'GET foo HTTP/1.0
-Host: 0
-
-' | ( ./httpd -q -T 86401  2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+for opt in '-t' '-T'; do
+  for badtm in '' 'badtimeout' '10badtimeout' '0' '-1' '86401'; do
+    echo "--- httpd rejects ${opt} \"${badtm}\""
+    echo 'GET foo HTTP/1.0
+    Host: 0
+' | ( ./httpd -q "${opt}" "${badtm}"  2>&1; echo $? ) | sed 's/^Date: .*/Date: .../'
+  done
+done
 
 exit 0
