@@ -9,7 +9,7 @@
 #include "pathdecode.h"
 #include "hostparse.h"
 #include "httpdate.h"
-#include "seconds.h"
+#include "milliseconds.h"
 #include "percent.h"
 #include "case.h"
 #include "log.h"
@@ -203,7 +203,7 @@ static void header(const char *code, const char *message) {
     out_puts("Accept-Ranges: bytes");
     out_putcrlf();
     out_puts("Date:");
-    if (!httpdate(&nowstr, seconds())) die_nomem();
+    if (!httpdate(&nowstr, milliseconds() / 1000LL)) die_nomem();
     out_put(nowstr.s, nowstr.len);
     out_putcrlf();
     customheaders_put();
@@ -343,7 +343,7 @@ static void get(void) {
         }
     }
 
-    if (seconds() > mtime + 60) {
+    if (milliseconds() / 1000 > mtime + 60) {
         out_puts("Last-Modified:");
         out_put(mtimestr.s, mtimestr.len);
         out_putcrlf();

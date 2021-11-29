@@ -40,7 +40,7 @@ httpdate.o: httpdate.c httpdate.h stralloc.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c httpdate.c
 
 httpfile.o: httpfile.c stralloc.h pathdecode.h hostparse.h httpdate.h \
- seconds.h percent.h case.h log.h str.h filetype.h file.h droproot.h \
+ milliseconds.h percent.h case.h log.h str.h filetype.h file.h droproot.h \
  alloc.h e.h timeoutwrite.h rangeparser.h getuidgid.h randombytes.h \
  limits.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c httpfile.c
@@ -65,9 +65,6 @@ randombytes.o: randombytes.c log.h randombytes.h
 
 rangeparser.o: rangeparser.c rangeparser.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c rangeparser.c
-
-seconds.o: seconds.c seconds.h
-	$(CC) $(CFLAGS) $(CPPFLAGS) -c seconds.c
 
 stralloc.o: stralloc.c alloc.h e.h stralloc.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c stralloc.c
@@ -99,7 +96,6 @@ OBJECTS+=pathdecode.o
 OBJECTS+=percent.o
 OBJECTS+=randombytes.o
 OBJECTS+=rangeparser.o
-OBJECTS+=seconds.o
 OBJECTS+=stralloc.o
 OBJECTS+=str.o
 OBJECTS+=timeoutwrite.o
