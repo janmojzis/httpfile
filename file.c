@@ -25,16 +25,25 @@ int file_open(char *fn, long long *mtime, long long *length) {
     if ((st.st_mode & 0444) != 0444) {
         close(fd);
         errno = EACCES;
+        log_e3("unable to open file '", fn, "': not ugo+r");
         goto cleanup;
     }
     if ((st.st_mode & 0101) == 0001) {
         close(fd);
         errno = EACCES;
+        log_e3("unable to open file '", fn, "': o+x but u-x");
+        goto cleanup;
+    }
+    if ((st.st_mode & S_IFMT) == S_IFDIR) {
+        /* redirect */
+        close(fd);
+        errno = EISDIR;
         goto cleanup;
     }
     if ((st.st_mode & S_IFMT) != S_IFREG) {
+        /* auth trick */
         close(fd);
-        errno = EISDIR;
+        errno = ENOTDIR;
         goto cleanup;
     }
 
