@@ -1,0 +1,61 @@
+.TH httpfile 1
+.SH NAME
+httpfile \- A simple HTTP server for publishing static content
+.SH SYNOPSIS
+\fBhttpfile\fR [ options ] \fIroot\fR
+.SH DESCRIPTION
+\fBhttpfile\fR is HTTP server derived from \fBpublicfile\fR (https://cr.yp.to/publicfile.html)
+.SH OPTIONS
+.TP
+.B \-v
+Enable verbose mode. Multiple \-v options increase the verbosity. The maximum is 3.
+.TP
+.B \-t \fIseconds\fR
+Set the request timeout to seconds \fIseconds\fR. (default 30).
+.TP
+.B \-T \fIseconds\fR
+Set the write timeout to the network to seconds \fIseconds\fR. (default 5).
+.TP
+.B \-u \fIuser\fR
+Run \fBhttpfile\fR under a specified \fIuser\fR's uid and gid.
+.TP
+.B \-h \fIcustom header\fR
+Add \fIcustom header\fR to the HTTP response. The maximum is 8 \fIcustom header\fRs.
+.TP
+.I root
+run chrooted in the directory \fIroot\fR.
+.SH ENVIRONMENT
+.TP
+.B \fIUID/GID\fR run under the uid and gid specified by the $UID and $GID environment variables
+.SH EXAMPLES
+.PP
+Run httpfile using tcpserver/busybox/inetd on port 80 under user nobody and with root directory /var/www/httpfile.
+.RS 4
+.nf
+tcpserver -HRDl0 0 80 httpfile -u nobody /var/www/httpfile
+busybox tcpsvd 0 80 httpfile -u nobody /var/www/httpfile
+inetd.conf line: http stream tcp nowait root /usr/bin/httpfile httpfile -u nobody /var/www/httpfile
+.fi
+.RE
+.PP
+Add headers to prohibit browser caching
+.RS 4
+.nf
+ ... httpfile -h 'Expires: -1' -h 'Cache-Control: must-revalidate, private' ...
+.fi
+.RE
+.PP
+Add HSTS header
+.RS 4
+.nf
+ ... httpfile -h 'Strict-Transport-Security: max-age=63072000; includeSubDomains; preload' ...
+.fi
+.RE
+.SH SEE ALSO
+.BR systemd.socket (5),
+.BR inetd (8),
+.BR tcpserver (1)
+.sp
+.nf
+https://cr.yp.to/publicfile.html
+.fi
