@@ -392,6 +392,7 @@ static void readline(void) {
 
     for (;;) {
         if (getch(&ch) != 1) _die(0);
+        if (ch == 0) ch = '\n';
         if (!stralloc_append(&line, &ch)) die_nomem();
         if (ch == '\n') break;
     }
