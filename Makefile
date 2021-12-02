@@ -110,7 +110,7 @@ utime: utime.o $(OBJECTS)
 rts.out: $(BINARIES) rts.tests
 	sh rts.tests > rts.out
 
-test: rts.exp rts.out
+rts: rts.exp rts.out
 	cmp rts.exp rts.out || (cat rts.out; exit 1;)
 
 clean:
