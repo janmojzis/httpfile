@@ -27,6 +27,15 @@ run chrooted in the directory \fIroot\fR.
 .SH ENVIRONMENT
 .TP
 .B \fIUID/GID\fR run under the uid and gid specified by the $UID and $GID environment variables
+.SH FILE HANDLING
+.TP
+A request for http://<host>/<file> refers to the file named ./<host>/<file> inside the \fIroot\fR directory hierarchy, if <file> does not end with a slash.
+.TP
+A request for http://<host>/<dir>/ refers to the file named ./<host>/<dir>/index.html.
+.TP
+\fBhttpfile\fR always converts the host name v to lowercase. If HTTP/1.0 requests do not specify a host name; in this case \fBhttpfile\fR uses the host name '0'.
+.TP
+A request for http://<host>/<dir> is redirected to http://<host>/<dir>/, which refers to the file named ./<host>/<dir>/index.html.
 .SH EXAMPLES
 .PP
 Run httpfile using tcpserver/busybox/inetd on port 80 under user nobody and with root directory /var/www/httpfile.
