@@ -36,6 +36,13 @@ A request for http://<host>/<dir>/ refers to the file named ./<host>/<dir>/index
 \fBhttpfile\fR always converts the host name v to lowercase. If HTTP/1.0 requests do not specify a host name; in this case \fBhttpfile\fR uses the host name '0'.
 .TP
 A request for http://<host>/<dir> is redirected to http://<host>/<dir>/, which refers to the file named ./<host>/<dir>/index.html.
+.SH BASIC AUTHORIZATION
+.TP
+\fBhttpfile\fR supports basic authentication using a special file (e.g. named pipe) trick.
+.TP
+A request for http://<host>/<dir>/<specialfile> returns HTTP response 401. Browser than sends request with authorization header "Authorization: Basic <base64_credentials>".
+.TP
+Then request for http://<host>/<file> refers to the file named ./@<base64_credentials_without_'='_pading>/<host>/<file>.
 .SH EXAMPLES
 .PP
 Run httpfile using tcpserver/busybox/inetd on port 80 under user nobody and with root directory /var/www/httpfile.
