@@ -1,5 +1,6 @@
 CC?=cc
 CFLAGS+=-W -Wall -Os -fPIC -fwrapv -pedantic
+DESTDIR?=
 
 BINARIES=httpfile
 BINARIES+=utime
@@ -106,6 +107,8 @@ httpfile: httpfile.o $(OBJECTS)
 utime: utime.o $(OBJECTS)
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o utime utime.o $(OBJECTS) $(LDFLAGS)
 
+install: httpfile
+	install -D -m 0755 httpfile $(DESTDIR)/usr/bin/httpfile
 
 rts.out: $(BINARIES) rts.tests
 	sh rts.tests > rts.out

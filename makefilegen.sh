@@ -4,6 +4,7 @@
   (
     echo "CC?=cc"
     echo "CFLAGS+=-W -Wall -Os -fPIC -fwrapv -pedantic"
+    echo "DESTDIR?="
     echo 
 
     i=0
@@ -25,7 +26,6 @@
 
     for file in `ls *.c`; do
       (
-        #gcc -I/usr/include/bearssl -MM "${file}"
         gcc -MM "${file}"
         echo "	\$(CC) \$(CFLAGS) \$(CPPFLAGS) -c ${file}"
         echo
@@ -54,8 +54,10 @@
         echo 
       fi
     done
-    echo
 
+    echo "install: httpfile"
+    echo "	install -D -m 0755 httpfile \$(DESTDIR)/usr/bin/httpfile"
+    echo
 
     echo "rts.out: \$(BINARIES) rts.tests"
     echo "	sh rts.tests > rts.out"
