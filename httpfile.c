@@ -25,7 +25,7 @@
 #include "randombytes.h"
 #include "limits.h"
 
-static char *writetimeoutstr = "5";
+static char *writetimeoutstr = "60";
 static long long writetimeout;
 static char *requesttimeoutstr = "30";
 static long long requesttimeout;
