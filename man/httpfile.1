@@ -13,9 +13,6 @@ Enable verbose mode. Multiple \-v options increase the verbosity. The maximum is
 .B \-t \fIseconds\fR
 Set the request timeout to seconds \fIseconds\fR. (default 30).
 .TP
-.B \-T \fIseconds\fR
-Set the write timeout to the network to seconds \fIseconds\fR. (default 5).
-.TP
 .B \-u \fIuser\fR
 Run \fBhttpfile\fR under a specified \fIuser\fR's uid and gid.
 .TP
@@ -27,6 +24,31 @@ run chrooted in the directory \fIroot\fR.
 .SH ENVIRONMENT
 .TP
 .B \fIUID/GID\fR run under the uid and gid specified by the $UID and $GID environment variables
+.SH INTERFACE
+.TP
+most \fBhttpfile\fR properties are inherited from publicfile-0.76
+.TP
+\fBhttpfile\fR prints requested public files from the \fIroot\fR directory hierarchy. Normally root is /var/www/httpfile.
+.PP
+\fBhttpfile\fR accepts GET and HEAD requests on standard input in HTTP/1.0, and HTTP/1.1 formats, and responds on standard output:
+.RS 4
+.nf
+HTTP/1.0: \fBhttpfile\fR prints an HTTP/1.0 header and the requested file. Then it exits.
+HTTP/1.1: \fBhttpfile\fR prints an HTTP/1.1 header and the requested file. Then it waits for further requests.
+.fi
+.RE
+.TP
+If the file is unopenable or if \fBhttpfile\fR does not like the request, runs out of memory, encounters an I/O error, or does not receive an input packet within \fIrequest seconds\fR seconds, \fBhttpfile\fR prints an error message and exits.
+.TP
+\fBhttpfile\fR also prints local log information on standard error.
+.TP
+\fBhttpfile\fR has exact-prefix support for If-Modified-Since: it uses code 304 if the Last-Modified contents are an exact prefix of the If-Modified-Since contents.
+.TP
+\fBhttpfile\fR accepts range requests.
+.TP
+\fBhttpfile\fR support basic authentication see BASIC AUTHORIZATION.
+.TP
+Normally \fBhttpfile\fR is run under tcpserver/inetd/systemd/... to handle HTTP connections from hosts around the Internet.
 .SH FILE HANDLING
 .TP
 A request for http://<host>/<file> refers to the file named ./<host>/<file> inside the \fIroot\fR directory hierarchy, if <file> does not end with a slash.
@@ -67,6 +89,16 @@ Add HSTS header
  ... httpfile -h 'Strict-Transport-Security: max-age=63072000; includeSubDomains; preload' ...
 .fi
 .RE
+.SH DIFFERENCE COMPARED TO PUBLICFILE
+.RS 0
+.nf
+source code rewritten from scratch
+removed ftpd
+added range support
+added 301 redirect for directories
+added basic authentication as a simple protection against robots
+name changed to 'httpfile'
+.fi
 .SH SEE ALSO
 .BR systemd.socket (5),
 .BR inetd (8),
