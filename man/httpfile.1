@@ -11,10 +11,10 @@ httpfile \- A simple HTTP server for publishing static content
 Enable verbose mode. Multiple \-v options increase the verbosity. The maximum is 3.
 .TP
 .B \-t \fIseconds\fR
-Set the request timeout to seconds \fIseconds\fR. (default 30).
+Set the 'request timeout' to seconds \fIseconds\fR. When httpfile reads HTTP request, the 'request timeout' covers time when the entire HTTP request is loaded. (default 30).
 .TP
 .B \-T \fIseconds\fR
-Set the write timeout to the network to seconds \fIseconds\fR. (default 60).
+Set the 'write timeout' to the network to seconds \fIseconds\fR. When httpfile sends a HTTP response, the 'write timeout' is set for each write(). (default 60).
 .TP
 .B \-u \fIuser\fR
 Run \fBhttpfile\fR under a specified \fIuser\fR's uid and gid.
@@ -30,44 +30,33 @@ run chrooted in the directory \fIroot\fR.
 .SH INTERFACE
 .TP
 most \fBhttpfile\fR properties are inherited from publicfile-0.76
-.TP
-\fBhttpfile\fR prints requested public files from the \fIroot\fR directory hierarchy. Normally root is /var/www/httpfile.
-.PP
-\fBhttpfile\fR accepts GET and HEAD requests on standard input in HTTP/1.0, and HTTP/1.1 formats, and responds on standard output:
-.RS 4
+.RS 0
 .nf
-HTTP/1.0: \fBhttpfile\fR prints an HTTP/1.0 header and the requested file. Then it exits.
-HTTP/1.1: \fBhttpfile\fR prints an HTTP/1.1 header and the requested file. Then it waits for further requests.
-.fi
-.RE
-.TP
-If the file is unopenable or if \fBhttpfile\fR does not like the request, runs out of memory, encounters an I/O error, or does not receive an input packet within \fIrequest seconds\fR seconds, \fBhttpfile\fR prints an error message and exits.
-.TP
-\fBhttpfile\fR also prints local log information on standard error.
-.TP
-\fBhttpfile\fR has exact-prefix support for If-Modified-Since: it uses code 304 if the Last-Modified contents are an exact prefix of the If-Modified-Since contents.
-.TP
-\fBhttpfile\fR accepts range requests.
-.TP
-\fBhttpfile\fR support basic authentication see BASIC AUTHORIZATION.
-.TP
 Normally \fBhttpfile\fR is run under tcpserver/inetd/systemd/... to handle HTTP connections from hosts around the Internet.
+\fBhttpfile\fR prints requested public files from the \fIroot\fR directory hierarchy see FILE HANDLING. Normally \fIroot\fR is /var/www/httpfile.
+\fBhttpfile\fR accepts GET and HEAD requests and prohibits POST, PUT, DELETE, ...
+\fBhttpfile\fR HTTP/1.0, and HTTP/1.1 formats.
+\fBhttpfile\fR has exact-prefix support for If-Modified-Since: it uses code 304 if the Last-Modified contents are an exact prefix of the If-Modified-Since contents.
+\fBhttpfile\fR support basic authentication see BASIC AUTHORIZATION.
+\fBhttpfile\fR accepts range requests.
+.fi
 .SH FILE HANDLING
-.TP
+.RS 0
+.nf
 A request for http://<host>/<file> refers to the file named ./<host>/<file> inside the \fIroot\fR directory hierarchy, if <file> does not end with a slash.
-.TP
 A request for http://<host>/<dir>/ refers to the file named ./<host>/<dir>/index.html.
-.TP
 \fBhttpfile\fR always converts the host name v to lowercase. If HTTP/1.0 requests do not specify a host name; in this case \fBhttpfile\fR uses the host name '0'.
-.TP
 A request for http://<host>/<dir> is redirected to http://<host>/<dir>/, which refers to the file named ./<host>/<dir>/index.html.
+.fi
+.TP
+\fBhttpfile\fR does not allow dots immediately after slashes in file names. It changes these dots to colons before attempting to open the file.
 .SH BASIC AUTHORIZATION
-.TP
+.RS 0
+.nf
 \fBhttpfile\fR supports basic authentication using a special file (e.g. named pipe) trick.
-.TP
 A request for http://<host>/<dir>/<specialfile> returns HTTP response 401. Browser than sends request with authorization header "Authorization: Basic <base64_credentials>".
-.TP
 Then request for http://<host>/<file> refers to the file named ./@<base64_credentials_without_'='_pading>/<host>/<file>.
+.fi
 .SH EXAMPLES
 .PP
 Run httpfile using tcpserver/busybox/inetd on port 80 under user nobody and with root directory /var/www/httpfile.
