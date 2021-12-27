@@ -274,6 +274,14 @@ static void redirect(char *prefix, char *suffix) {
 
 static void redirecthttps(void) {
 
+    struct stat st;
+
+    if (!stralloc_copys(&fn,"./")) die_nomem();
+    if (!stralloc_cat(&fn, &host)) die_nomem();
+    pathdecode(&fn);
+    if (!stralloc_0(&fn)) die_nomem();
+    if (stat(fn.s, &st) != 0) barf("404 ", e_str(errno));
+
     redirect("https:", "");
 }
 
