@@ -1,5 +1,5 @@
 /*
-20201202
+20211217
 Jan Mojzis
 Public domain.
 
@@ -9,22 +9,27 @@ function and line number.
 Non-printable characters are escaped.
 
 Log format:
-time: name: id: level: message (error){file:line}
+time: name: level: ip: message (error){file:line}[id]
 time .......... optional
+ip ............ optional
 name .......... optional
-id ............ optional
 {file:line} ... in debug mode
+[id] .......... optional
 */
 
 #include <arpa/inet.h>
 #include <string.h>
+#include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
 #include "e.h"
+#include "randommod.h"
 #include "log.h"
 
 static const char *logname = 0;
-static const char *logid = 0;
+static const char *logipstr = 0;
+static const char *logid = "";
+static char logidbuf[9];
 static int loglevel = 1;
 static int logtime = 0;
 static long long loglimit = 200;
@@ -45,6 +50,10 @@ void log_time(int flag) {
 
 void log_limit(long long limit) {
     loglimit = limit;
+}
+
+void log_ip(const char *ip) {
+    logipstr = ip;
 }
 
 static char buf[256];
@@ -207,15 +216,16 @@ void log_9_(
             break;
     }
 
-    /* time: name: id: level: message (error){file:line} */
+    /* time: name: level: ip: message (error){file:line}[id] */
+
 
     /* 'time:' */
     do {
-        if (!level) break;           /* don't print in usage level */
-        if (!logtime) break;         /* don't print when logtime = 0 */
         struct tm *t;
         int saved_errno = errno;
         time_t secs = time(0);
+        if (!level) break;           /* don't print in usage level */
+        if (!logtime) break;         /* don't print when logtime = 0 */
 
         t = localtime(&secs);
         outnum(t->tm_year + 1900, 4); outs("-");
@@ -227,6 +237,7 @@ void log_9_(
         errno = saved_errno;
     } while (0);
 
+
     /* 'name:' */
     do {
         if (!level) break;           /* don't print in usage level */
@@ -234,17 +245,17 @@ void log_9_(
         outsescape(logname, 0, counterptr); outs(": ");
     } while (0);
 
-    /* 'id:' */
-    do {
-        if (!level) break;           /* don't print in usage level */
-        if (!logid) break;           /* don't print when logid = 0 */
-        outsescape(logid, 0, counterptr); outs(": ");
-    } while (0);
-
     /* 'level:' */
     do {
         if (!level) break;           /* don't print in usage level */
         outs(m); outs(": ");
+    } while (0);
+
+    /* 'ip:' */
+    do {
+        if (!level) break;           /* don't print in usage level */
+        if (!logipstr) break;        /* don't print when logipstr = 0 */
+        outsescape(logipstr, 0, counterptr); outs(": ");
     } while (0);
 
     /* 'message' */
@@ -267,6 +278,14 @@ void log_9_(
         if (!level) break;          /* don't print in usage level             */
         if (loglevel <= 2) break;   /* print only when debug verbosity is set */
         outs("{"); outs(f); outs(":"); outnum(l, 0); outs("}");
+    } while (0);
+
+    /* [id] */
+    do {
+        if (loglevel <= 1) break;    /* don't print in usage, fatal level */
+        if (!logid) break;           /* don't print when logid = 0 */
+        if (logid[0] == 0) break;    /* don't print when logid = "" */
+        outs("["); outsescape(logid, 0, counterptr); outs("]");
     } while (0);
 
     outs("\n");
@@ -306,29 +325,41 @@ char *lognum0(long long num, long long cnt) {
     return numtostr(staticbuf[staticbufcounter], STATICBUFSIZE, num, cnt);
 }
 
-char *loghex(unsigned char *y, long long ylen) {
+static void tohex(char *x, long long xlen, unsigned char *y, long long ylen) {
     long long i;
-    char *x;
-    staticbufcounter = (staticbufcounter + 1) % 9;
-    x = staticbuf[staticbufcounter];
     for (i = 0; i < ylen; ++i) {
-        if (i == (STATICBUFSIZE - 3) / 2) {
+        if (i == (xlen - 3) / 2) {
             x[2 * i    ] = '.';
             x[2 * i + 1] = '.';
             x[2 * i + 2] = 0;
-            return x;
+            return;
         }
         x[2 * i    ] = "0123456789abcdef"[(y[i] >> 4) & 15];
         x[2 * i + 1] = "0123456789abcdef"[(y[i] >> 0) & 15];
     }
     x[2 * i] = 0;
+}
+
+char *loghex(unsigned char *y, long long ylen) {
+    char *x;
+    staticbufcounter = (staticbufcounter + 1) % 9;
+    x = staticbuf[staticbufcounter];
+    tohex(x, STATICBUFSIZE, y, ylen);
     return x;
 }
 
 void log_id(const char *id) {
-    static char strpid[41];
+
+    if (!id) id = getenv("LOG_ID");
     if (!id) {
-        id = numtostr(strpid, sizeof strpid, getpid(), 0);
+        static char chars[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRTSUVWXYZ0123456789";
+        unsigned long long i;
+        for (i = 0; i < sizeof logidbuf; ++i) {
+            logidbuf[i] = chars[randommod(sizeof chars - 1)];
+        }
+        logidbuf[sizeof logidbuf - 1] = 0;
+        id = logidbuf;
     }
     logid = id;
+    (void) setenv("LOG_ID", id, 1);
 }

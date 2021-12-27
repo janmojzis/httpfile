@@ -2,6 +2,7 @@
 #define _LOG_H____
 
 extern void log_name(const char *);
+extern void log_ip(const char *);
 extern void log_id(const char *);
 extern void log_level(int);
 extern void log_time(int);

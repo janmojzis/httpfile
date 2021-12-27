@@ -49,7 +49,7 @@ httpfile.o: httpfile.c stralloc.h pathdecode.h hostparse.h httpdate.h \
 limits.o: limits.c log.h limits.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c limits.c
 
-log.o: log.c e.h log.h
+log.o: log.c e.h randommod.h log.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c log.c
 
 milliseconds.o: milliseconds.c milliseconds.h
@@ -63,6 +63,9 @@ percent.o: percent.c percent.h stralloc.h
 
 randombytes.o: randombytes.c log.h randombytes.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c randombytes.c
+
+randommod.o: randommod.c randombytes.h randommod.h
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c randommod.c
 
 rangeparser.o: rangeparser.c rangeparser.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c rangeparser.c
@@ -96,6 +99,7 @@ OBJECTS+=milliseconds.o
 OBJECTS+=pathdecode.o
 OBJECTS+=percent.o
 OBJECTS+=randombytes.o
+OBJECTS+=randommod.o
 OBJECTS+=rangeparser.o
 OBJECTS+=stralloc.o
 OBJECTS+=str.o

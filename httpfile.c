@@ -443,7 +443,6 @@ int main(int argc, char **argv) {
 
     log_name("httpfile");
 
-
     if (!argv[0]) usage();
     for (;;) {
         if (!argv[1]) break;
@@ -536,7 +535,8 @@ int main(int argc, char **argv) {
 
     if (geteuid() == 0) log_w1("running under root privileges");
 
-    log_id(getenv("TCPREMOTEIP"));
+    log_id(0);
+    log_ip(getenv("TCPREMOTEIP"));
     log_level(flagverbose);
 
     if (flagredir) doit = redirecthttps;
