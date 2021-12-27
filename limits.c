@@ -39,8 +39,8 @@ int limits(void) {
 #endif
 
 /* if memory limit is greater than 64MB */
-/* set memory limit to 64MB             */
-#define DATAMAX 67108864
+/* set memory limit to 128MB            */
+#define DATAMAX 134217728
 #ifdef RLIMIT_DATA
     if (getrlimit(RLIMIT_DATA, &r) == -1) {
         log_e1("unable to get RLIMIT_DATA");
