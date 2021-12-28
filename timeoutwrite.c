@@ -12,8 +12,10 @@ long long timeoutwrite(long long t, int fd, const char *buf, long long len) {
     long long deadline;
     struct pollfd p;
 
-    if (len < 0 || len > 1048576) { errno = EPROTO; return -1; }
-
+    if (len < 0 || len > 1048576) {
+        errno = EPROTO;
+        return -1;
+    }
 
     deadline = milliseconds() + t * 1000;
 

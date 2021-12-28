@@ -8,4 +8,3 @@
 extern int getuidgid(uid_t *, gid_t *, const char *);
 
 #endif
-

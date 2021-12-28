@@ -4,7 +4,8 @@ long long str_len(const char *str) {
 
     const char *s;
 
-    for (s = str; *s; ++s);
+    for (s = str; *s; ++s)
+        ;
     return (s - str);
 }
 
@@ -12,7 +13,8 @@ int str_equal(const char *y, const char *x) {
 
     long long i;
 
-    for (i = 0; x[i] && y[i]; ++i) if (y[i] != x[i]) return 0;
+    for (i = 0; x[i] && y[i]; ++i)
+        if (y[i] != x[i]) return 0;
     return (y[i] == x[i]);
 }
 
@@ -21,7 +23,8 @@ long long str_chr(const char *str, int c) {
     const char *s;
     char ch = c;
 
-    for (s = str; (*s && *s != ch); ++s);
+    for (s = str; (*s && *s != ch); ++s)
+        ;
     return (s - str);
 }
 

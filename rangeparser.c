@@ -1,10 +1,11 @@
 #include "rangeparser.h"
 
-int rangeparser(long long *first, long long *last, char *x, long long xlen, long long length) {
+int rangeparser(long long *first, long long *last, char *x, long long xlen,
+                long long length) {
 
     long long pos, i, min = -1, max = -1;
     unsigned long long c;
-    
+
     for (pos = 0; pos < xlen; ++pos) {
         if (x[pos] == '-') break;
     }
@@ -18,7 +19,7 @@ int rangeparser(long long *first, long long *last, char *x, long long xlen, long
             c = (unsigned long long) (unsigned char) (x[i] - '0');
             if (c > 10) return 0;
             if (min < 0) return 0;
-            if ((unsigned long long)min > min * 10 + c) return 0;
+            if ((unsigned long long) min > min * 10 + c) return 0;
             min = min * 10 + c;
         }
     }
@@ -30,7 +31,7 @@ int rangeparser(long long *first, long long *last, char *x, long long xlen, long
             c = (unsigned long long) (unsigned char) (x[i] - '0');
             if (c > 10) return 0;
             if (max < 0) return 0;
-            if ((unsigned long long)max > max * 10 + c) return 0;
+            if ((unsigned long long) max > max * 10 + c) return 0;
             max = max * 10 + c;
         }
     }
@@ -62,7 +63,7 @@ int rangeparser(long long *first, long long *last, char *x, long long xlen, long
     }
 
     if (*first < 0) return 0; /* probably useless */
-    if (*last < 0) return 0; /* probably useless */
+    if (*last < 0) return 0;  /* probably useless */
     if (*first >= length) return 0;
     if (*first > *last) return 0;
 

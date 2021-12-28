@@ -7,12 +7,14 @@ int stralloc_readyplus(stralloc *r, long long len) {
     char *newdata;
     long long i;
 
-    if (!r || len < 0) { errno = EINVAL; return 0; }
+    if (!r || len < 0) {
+        errno = EINVAL;
+        return 0;
+    }
     if (len == 0) return 1;
 
     if (r->len + len + 1 > r->alloc) {
-        while (r->len + len + 1 > r->alloc)
-            r->alloc = 2 * r->alloc + 32;
+        while (r->len + len + 1 > r->alloc) r->alloc = 2 * r->alloc + 32;
         newdata = alloc(r->alloc);
         if (!newdata) return 0;
         if (r->s) {
@@ -29,7 +31,10 @@ int stralloc_catb(stralloc *r, const void *xv, long long xlen) {
     const char *x = xv;
     long long i;
 
-    if (!r || !xv || xlen < 0) { errno = EINVAL; return 0; }
+    if (!r || !xv || xlen < 0) {
+        errno = EINVAL;
+        return 0;
+    }
     if (xlen == 0) return 1;
 
     if (!stralloc_readyplus(r, xlen)) return 0;
@@ -43,22 +48,32 @@ int stralloc_cats(stralloc *r, const void *xv) {
     const char *x = xv;
     long long xlen;
 
-    if (!r || !xv) { errno = EINVAL; return 0; }
+    if (!r || !xv) {
+        errno = EINVAL;
+        return 0;
+    }
 
-    for (xlen = 0; x[xlen]; ++xlen);
+    for (xlen = 0; x[xlen]; ++xlen)
+        ;
     return stralloc_catb(r, x, xlen);
 }
 
 int stralloc_cat(stralloc *x, stralloc *y) {
 
-    if (!y) { errno = EINVAL; return 0; }
+    if (!y) {
+        errno = EINVAL;
+        return 0;
+    }
 
     return stralloc_catb(x, y->s, y->len);
 }
 
 int stralloc_copyb(stralloc *r, const void *xv, long long xlen) {
 
-    if (!r) { errno = EINVAL; return 0; }
+    if (!r) {
+        errno = EINVAL;
+        return 0;
+    }
 
     r->len = 0;
     return stralloc_catb(r, xv, xlen);
@@ -66,7 +81,10 @@ int stralloc_copyb(stralloc *r, const void *xv, long long xlen) {
 
 int stralloc_copys(stralloc *r, const void *xv) {
 
-    if (!r) { errno = EINVAL; return 0; }
+    if (!r) {
+        errno = EINVAL;
+        return 0;
+    }
 
     r->len = 0;
     return stralloc_cats(r, xv);
@@ -74,7 +92,10 @@ int stralloc_copys(stralloc *r, const void *xv) {
 
 int stralloc_copy(stralloc *x, stralloc *y) {
 
-    if (!x || !y) { errno = EINVAL; return 0; }
+    if (!x || !y) {
+        errno = EINVAL;
+        return 0;
+    }
 
     x->len = 0;
     return stralloc_cat(x, y);
@@ -84,10 +105,7 @@ int stralloc_append(stralloc *r, const void *xv) {
     return stralloc_catb(r, xv, 1);
 }
 
-int stralloc_0(stralloc *r) {
-    return stralloc_append(r, "");
-}
-
+int stralloc_0(stralloc *r) { return stralloc_append(r, ""); }
 
 static int stralloc_catunum0(stralloc *sa, unsigned long long u, long long n) {
 
@@ -95,27 +113,39 @@ static int stralloc_catunum0(stralloc *sa, unsigned long long u, long long n) {
     unsigned long long q;
     char *s;
 
-    if (!sa) { errno = EINVAL; return 0; }
+    if (!sa) {
+        errno = EINVAL;
+        return 0;
+    }
 
     len = 1;
     q = u;
-    while (q > 9) { ++len; q /= 10; }
+    while (q > 9) {
+        ++len;
+        q /= 10;
+    }
     if (len < n) len = n;
 
     if (!stralloc_readyplus(sa, len)) return 0;
     s = sa->s + sa->len;
     sa->len += len;
-    while (len) { s[--len] = '0' + (u % 10); u /= 10; }
+    while (len) {
+        s[--len] = '0' + (u % 10);
+        u /= 10;
+    }
 
     return 1;
 }
 
 int stralloc_catnum0(stralloc *sa, long long l, long long n) {
 
-    if (!sa) { errno = EINVAL; return 0; }
+    if (!sa) {
+        errno = EINVAL;
+        return 0;
+    }
 
     if (l < 0) {
-        if (!stralloc_append(sa,"-")) return 0;
+        if (!stralloc_append(sa, "-")) return 0;
         l = -l;
     }
     return stralloc_catunum0(sa, l, n);
@@ -127,7 +157,10 @@ int stralloc_catnum(stralloc *r, long long num) {
 
 int stralloc_copynum(stralloc *r, long long num) {
 
-    if (!r) { errno = EINVAL; return 0; }
+    if (!r) {
+        errno = EINVAL;
+        return 0;
+    }
 
     r->len = 0;
     return stralloc_catnum(r, num);

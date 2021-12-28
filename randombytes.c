@@ -27,7 +27,10 @@ void randombytes(void *xv, unsigned long long xlen) {
     }
 
     while (xlen > 0) {
-        if (xlen < 1048576) i = xlen; else i = 1048576;
+        if (xlen < 1048576)
+            i = xlen;
+        else
+            i = 1048576;
 
         i = read(fd, x, i);
         if (i < 1) {

@@ -24,7 +24,5 @@ void hostparse(stralloc *host) {
             ++coloncount;
         }
     }
-    if (coloncount == 1) {
-        host->len = colonpos;
-    }
+    if (coloncount == 1) { host->len = colonpos; }
 }

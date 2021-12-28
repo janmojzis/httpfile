@@ -25,6 +25,8 @@
 #include "randombytes.h"
 #include "limits.h"
 
+/* clang-format off */
+
 static char *writetimeoutstr = "60";
 static long long writetimeout;
 static char *requesttimeoutstr = "30";
@@ -668,3 +670,5 @@ int main(int argc, char **argv) {
     }
     return 111;
 }
+
+/* clang-format on */

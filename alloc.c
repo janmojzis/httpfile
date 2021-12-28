@@ -11,7 +11,8 @@ Public domain.
 #include "alloc.h"
 #include "log.h"
 
-static unsigned char space[alloc_STATICSPACE]  __attribute__ ((aligned(alloc_ALIGNMENT)));
+static unsigned char space[alloc_STATICSPACE]
+    __attribute__((aligned(alloc_ALIGNMENT)));
 static unsigned long long avail = sizeof space;
 static unsigned long long allocated = 0;
 
@@ -25,8 +26,7 @@ static int ptr_add(void *x) {
 
     if (!x) return 1;
     if (ptrlen + 1 > ptralloc) {
-        while (ptrlen + 1 > ptralloc)
-            ptralloc = 2 * ptralloc + 1;
+        while (ptrlen + 1 > ptralloc) ptralloc = 2 * ptralloc + 1;
         newptr = (void **) malloc(ptralloc * sizeof(void *));
         if (!newptr) return 0;
         if (ptr) {
@@ -53,31 +53,31 @@ ok:
     return 1;
 }
 
-
 void *alloc(unsigned long long norig) {
 
     unsigned char *x;
     unsigned long long i, n = norig;
 
     if (n > alloc_LIMIT) {
-        log_e5("alloc(", lognum(norig), ") ... failed, > alloc_LIMIT (", lognum(alloc_LIMIT), ")");
+        log_e5("alloc(", lognum(norig), ") ... failed, > alloc_LIMIT (",
+               lognum(alloc_LIMIT), ")");
         goto nomem;
     }
     if (n == 0) {
-        log_w3("alloc(0), will allocate ", lognum(alloc_ALIGNMENT), " bytes");
+        log_d3("alloc(0), will allocate ", lognum(alloc_ALIGNMENT), " bytes");
         n = alloc_ALIGNMENT;
     }
     n = ((n + alloc_ALIGNMENT - 1) / alloc_ALIGNMENT) * alloc_ALIGNMENT;
     if (n <= avail) {
         avail -= n;
         log_t3("alloc(", lognum(norig), ") ... ok, static");
-        return (void *)(space + avail);
+        return (void *) (space + avail);
     }
 
     n += alloc_ALIGNMENT;
     allocated += n;
 
-    if (n != (unsigned long long) (size_t) (n)) {
+    if (n != (unsigned long long) (size_t)(n)) {
         log_e3("alloc(", lognum(norig), ") ... failed, size_t overflow");
         goto nomem;
     }
@@ -89,17 +89,21 @@ void *alloc(unsigned long long norig) {
     }
     randombytes(x, n);
 
-    for (i = 0; i < alloc_ALIGNMENT; ++i) { *x++ = n; n >>= 8; }
+    for (i = 0; i < alloc_ALIGNMENT; ++i) {
+        *x++ = n;
+        n >>= 8;
+    }
 
     if (!ptr_add(x)) {
         log_e3("alloc(", lognum(norig), ") ... failed, malloc() failed");
         goto nomem;
     }
-    log_t5("alloc(", lognum(norig), ") ... ok, using malloc(), total ", lognum(allocated), " bytes");
-    return (void *)x;
+    log_t5("alloc(", lognum(norig), ") ... ok, using malloc(), total ",
+           lognum(allocated), " bytes");
+    return (void *) x;
 nomem:
     errno = ENOMEM;
-    return (void *)0;
+    return (void *) 0;
 }
 
 void alloc_free(void *xv) {
@@ -113,12 +117,14 @@ void alloc_free(void *xv) {
     }
 
     if (x >= space)
-        if (x < space + sizeof space)
-            return;
+        if (x < space + sizeof space) return;
 
     ptr_remove(x);
 
-    for (i = 0; i < alloc_ALIGNMENT; ++i) { n <<= 8; n |= *--x; }
+    for (i = 0; i < alloc_ALIGNMENT; ++i) {
+        n <<= 8;
+        n |= *--x;
+    }
 
     randombytes(x, n);
     free(x);
@@ -126,10 +132,12 @@ void alloc_free(void *xv) {
 
 void alloc_freeall(void) {
 
-    while (ptrlen > 0) {
-        alloc_free(ptr[0]);
+    while (ptrlen > 0) { alloc_free(ptr[0]); }
+    if (ptr) {
+        free(ptr);
+        ptr = 0;
+        ptrlen = ptralloc = 0;
     }
-    if (ptr) { free(ptr); ptr = 0; ptrlen = ptralloc = 0; }
 
     randombytes(space, sizeof space);
 }

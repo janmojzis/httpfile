@@ -58,12 +58,16 @@ int file_open(char *fn, long long *mtime, long long *length) {
     ret = fd;
 
 cleanup:
-    log_t8("file_open(fn = ", fn, ", mtime = ", lognum(*mtime), ", length = ", lognum(*mtime), ") = ", lognum(ret));
+    log_t8("file_open(fn = ", fn, ", mtime = ", lognum(*mtime),
+           ", length = ", lognum(*mtime), ") = ", lognum(ret));
     return ret;
 }
 
 int file_seek(int fd, long long offset) {
-    if (offset < 0) { errno = EINVAL; return 0; }
+    if (offset < 0) {
+        errno = EINVAL;
+        return 0;
+    }
     if (lseek(fd, offset, SEEK_SET) != offset) return 0;
     return 1;
 }
