@@ -29,14 +29,14 @@ run chrooted in the directory \fIroot\fR.
 .B \fIUID/GID\fR run under the uid and gid specified by the $UID and $GID environment variables
 .SH INTERFACE
 .TP
-most \fBhttpfile\fR properties are inherited from publicfile-0.76
+most \fBhttpfile\fR properties are inherited from publicfile\-0.76
 .RS 0
 .nf
 Normally \fBhttpfile\fR is run under tcpserver/inetd/systemd/... to handle HTTP connections from hosts around the Internet.
 \fBhttpfile\fR prints requested public files from the \fIroot\fR directory hierarchy see FILE HANDLING. Normally \fIroot\fR is /var/www/httpfile.
 \fBhttpfile\fR accepts GET and HEAD requests and prohibits POST, PUT, DELETE, ...
 \fBhttpfile\fR HTTP/1.0, and HTTP/1.1 formats.
-\fBhttpfile\fR has exact-prefix support for If-Modified-Since: it uses code 304 if the Last-Modified contents are an exact prefix of the If-Modified-Since contents.
+\fBhttpfile\fR has exact\-prefix support for If\-Modified\-Since: it uses code 304 if the Last\-Modified contents are an exact prefix of the If\-Modified\-Since contents.
 \fBhttpfile\fR support basic authentication see BASIC AUTHORIZATION.
 \fBhttpfile\fR accepts range requests.
 .fi
@@ -62,23 +62,23 @@ Then request for http://<host>/<file> refers to the file named ./@<base64_creden
 Run httpfile using tcpserver/busybox/inetd on port 80 under user nobody and with root directory /var/www/httpfile.
 .RS 4
 .nf
-tcpserver -HRDl0 0 80 httpfile -u nobody /var/www/httpfile
-busybox tcpsvd 0 80 httpfile -u nobody /var/www/httpfile
-inetd.conf line: http stream tcp nowait root /usr/bin/httpfile httpfile -u nobody /var/www/httpfile
+tcpserver \-HRDl0 0 80 httpfile \-u nobody /var/www/httpfile
+busybox tcpsvd 0 80 httpfile \-u nobody /var/www/httpfile
+inetd.conf line: http stream tcp nowait root /usr/bin/httpfile httpfile \-u nobody /var/www/httpfile
 .fi
 .RE
 .PP
 Add headers to prohibit browser caching
 .RS 4
 .nf
- ... httpfile -h 'Expires: -1' -h 'Cache-Control: must-revalidate, private' ...
+ ... httpfile \-h 'Expires: \-1' \-h 'Cache\-Control: must\-revalidate, private' ...
 .fi
 .RE
 .PP
 Add HSTS header
 .RS 4
 .nf
- ... httpfile -h 'Strict-Transport-Security: max-age=63072000; includeSubDomains; preload' ...
+ ... httpfile \-h 'Strict\-Transport\-Security: max\-age=63072000; includeSubDomains; preload' ...
 .fi
 .RE
 .SH DIFFERENCE COMPARED TO PUBLICFILE
