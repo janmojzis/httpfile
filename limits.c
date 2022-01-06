@@ -41,6 +41,7 @@ int limits(void) {
 /* if memory limit is greater than 64MB */
 /* set memory limit to 128MB            */
 #define DATAMAX 134217728
+#ifndef __APPLE__
 #ifdef RLIMIT_DATA
     if (getrlimit(RLIMIT_DATA, &r) == -1) {
         log_e1("unable to get RLIMIT_DATA");
@@ -49,11 +50,12 @@ int limits(void) {
     if (r.rlim_cur > DATAMAX) {
         r.rlim_cur = r.rlim_max = DATAMAX;
         if (setrlimit(RLIMIT_DATA, &r) == -1) {
-            log_e1("unable to set RLIMIT_DATA to 0");
+            log_e2("unable to set RLIMIT_DATA to ", lognum(DATAMAX));
             goto cleanup;
         }
         log_t2("setrlimit RLIMIT_DATA set to ", lognum(DATAMAX));
     }
+#endif
 #endif
 
     ret = 1;

@@ -22,6 +22,8 @@ name .......... optional
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
 #include "e.h"
 #include "randommod.h"
 #include "log.h"
