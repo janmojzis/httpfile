@@ -7,7 +7,7 @@ BINARIES+=utime
 
 all: $(BINARIES)
 
-alloc.o: alloc.c randombytes.h alloc.h log.h
+alloc.o: alloc.c log.h alloc.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c alloc.c
 
 case_diffs.o: case_diffs.c case.h

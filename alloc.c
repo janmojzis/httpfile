@@ -1,15 +1,11 @@
 /*
-20201129
-Jan Mojzis
-Public domain.
+version 20220221
 */
 
 #include <stdlib.h>
 #include <errno.h>
-#include <string.h>
-#include "randombytes.h"
-#include "alloc.h"
 #include "log.h"
+#include "alloc.h"
 
 static unsigned char space[alloc_STATICSPACE]
     __attribute__((aligned(alloc_ALIGNMENT)));
@@ -23,6 +19,7 @@ static unsigned long long ptralloc = 0;
 static int ptr_add(void *x) {
 
     void **newptr;
+    unsigned long long i;
 
     if (!x) return 1;
     if (ptrlen + 1 > ptralloc) {
@@ -30,7 +27,7 @@ static int ptr_add(void *x) {
         newptr = (void **) malloc(ptralloc * sizeof(void *));
         if (!newptr) return 0;
         if (ptr) {
-            memcpy(newptr, ptr, ptrlen * sizeof(void *));
+            for (i = 0; i < ptrlen; ++i) newptr[i] = ptr[i];
             free(ptr);
         }
         ptr = newptr;
@@ -53,18 +50,25 @@ ok:
     return 1;
 }
 
-void *alloc(unsigned long long norig) {
+static void cleanup(void *xv, unsigned long long xlen) {
+
+    volatile unsigned long *x = (volatile unsigned long *) xv;
+
+    xlen /= sizeof(unsigned long);
+    while (xlen-- > 0) *x++ = 0;
+}
+
+void *alloc(long long norig) {
 
     unsigned char *x;
     unsigned long long i, n = norig;
 
-    if (n > alloc_LIMIT) {
-        log_e5("alloc(", lognum(norig), ") ... failed, > alloc_LIMIT (",
-               lognum(alloc_LIMIT), ")");
-        goto nomem;
+    if (norig < 0) {
+        log_e3("alloc(", lognum(norig), ") ... failed, < 0");
+        goto inval;
     }
     if (n == 0) {
-        log_d3("alloc(0), will allocate ", lognum(alloc_ALIGNMENT), " bytes");
+        log_t3("alloc(0), will allocate ", lognum(alloc_ALIGNMENT), " bytes");
         n = alloc_ALIGNMENT;
     }
     n = ((n + alloc_ALIGNMENT - 1) / alloc_ALIGNMENT) * alloc_ALIGNMENT;
@@ -77,7 +81,7 @@ void *alloc(unsigned long long norig) {
     n += alloc_ALIGNMENT;
     allocated += n;
 
-    if (n != (unsigned long long) (size_t)(n)) {
+    if (n != (unsigned long long) (size_t) n) {
         log_e3("alloc(", lognum(norig), ") ... failed, size_t overflow");
         goto nomem;
     }
@@ -87,7 +91,7 @@ void *alloc(unsigned long long norig) {
         log_e3("alloc(", lognum(norig), ") ... failed, malloc() failed");
         goto nomem;
     }
-    randombytes(x, n);
+    cleanup(x, n);
 
     for (i = 0; i < alloc_ALIGNMENT; ++i) {
         *x++ = n;
@@ -103,6 +107,9 @@ void *alloc(unsigned long long norig) {
     return (void *) x;
 nomem:
     errno = ENOMEM;
+    return (void *) 0;
+inval:
+    errno = EINVAL;
     return (void *) 0;
 }
 
@@ -126,7 +133,7 @@ void alloc_free(void *xv) {
         n |= *--x;
     }
 
-    randombytes(x, n);
+    cleanup(x, n);
     free(x);
 }
 
@@ -139,5 +146,5 @@ void alloc_freeall(void) {
         ptrlen = ptralloc = 0;
     }
 
-    randombytes(space, sizeof space);
+    cleanup(space, sizeof space);
 }
