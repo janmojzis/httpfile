@@ -58,8 +58,8 @@ int file_open(char *fn, long long *mtime, long long *length) {
     ret = fd;
 
 cleanup:
-    log_t8("file_open(fn = ", fn, ", mtime = ", lognum(*mtime),
-           ", length = ", lognum(*mtime), ") = ", lognum(ret));
+    log_t8("file_open(fn = ", fn, ", mtime = ", log_num(*mtime),
+           ", length = ", log_num(*mtime), ") = ", log_num(ret));
     return ret;
 }
 

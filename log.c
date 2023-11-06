@@ -1,5 +1,5 @@
 /*
-20211217
+20230815
 Jan Mojzis
 Public domain.
 
@@ -28,24 +28,35 @@ name .......... optional
 #include "randommod.h"
 #include "log.h"
 
+int log_level = log_level_FATAL;
 static const char *logname = 0;
+static int logtime = 0;
+static long long loglimit = 200;
 static const char *logipstr = 0;
 static const char *logid = "";
 static char logidbuf[9];
-static int loglevel = 1;
-static int logtime = 0;
-static long long loglimit = 200;
 
-void log_level(int level) {
-    loglevel = level;
-    if (level < 0) loglevel = 0;
-    if (level > 4) loglevel = 4;
+void log_set_level(int level) {
+    log_level = level;
+    if (level < log_level_USAGE) log_level = log_level_USAGE;
+    if (level > log_level_TRACING) log_level = log_level_TRACING;
 }
 
-void log_name(const char *name) { logname = name; }
-void log_time(int flag) { logtime = flag; }
-void log_limit(long long limit) { loglimit = limit; }
-void log_ip(const char *ip) { logipstr = ip; }
+void log_inc_level(int signal) {
+    (void) signal;
+    log_set_level(log_level + 1);
+}
+
+void log_dec_level(int signal) {
+    (void) signal;
+    log_set_level(log_level - 1);
+}
+
+void log_set_name(const char *name) { logname = name; }
+void log_set_time(int flag) { logtime = flag; }
+void log_set_ip(const char *ip) { logipstr = ip; }
+void log_set_limit(long long limit) { loglimit = limit; }
+const char *log_get_id(void) { return logid; }
 
 static char buf[256];
 static unsigned long long buflen = 0;
@@ -107,9 +118,7 @@ static void outsescape(const char *x, int flaglf, long long *counter) {
             outch("0123456789abcdef"[(x[i] >> 4) & 15]);
             outch("0123456789abcdef"[(x[i] >> 0) & 15]);
         }
-        else {
-            outch(x[i]);
-        }
+        else { outch(x[i]); }
     }
 }
 #define outs(x) outsescape((x), 1, 0);
@@ -152,7 +161,7 @@ static char *numtostr(char *strbuf, long long strbuflen, long long n,
     return strbuf;
 }
 
-#define STATICBUFSIZE 41
+#define STATICBUFSIZE 67
 
 static void outnum(unsigned long long n, unsigned long long cnt) {
 
@@ -170,11 +179,12 @@ void log_9_(int level, int flagerror, const char *f, unsigned long long l,
     long long counter = 0;
     long long *counterptr = &counter;
 
-    if (level > loglevel) return;
+    if (level > log_level) return;
 
-    if (loglevel <= 2) counterptr = 0;
+    if (log_level <= 2) counterptr = 0;
 
     s[0] = s0;
+
     s[1] = s1;
     s[2] = s2;
     s[3] = s3;
@@ -186,7 +196,10 @@ void log_9_(int level, int flagerror, const char *f, unsigned long long l,
 
     switch (level) {
         case 1:
-            m = "fatal";
+            if (flagerror == 2)
+                m = "bug";
+            else
+                m = "fatal";
             break;
         case 2:
             if (flagerror == 1)
@@ -273,10 +286,10 @@ void log_9_(int level, int flagerror, const char *f, unsigned long long l,
 
     /* {file:line} */
     do {
-        if (!f) break;            /* don't print when no f                  */
-        if (!l) break;            /* don't print when no l                  */
-        if (!level) break;        /* don't print in usage level             */
-        if (loglevel <= 2) break; /* print only when debug verbosity is set */
+        if (!f) break;             /* don't print when no f                  */
+        if (!l) break;             /* don't print when no l                  */
+        if (!level) break;         /* don't print in usage level             */
+        if (log_level <= 2) break; /* print only when debug verbosity is set */
         outs("{");
         outs(f);
         outs(":");
@@ -286,9 +299,9 @@ void log_9_(int level, int flagerror, const char *f, unsigned long long l,
 
     /* [id] */
     do {
-        if (loglevel <= 1) break; /* don't print in usage, fatal level */
-        if (!logid) break;        /* don't print when logid = 0 */
-        if (logid[0] == 0) break; /* don't print when logid = "" */
+        if (log_level <= 1) break; /* don't print in usage, fatal level */
+        if (!logid) break;         /* don't print when logid = 0 */
+        if (logid[0] == 0) break;  /* don't print when logid = "" */
         outs("[");
         outsescape(logid, 0, counterptr);
         outs("]");
@@ -302,7 +315,7 @@ void log_9_(int level, int flagerror, const char *f, unsigned long long l,
 static char staticbuf[9][STATICBUFSIZE];
 static int staticbufcounter = 0;
 
-char *logip(unsigned char *ip) {
+char *log_ip(unsigned char *ip) {
     staticbufcounter = (staticbufcounter + 1) % 9;
     if (memcmp(ip, "\0\0\0\0\0\0\0\0\0\0\377\377", 12)) {
         struct sockaddr_in6 sa;
@@ -319,17 +332,17 @@ char *logip(unsigned char *ip) {
     return staticbuf[staticbufcounter];
 }
 
-char *logport(unsigned char *port) {
+char *log_port(unsigned char *port) {
     staticbufcounter = (staticbufcounter + 1) % 9;
     return numtostr(staticbuf[staticbufcounter], STATICBUFSIZE,
                     port[0] << 8 | port[1], 0);
 }
 
-char *lognum(long long num) {
+char *log_num(long long num) {
     staticbufcounter = (staticbufcounter + 1) % 9;
     return numtostr(staticbuf[staticbufcounter], STATICBUFSIZE, num, 0);
 }
-char *lognum0(long long num, long long cnt) {
+char *log_num0(long long num, long long cnt) {
     staticbufcounter = (staticbufcounter + 1) % 9;
     return numtostr(staticbuf[staticbufcounter], STATICBUFSIZE, num, cnt);
 }
@@ -349,7 +362,7 @@ static void tohex(char *x, long long xlen, unsigned char *y, long long ylen) {
     x[2 * i] = 0;
 }
 
-char *loghex(unsigned char *y, long long ylen) {
+char *log_hex(unsigned char *y, long long ylen) {
     char *x;
     staticbufcounter = (staticbufcounter + 1) % 9;
     x = staticbuf[staticbufcounter];
@@ -357,7 +370,12 @@ char *loghex(unsigned char *y, long long ylen) {
     return x;
 }
 
-void log_id(const char *id) {
+char *log_argv(char **argv) {
+    if (!argv) return 0;
+    return argv[0];
+}
+
+void log_set_id(const char *id) {
 
     if (!id) id = getenv("LOG_ID");
     if (!id) {
@@ -372,4 +390,16 @@ void log_id(const char *id) {
     }
     logid = id;
     (void) setenv("LOG_ID", id, 1);
+}
+
+void log_set_hexid(const unsigned char *x, long long xlen) {
+
+    long long i;
+    for (i = 0; i < (long long) sizeof(logidbuf); ++i) logidbuf[i] = 0;
+    for (i = 0; i < xlen; ++i) {
+        logidbuf[2 * i] = "0123456789abcdef"[(x[i] >> 4) & 15];
+        logidbuf[2 * i + 1] = "0123456789abcdef"[(x[i] >> 0) & 15];
+        if (i == (sizeof(logidbuf) / 2) - 1) break;
+    }
+    logid = logidbuf;
 }

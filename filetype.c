@@ -66,6 +66,6 @@ cleanup:
     }
     --contenttype->len;
     log_t6("filetype(fn = ", fn, ", contenttype = ", contenttype->s,
-           ") = ", lognum(ret));
+           ") = ", log_num(ret));
     return ret;
 }

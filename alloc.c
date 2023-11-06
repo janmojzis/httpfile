@@ -64,17 +64,17 @@ void *alloc(long long norig) {
     unsigned long long i, n = norig;
 
     if (norig < 0) {
-        log_e3("alloc(", lognum(norig), ") ... failed, < 0");
+        log_e3("alloc(", log_num(norig), ") ... failed, < 0");
         goto inval;
     }
     if (n == 0) {
-        log_t3("alloc(0), will allocate ", lognum(alloc_ALIGNMENT), " bytes");
+        log_t3("alloc(0), will allocate ", log_num(alloc_ALIGNMENT), " bytes");
         n = alloc_ALIGNMENT;
     }
     n = ((n + alloc_ALIGNMENT - 1) / alloc_ALIGNMENT) * alloc_ALIGNMENT;
     if (n <= avail) {
         avail -= n;
-        log_t3("alloc(", lognum(norig), ") ... ok, static");
+        log_t3("alloc(", log_num(norig), ") ... ok, static");
         return (void *) (space + avail);
     }
 
@@ -82,13 +82,13 @@ void *alloc(long long norig) {
     allocated += n;
 
     if (n != (unsigned long long) (size_t) n) {
-        log_e3("alloc(", lognum(norig), ") ... failed, size_t overflow");
+        log_e3("alloc(", log_num(norig), ") ... failed, size_t overflow");
         goto nomem;
     }
 
     x = (unsigned char *) malloc(n);
     if (!x) {
-        log_e3("alloc(", lognum(norig), ") ... failed, malloc() failed");
+        log_e3("alloc(", log_num(norig), ") ... failed, malloc() failed");
         goto nomem;
     }
     cleanup(x, n);
@@ -99,11 +99,11 @@ void *alloc(long long norig) {
     }
 
     if (!ptr_add(x)) {
-        log_e3("alloc(", lognum(norig), ") ... failed, malloc() failed");
+        log_e3("alloc(", log_num(norig), ") ... failed, malloc() failed");
         goto nomem;
     }
-    log_t5("alloc(", lognum(norig), ") ... ok, using malloc(), total ",
-           lognum(allocated), " bytes");
+    log_t5("alloc(", log_num(norig), ") ... ok, using malloc(), total ",
+           log_num(allocated), " bytes");
     return (void *) x;
 nomem:
     errno = ENOMEM;

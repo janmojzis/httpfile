@@ -451,7 +451,7 @@ int main(int argc, char **argv) {
     signal(SIGPIPE, SIG_IGN);
     signal(SIGALRM, drop);
 
-    log_name("httpfile");
+    log_set_name("httpfile");
 
     if (!argv[0]) usage();
     for (;;) {
@@ -461,9 +461,9 @@ int main(int argc, char **argv) {
         if (x[0] == '-' && x[1] == 0) break;
         if (x[0] == '-' && x[1] == '-' && x[2] == 0) break;
         while (*++x) {
-            if (*x == 'q') { flagverbose = 0; log_level(flagverbose); continue; }
-            if (*x == 'Q') { flagverbose = 1; log_level(flagverbose); continue; }
-            if (*x == 'v') { log_level(++flagverbose); continue; }
+            if (*x == 'q') { flagverbose = 0; continue; }
+            if (*x == 'Q') { flagverbose = 1; continue; }
+            if (*x == 'v') { ++flagverbose; if (flagverbose >= 4) flagverbose = 4; continue; }
 
             /* redirect */
             if (*x == 'r') { flagredir = 1; continue; }
@@ -496,11 +496,11 @@ int main(int argc, char **argv) {
     if (!numparse(&writetimeout, writetimeoutstr)) die_timeoutparse(writetimeoutstr);
     if (writetimeout < 1) die_timeoutlesszero(writetimeoutstr);
     if (writetimeout > 86400) die_timeouttoolarge(writetimeoutstr);
-    log_t2("writetimeout = ", lognum(writetimeout));
+    log_t2("writetimeout = ", log_num(writetimeout));
     if (!numparse(&requesttimeout, requesttimeoutstr)) die_timeoutparse(requesttimeoutstr);
     if (requesttimeout < 1) die_timeoutlesszero(requesttimeoutstr);
     if (requesttimeout > 86400) die_timeouttoolarge(requesttimeoutstr);
-    log_t2("requesttimeout = ", lognum(requesttimeout));
+    log_t2("requesttimeout = ", log_num(requesttimeout));
 
     /* initialize randombytes */
     {
@@ -545,9 +545,9 @@ int main(int argc, char **argv) {
 
     if (geteuid() == 0) log_w1("running under root privileges");
 
-    log_id(0);
-    log_ip(getenv("TCPREMOTEIP"));
-    log_level(flagverbose);
+    log_set_id(0);
+    log_set_ip(getenv("TCPREMOTEIP"));
+    log_set_level(flagverbose);
 
     if (flagredir) doit = redirecthttps;
 

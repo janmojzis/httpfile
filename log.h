@@ -1,18 +1,33 @@
 #ifndef _LOG_H____
 #define _LOG_H____
 
-extern void log_name(const char *);
-extern void log_ip(const char *);
-extern void log_id(const char *);
-extern void log_level(int);
-extern void log_time(int);
-extern void log_limit(long long);
+extern int log_level;
+#define log_level_USAGE 0
+#define log_level_FATAL 1
+#define log_level_BUG 1
+#define log_level_ERROR 2
+#define log_level_WARNING 2
+#define log_level_INFO 2
+#define log_level_DEBUG 3
+#define log_level_TRACING 4
 
-extern char *logip(unsigned char *);
-extern char *logport(unsigned char *);
-extern char *lognum(long long);
-extern char *lognum0(long long, long long);
-extern char *loghex(unsigned char *, long long);
+extern void log_set_level(int);
+extern void log_inc_level(int);
+extern void log_dec_level(int);
+extern void log_set_name(const char *);
+extern void log_set_time(int);
+extern void log_set_limit(long long);
+extern void log_set_ip(const char *);
+extern void log_set_id(const char *);
+extern void log_set_hexid(const unsigned char *, long long);
+extern const char *log_get_id(void);
+
+extern char *log_num(long long);
+extern char *log_num0(long long, long long);
+extern char *log_ip(unsigned char *);
+extern char *log_port(unsigned char *);
+extern char *log_hex(unsigned char *, long long);
+extern char *log_argv(char **);
 
 extern void log_9_(int, int, const char *, unsigned long long, const char *,
                    const char *, const char *, const char *, const char *,
@@ -20,7 +35,10 @@ extern void log_9_(int, int, const char *, unsigned long long, const char *,
 
 /* usage */
 #define log_u(a, b, c, d, e, f, g, h, i, j, k)                                 \
-    log_9_(0, 0, a, b, c, d, e, f, g, h, i, j, k)
+    do {                                                                       \
+        if (log_level < log_level_USAGE) break;                                \
+        log_9_(log_level_USAGE, 0, a, b, c, d, e, f, g, h, i, j, k);           \
+    } while (0)
 #define log_u9(a, b, c, d, e, f, g, h, i)                                      \
     log_u(__FILE__, __LINE__, a, b, c, d, e, f, g, h, i)
 #define log_u8(a, b, c, d, e, f, g, h) log_u9(a, b, c, d, e, f, g, h, 0)
@@ -32,9 +50,29 @@ extern void log_9_(int, int, const char *, unsigned long long, const char *,
 #define log_u2(a, b) log_u3(a, b, 0)
 #define log_u1(a) log_u2(a, 0)
 
+/* bug */
+#define log_b(a, b, c, d, e, f, g, h, i, j, k)                                 \
+    do {                                                                       \
+        if (log_level < log_level_BUG) break;                                  \
+        log_9_(log_level_BUG, 2, a, b, c, d, e, f, g, h, i, j, k);             \
+    } while (0)
+#define log_b9(a, b, c, d, e, f, g, h, i)                                      \
+    log_b(__FILE__, __LINE__, a, b, c, d, e, f, g, h, i)
+#define log_b8(a, b, c, d, e, f, g, h) log_b9(a, b, c, d, e, f, g, h, 0)
+#define log_b7(a, b, c, d, e, f, g) log_b8(a, b, c, d, e, f, g, 0)
+#define log_b6(a, b, c, d, e, f) log_b7(a, b, c, d, e, f, 0)
+#define log_b5(a, b, c, d, e) log_b6(a, b, c, d, e, 0)
+#define log_b4(a, b, c, d) log_b5(a, b, c, d, 0)
+#define log_b3(a, b, c) log_b4(a, b, c, 0)
+#define log_b2(a, b) log_b3(a, b, 0)
+#define log_b1(a) log_b2(a, 0)
+
 /* fatal */
 #define log_f(a, b, c, d, e, f, g, h, i, j, k)                                 \
-    log_9_(1, 1, a, b, c, d, e, f, g, h, i, j, k)
+    do {                                                                       \
+        if (log_level < log_level_FATAL) break;                                \
+        log_9_(log_level_FATAL, 1, a, b, c, d, e, f, g, h, i, j, k);           \
+    } while (0)
 #define log_f9(a, b, c, d, e, f, g, h, i)                                      \
     log_f(__FILE__, __LINE__, a, b, c, d, e, f, g, h, i)
 #define log_f8(a, b, c, d, e, f, g, h) log_f9(a, b, c, d, e, f, g, h, 0)
@@ -48,7 +86,10 @@ extern void log_9_(int, int, const char *, unsigned long long, const char *,
 
 /* error */
 #define log_e(a, b, c, d, e, f, g, h, i, j, k)                                 \
-    log_9_(2, 1, a, b, c, d, e, f, g, h, i, j, k)
+    do {                                                                       \
+        if (log_level < log_level_ERROR) break;                                \
+        log_9_(log_level_ERROR, 1, a, b, c, d, e, f, g, h, i, j, k);           \
+    } while (0)
 #define log_e9(a, b, c, d, e, f, g, h, i)                                      \
     log_e(__FILE__, __LINE__, a, b, c, d, e, f, g, h, i)
 #define log_e8(a, b, c, d, e, f, g, h) log_e9(a, b, c, d, e, f, g, h, 0)
@@ -62,7 +103,10 @@ extern void log_9_(int, int, const char *, unsigned long long, const char *,
 
 /* warning */
 #define log_w(a, b, c, d, e, f, g, h, i, j, k)                                 \
-    log_9_(2, 2, a, b, c, d, e, f, g, h, i, j, k)
+    do {                                                                       \
+        if (log_level < log_level_WARNING) break;                              \
+        log_9_(log_level_WARNING, 2, a, b, c, d, e, f, g, h, i, j, k);         \
+    } while (0)
 #define log_w9(a, b, c, d, e, f, g, h, i)                                      \
     log_w(__FILE__, __LINE__, a, b, c, d, e, f, g, h, i)
 #define log_w8(a, b, c, d, e, f, g, h) log_w9(a, b, c, d, e, f, g, h, 0)
@@ -76,7 +120,10 @@ extern void log_9_(int, int, const char *, unsigned long long, const char *,
 
 /* info */
 #define log_i(a, b, c, d, e, f, g, h, i, j, k)                                 \
-    log_9_(2, 0, a, b, c, d, e, f, g, h, i, j, k)
+    do {                                                                       \
+        if (log_level < log_level_INFO) break;                                 \
+        log_9_(log_level_INFO, 0, a, b, c, d, e, f, g, h, i, j, k);            \
+    } while (0)
 #define log_i9(a, b, c, d, e, f, g, h, i)                                      \
     log_i(__FILE__, __LINE__, a, b, c, d, e, f, g, h, i)
 #define log_i8(a, b, c, d, e, f, g, h) log_i9(a, b, c, d, e, f, g, h, 0)
@@ -90,7 +137,10 @@ extern void log_9_(int, int, const char *, unsigned long long, const char *,
 
 /* debug */
 #define log_d(a, b, c, d, e, f, g, h, i, j, k)                                 \
-    log_9_(3, 1, a, b, c, d, e, f, g, h, i, j, k)
+    do {                                                                       \
+        if (log_level < log_level_DEBUG) break;                                \
+        log_9_(log_level_DEBUG, 1, a, b, c, d, e, f, g, h, i, j, k);           \
+    } while (0)
 #define log_d9(a, b, c, d, e, f, g, h, i)                                      \
     log_d(__FILE__, __LINE__, a, b, c, d, e, f, g, h, i)
 #define log_d8(a, b, c, d, e, f, g, h) log_d9(a, b, c, d, e, f, g, h, 0)
@@ -104,7 +154,10 @@ extern void log_9_(int, int, const char *, unsigned long long, const char *,
 
 /* tracing */
 #define log_t(a, b, c, d, e, f, g, h, i, j, k)                                 \
-    log_9_(4, 1, a, b, c, d, e, f, g, h, i, j, k)
+    do {                                                                       \
+        if (log_level < log_level_TRACING) break;                              \
+        log_9_(log_level_TRACING, 1, a, b, c, d, e, f, g, h, i, j, k);         \
+    } while (0)
 #define log_t9(a, b, c, d, e, f, g, h, i)                                      \
     log_t(__FILE__, __LINE__, a, b, c, d, e, f, g, h, i)
 #define log_t8(a, b, c, d, e, f, g, h) log_t9(a, b, c, d, e, f, g, h, 0)

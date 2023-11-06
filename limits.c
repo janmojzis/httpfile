@@ -50,10 +50,10 @@ int limits(void) {
     if (r.rlim_cur > DATAMAX) {
         r.rlim_cur = r.rlim_max = DATAMAX;
         if (setrlimit(RLIMIT_DATA, &r) == -1) {
-            log_e2("unable to set RLIMIT_DATA to ", lognum(DATAMAX));
+            log_e2("unable to set RLIMIT_DATA to ", log_num(DATAMAX));
             goto cleanup;
         }
-        log_t2("setrlimit RLIMIT_DATA set to ", lognum(DATAMAX));
+        log_t2("setrlimit RLIMIT_DATA set to ", log_num(DATAMAX));
     }
 #endif
 #endif
@@ -61,6 +61,6 @@ int limits(void) {
     ret = 1;
 cleanup:
 
-    log_t2("limits() = ", lognum(ret));
+    log_t2("limits() = ", log_num(ret));
     return ret;
 }
