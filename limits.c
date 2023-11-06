@@ -38,7 +38,7 @@ int limits(void) {
     }
 #endif
 
-/* if memory limit is greater than 64MB */
+/* if memory limit is greater than 128MB */
 /* set memory limit to 128MB            */
 #define DATAMAX 134217728
 #ifndef __APPLE__
